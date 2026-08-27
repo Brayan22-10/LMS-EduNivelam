@@ -2,22 +2,29 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\IncidentController; 
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\IncidentController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
-Route::get('/reports', [SiteController::class, 'reports'])->name('site.reports');
-Route::get('/directory', [SiteController::class, 'directory'])->name('site.directory');
-
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/panel', [PageController::class, 'dashboard'])->name('dashboard');
-});
+Route::get('/directory', [SiteController::class, 'directory'])->name('site.directory');
+Route::get('/reports', [SiteController::class, 'reports'])->name('site.reports');
 
 Route::resource('incidentes', IncidentController::class);
 
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
