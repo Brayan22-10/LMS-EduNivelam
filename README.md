@@ -19,3 +19,18 @@ Herramientas mínimas requeridas para levantar el proyecto localmente:
    ```bash
    git clone <https://github.com/Brayan22-10/cms>
    cd cms
+
+# Sistema de Gestión de Incidentes (Sitio Seguro)
+
+## Estructura Detallada de Rutas
+
+| Método HTTP | URI | Nombre de Ruta | Controlador@Método | Tipo de Acceso |
+| :--- | :--- | :--- | :--- | :--- |
+| GET | `/` | `home` | `PageController@home` | Público |
+| GET | `/about` | `about` | `PageController@about` | Público |
+| GET | `/contact` | `contact` | `ContactController@create` | Público |
+| POST | `/contact` | `contact.store` | `ContactController@store` | Público (Con CSRF) |
+| GET | `/reportes` | `site.reports` | `SiteController@reports` | Público |
+| GET | `/directorio` | `site.directory` | `SiteController@directory` | Público |
+| GET | `/panel` | `dashboard` | `PageController@dashboard` | Privado (Auth) |
+| CRUD | `/incidentes` | `incidentes.*` | `IncidentController` | Público/Privado |
