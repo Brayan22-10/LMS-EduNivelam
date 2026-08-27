@@ -9,8 +9,8 @@ use App\Http\Controllers\SiteController;
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
-Route::get('/reportes', [SiteController::class, 'reports'])->name('site.reports');
-Route::get('/directorio', [SiteController::class, 'directory'])->name('site.directory');
+Route::get('/reports', [SiteController::class, 'reports'])->name('site.reports');
+Route::get('/directory', [SiteController::class, 'directory'])->name('site.directory');
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

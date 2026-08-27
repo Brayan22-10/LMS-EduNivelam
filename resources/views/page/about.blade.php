@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1> About </h1>
-</body>
-</html>
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mt-4">
+        <h1 class="mb-3">About</h1>
+    </div>
+@endsection
