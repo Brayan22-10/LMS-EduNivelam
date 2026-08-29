@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -16,23 +18,47 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
-        ]);
+{
+    $email = Str::lower($request->input('email'));
+    $throttleKey = $email . '|' . $request->ip();
+    $lockoutCacheKey = 'lockout_count_' . $throttleKey;
 
-        if (!Auth::attempt($credentials)) {
-            return back()->withErrors([
-                'email' => 'Las credenciales no son válidas.',
-            ])->onlyInput('email');
-        }
-
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard'));
+    if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+        return back()->withInput();
     }
 
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required', 'string'],
+    ]);
+
+    if (!Auth::attempt($credentials)) {
+        RateLimiter::hit($throttleKey, 300); 
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $blockCount = cache()->get($lockoutCacheKey, 0) + 1;
+            cache()->put($lockoutCacheKey, $blockCount, now()->addHours(24)); 
+
+            $customLockoutTime = 300 * pow(2, $blockCount - 1);
+
+            RateLimiter::clear($throttleKey);
+            for ($i = 0; $i < 5; $i++) {
+                RateLimiter::hit($throttleKey, $customLockoutTime);
+            }
+        }
+
+        return back()->withErrors([
+            'email' => 'Las credenciales no son válidas.',
+        ])->onlyInput('email');
+    }
+
+    RateLimiter::clear($throttleKey);
+    cache()->forget($lockoutCacheKey);
+
+    $request->session()->regenerate();
+
+    return redirect()->intended(route('dashboard'));
+    }
     public function showRegister()
     {
         return view('auth.register');
