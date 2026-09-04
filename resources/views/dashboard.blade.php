@@ -8,10 +8,9 @@
             <p class="lead">Welcome, <strong>{{ Auth::user()->name ?? 'Administrator' }}</strong>.</p>
             <p>This panel is protected by server-side authentication middleware.</p>
             
-            <form method="POST" action="{{ route('logout') }}" class="mt-4">
-                @csrf
-                <button type="submit" class="btn btn-danger">Log Out</button>
-            </form>
+            <div class="mt-4">
+                @include('auth.logout')
+            </div>
         </div>
     </div>
 </div>
