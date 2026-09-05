@@ -2,8 +2,12 @@
 
 @section('title', 'Contacto - Sitio Seguro')
 
+@section('styles')
+    @vite(['resources/css/contact.css'])
+@endsection
+
 @section('content')
-<section class="py-5">   
+<section class="py-5">  
     <div class="container">
         <h2>Formulario de Contacto</h2>
         <hr class="mb-4">
@@ -30,4 +34,8 @@
         </form>
     </div>
 </section>
+@endsection
+
+@section('scripts')
+    @vite(['resources/js/contact.js'])
 @endsection

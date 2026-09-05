@@ -1,0 +1,55 @@
+.register-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-modal-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.register-modal-title {
+    color: #dc3545;
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.register-modal-text {
+    color: #495057;
+    font-size: 1.05rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.register-modal-btn {
+    background-color: #212529;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    width: 100%;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.register-modal-btn:hover {
+    background-color: #343a40;
+}
+
+.password-strength-container {
+    font-size: 0.85rem;
+}

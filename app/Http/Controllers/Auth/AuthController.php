@@ -19,47 +19,48 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $email = Str::lower($request->input('email'));
-    $throttleKey = $email . '|' . $request->ip();
-    $lockoutCacheKey = 'lockout_count_' . $throttleKey;
-
-    if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-        return back()->withInput();
-    }
-
-    $credentials = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required', 'string'],
-    ]);
-
-    if (!Auth::attempt($credentials)) {
-        RateLimiter::hit($throttleKey, 300); 
+    {
+        $email = Str::lower($request->input('email'));
+        $throttleKey = $email . '|' . $request->ip();
+        $lockoutCacheKey = 'lockout_count_' . $throttleKey;
 
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            $blockCount = cache()->get($lockoutCacheKey, 0) + 1;
-            cache()->put($lockoutCacheKey, $blockCount, now()->addHours(24)); 
-
-            $customLockoutTime = 300 * pow(2, $blockCount - 1);
-
-            RateLimiter::clear($throttleKey);
-            for ($i = 0; $i < 5; $i++) {
-                RateLimiter::hit($throttleKey, $customLockoutTime);
-            }
+            return back()->withInput();
         }
 
-        return back()->withErrors([
-            'email' => 'Las credenciales no son válidas.',
-        ])->onlyInput('email');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        if (!Auth::attempt($credentials)) {
+            RateLimiter::hit($throttleKey, 300); 
+
+            if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+                $blockCount = cache()->get($lockoutCacheKey, 0) + 1;
+                cache()->put($lockoutCacheKey, $blockCount, now()->addHours(24)); 
+
+                $customLockoutTime = 300 * pow(2, $blockCount - 1);
+
+                RateLimiter::clear($throttleKey);
+                for ($i = 0; $i < 5; $i++) {
+                    RateLimiter::hit($throttleKey, $customLockoutTime);
+                }
+            }
+
+            return back()->withErrors([
+                'email' => 'Las credenciales no son válidas.',
+            ])->onlyInput('email');
+        }
+
+        RateLimiter::clear($throttleKey);
+        cache()->forget($lockoutCacheKey);
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard'));
     }
 
-    RateLimiter::clear($throttleKey);
-    cache()->forget($lockoutCacheKey);
-
-    $request->session()->regenerate();
-
-    return redirect()->intended(route('dashboard'));
-    }
     public function showRegister()
     {
         return view('auth.register');
@@ -69,13 +70,45 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', Password::defaults()],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => [
+                'required', 
+                'string', 
+                'min:8', 
+                'confirmed',
+                function ($attribute, $value, $fail) use ($request) {
+                    if (!preg_match('/[A-Z]/', $value)) {
+                        $fail('La contraseña debe contener al menos una mayúscula.');
+                    }
+                    if (!preg_match('/[0-9]/', $value)) {
+                        $fail('La contraseña debe contener al menos un número.');
+                    }
+                    if (!preg_match('/[^A-Za-z0-9]/', $value)) {
+                        $fail('La contraseña debe contener al menos un símbolo.');
+                    }
+                    if (!empty($request->name) && stripos($value, $request->name) !== false) {
+                        $fail('La contraseña no puede contener el nombre de la cuenta.');
+                    }
+                }
+            ],
+        ], [
+            'email.email' => 'Por favor, introduce un correo electrónico válido.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
         ]);
+
+        $email = Str::lower($request->email);
+
+        $existingUser = User::where('email', $email)->first();
+
+        if ($existingUser) {
+            return back()->withInput($request->except('password', 'password_confirmation'))
+                         ->with('registration_error', 'Se produjo un error. Por favor, vuelva a intentarlo.');
+        }
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $email,
             'password' => Hash::make($request->password),
         ]);
 
