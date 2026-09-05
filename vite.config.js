@@ -16,6 +16,8 @@ export default defineConfig({
                 'resources/js/dashboard.js',
                 'resources/css/register.css',
                 'resources/js/register.js',
+                'resources/css/admin-users.css',
+                'resources/js/admin-users.js',
             ],
             refresh: true,
         }),

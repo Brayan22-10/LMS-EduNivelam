@@ -1,0 +1,8 @@
+.user-row-clickable {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.user-modal-icon {
+    font-size: 3rem;
+}

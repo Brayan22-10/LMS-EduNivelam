@@ -1,0 +1,123 @@
+.dashboard-fullscreen-fix {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    width: 100vw;
+    min-height: calc(100vh - 56px);
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 56px);
+    margin: 0;
+    padding: 0;
+}
+
+.admin-sidebar {
+    width: 260px;
+    background-color: #212529;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 25px 20px;
+    flex-shrink: 0;
+    min-height: calc(100vh - 56px);
+}
+
+.sidebar-header h4 {
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.sidebar-role {
+    font-size: 0.8rem;
+    color: #adb5bd;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+    flex-grow: 1;
+}
+
+.sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar-menu li a {
+    display: block;
+    color: #ced4da;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.sidebar-menu li a:hover,
+.sidebar-menu li a.active {
+    background-color: #343a40;
+    color: #fff;
+    transform: translateX(4px);
+}
+
+.btn-logout-sidebar {
+    width: 100%;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-logout-sidebar:hover {
+    background-color: #bb2d3b;
+}
+
+.dashboard-main-content {
+    flex-grow: 1;
+    padding: 35px;
+    overflow-y: auto;
+    background-color: #f4f6f9;
+}
+
+.dashboard-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background-color: #e9ecef;
+}
