@@ -58,7 +58,11 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        if (Auth::user()->email === 'admin@environmental.com') {
+            return redirect()->intended(route('dashboard'));
+        }
+
+        return redirect()->intended(route('home'));
     }
 
     public function showRegister()
@@ -103,7 +107,7 @@ class AuthController extends Controller
 
         if ($existingUser) {
             return back()->withInput($request->except('password', 'password_confirmation'))
-                         ->with('registration_error', 'Se produjo un error. Por favor, vuelva a intentarlo.');
+                       ->with('registration_error', 'Se produjo un error. Por favor, vuelva a intentarlo.');
         }
 
         $user = User::create([
@@ -116,7 +120,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('home');
     }
 
     public function logout(Request $request)

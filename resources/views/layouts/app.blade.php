@@ -13,11 +13,16 @@
     
     @include('layouts.navigation')
 
-    <section class="py-4">  
-        <div class="container">
-            @yield('content')
-        </div>
-    </section>
+    {{-- Si la ruta actual es el dashboard o administración de usuarios, quitamos el padding y el contenedor estricto --}}
+    @if(request()->routeIs('dashboard') || request()->routeIs('admin.users'))
+        @yield('content')
+    @else
+        <section class="py-4">  
+            <div class="container">
+                @yield('content')
+            </div>
+        </section>
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
