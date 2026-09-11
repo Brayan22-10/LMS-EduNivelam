@@ -14,9 +14,14 @@
             </div>
             
             <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}" class="active">📊 Resumen General</a></li>
-                <li><a href="{{ route('admin.users') }}">👥 Gestión de Usuarios</a></li>
-                <li><a href="#">⚙️ Configuración del Sistema</a></li>
+                <li><a href="{{ route('dashboard') }}" class="active"> Resumen General</a></li>
+                
+                {{-- Autorización en vista alineada con la protección por middleware en el servidor --}}
+                @can('manage-users')
+                    <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
+                @endcan
+
+                <li><a href="#"> Configuración del Sistema</a></li>
             </ul>
 
             <div class="sidebar-footer">
@@ -36,19 +41,19 @@
             <div class="row g-4 mb-4">
                 <div class="col-md-6">
                     <div class="stat-card shadow-sm border-0 p-3 bg-white rounded">
-                        <div class="stat-icon bg-primary-light text-primary">👥</div>
                         <div>
                             <h6 class="text-muted mb-1">Usuarios Registrados</h6>
-                            <h3 class="fw-bold mb-0">{{ \App\Models\User::count() }}</h3>
+                            {{-- Conteo dinámico inyectado desde DashboardController --}}
+                            <h3 class="fw-bold mb-0">{{ $stats['users'] }}</h3>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="stat-card shadow-sm border-0 p-3 bg-white rounded">
-                        <div class="stat-icon bg-success-light text-success">🛡️</div>
                         <div>
-                            <h6 class="text-muted mb-1">Nivel de Seguridad</h6>
-                            <h3 class="fw-bold mb-0 text-success">Óptimo</h3>
+                            <h6 class="text-muted mb-1">Publicaciones Activas</h6>
+                            {{-- Métrica adicional de publicaciones traída del controlador --}}
+                            <h3 class="fw-bold mb-0 text-success">{{ $stats['posts'] }}</h3>
                         </div>
                     </div>
                 </div>
@@ -61,7 +66,9 @@
                 </p>
                 <hr>
                 <div class="d-flex gap-3">
-                    <a href="{{ route('admin.users') }}" class="btn btn-dark">Administrar Usuarios</a>
+                    @can('manage-users')
+                        <a href="{{ route('admin.users') }}" class="btn btn-dark">Administrar Usuarios</a>
+                    @endcan
                     <a href="#" class="btn btn-outline-secondary">Ajustes del Sistema</a>
                 </div>
             </div>

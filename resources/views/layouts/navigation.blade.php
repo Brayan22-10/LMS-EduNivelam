@@ -5,7 +5,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">Home</a>
                 </li>
@@ -21,19 +21,34 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('contact') }}">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register') }}">Sign Up</a>
-                </li>
 
-                @auth
+                {{-- Opciones para usuarios no autenticados (Invitados) --}}
+                @guest
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="{{ route('dashboard') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ route('register') }}">Sign Up</a>
                     </li>
-                @else
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
-                @endauth
+                @else
+                    {{-- Opciones exclusivas para Administradores con permisos de gestión --}}
+                    @can('manage-users')
+                        <li class="nav-item">
+                            <a class="nav-link text-warning fw-bold" href="{{ route('dashboard') }}">Dashboard</a>
+                        </li>
+                    @endcan
+
+                    {{-- Saludo y control de sesión para cualquier usuario autenticado --}}
+                    <li class="nav-item ms-lg-3 text-light">
+                        <span>Hola, {{ Auth::user()->name }}</span>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Cerrar sesión</button>
+                        </form>
+                    </li>
+                @endguest
             </ul>
         </div>
     </div>

@@ -14,9 +14,9 @@
             </div>
             
             <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}">📊 Resumen General</a></li>
-                <li><a href="{{ route('admin.users') }}" class="active">👥 Gestión de Usuarios</a></li>
-                <li><a href="#">⚙️ Configuración del Sistema</a></li>
+                <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
+                <li><a href="{{ route('admin.users') }}" class="active"> Gestión de Usuarios</a></li>
+                <li><a href="#"> Configuración del Sistema</a></li>
             </ul>
 
             <div class="sidebar-footer">

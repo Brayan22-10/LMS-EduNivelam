@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -70,57 +70,19 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => [
-                'required', 
-                'string', 
-                'min:8', 
-                'confirmed',
-                function ($attribute, $value, $fail) use ($request) {
-                    if (!preg_match('/[A-Z]/', $value)) {
-                        $fail('La contraseña debe contener al menos una mayúscula.');
-                    }
-                    if (!preg_match('/[0-9]/', $value)) {
-                        $fail('La contraseña debe contener al menos un número.');
-                    }
-                    if (!preg_match('/[^A-Za-z0-9]/', $value)) {
-                        $fail('La contraseña debe contener al menos un símbolo.');
-                    }
-                    if (!empty($request->name) && stripos($value, $request->name) !== false) {
-                        $fail('La contraseña no puede contener el nombre de la cuenta.');
-                    }
-                }
-            ],
-        ], [
-            'email.email' => 'Por favor, introduce un correo electrónico válido.',
-            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
-            'password.confirmed' => 'Las contraseñas no coinciden.',
-        ]);
-
-        $email = Str::lower($request->email);
-
-        $existingUser = User::where('email', $email)->first();
-
-        if ($existingUser) {
-            return back()->withInput($request->except('password', 'password_confirmation'))
-                       ->with('registration_error', 'Se produjo un error. Por favor, vuelva a intentarlo.');
-        }
-
         $user = User::create([
-            'name' => $request->name,
-            'email' => $email,
-            'password' => Hash::make($request->password),
+            'name' => $request->string('name'),
+            'email' => Str::lower($request->string('email')),
+            'password' => Hash::make($request->string('password')),
         ]);
 
         Auth::login($user);
 
         $request->session()->regenerate();
 
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
     }
 
     public function logout(Request $request)
