@@ -16,8 +16,8 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('/directory', [SiteController::class, 'directory'])->name('site.directory');
-Route::get('/reports', [SiteController::class, 'reports'])->name('site.reports');
+Route::get('/instructors', [SiteController::class, 'directory'])->name('instructors');
+Route::get('/courses', [SiteController::class, 'reports'])->name('courses');
 
 Route::resource('incidentes', IncidentController::class);
 Route::resource('posts', PostController::class);

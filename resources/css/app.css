@@ -1,17 +1,20 @@
 body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    color: #1f2937;
+    background-color: #f8f9fa;
 }
 
-nav {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    background: #006b3f;
+.floating-navbar {
+    background: rgba(33, 37, 41, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 10px;
+    transition: all 0.3s ease-in-out;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
+.floating-navbar .nav-link {
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.floating-navbar .nav-link:hover {
+    color: #0dcaf0 !important;
+    transform: translateY(-1px);
 }
