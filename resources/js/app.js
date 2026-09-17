@@ -1,2 +1,4 @@
 import './bootstrap';
-console.log('Portal Seguro cargado');
+import './inactivity.js';
+
+console.log('EduNivelam - Portal Seguro cargado correctamente');

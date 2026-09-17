@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ContactController;
@@ -34,6 +35,9 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/check-session-status', function (Request $request) {
+        return response()->json(['status' => 'active']);
+    });
     
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')

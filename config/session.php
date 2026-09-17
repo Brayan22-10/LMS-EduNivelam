@@ -32,7 +32,8 @@ return [
     |
     */
 
-    'lifetime' => (int) env('SESSION_LIFETIME', 120),
+    // Ajustado a 30 minutos por defecto para el control de inactividad del LMS
+    'lifetime' => (int) env('SESSION_LIFETIME', 5),
 
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 
