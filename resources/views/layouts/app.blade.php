@@ -13,8 +13,8 @@
     
     @include('layouts.navigation')
 
-    {{-- Si la ruta actual es el dashboard o administración de usuarios, quitamos el padding y el contenedor estricto --}}
-    @if(request()->routeIs('dashboard') || request()->routeIs('admin.users'))
+    {{-- Si la ruta es dashboard, administración, login o registro, no renderiza el footer ni el contenedor con padding extra --}}
+    @if(request()->routeIs('dashboard') || request()->routeIs('admin.users') || request()->routeIs('login') || request()->routeIs('register'))
         @yield('content')
     @else
         <section class="py-4">  
@@ -23,7 +23,7 @@
             </div>
         </section>
 
-        {{-- Footer profesional integrado para vistas públicas --}}
+        {{-- Footer profesional integrado solo para vistas públicas generales --}}
         @include('layouts.footer')
     @endif
 
