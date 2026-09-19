@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
+use Webklex\IMAP\Facades\Client;
+use App\Models\ReceivedEmail;
+use Carbon\Carbon;
+
+class ReceiveEmails extends Command
+{
+    protected $signature = 'mail:receive';
+    protected $description = 'Consulta el buzón IMAP, procesa los mensajes nuevos y los guarda en la base de datos';
+
+    public function handle(): int
+    {
+        $this->info('Conectando al servidor IMAP...');
+
+        try {
+            $client = Client::account('default');
+            $client->connect();
+            
+            $folder = $client->getFolder('INBOX');
+            $messages = $folder->messages()->unseen()->limit(10)->get();
+
+            foreach ($messages as $message) {
+                $messageId = $message->getMessageId();
+                $from = $message->getFrom()[0];
+                
+                $fromEmail = $from->mail ?? 'desconocido@domain.com';
+                $fromName = $from->personal ?? null;
+                $subject = $message->getSubject();
+                $body = $message->getHTMLBody() ?: $message->getTextBody();
+                $receivedAt = Carbon::parse($message->getDate());
+
+                ReceivedEmail::firstOrCreate(
+                    ['message_id' => $messageId],
+                    [
+                        'from_email' => $fromEmail,
+                        'from_name' => $fromName,
+                        'subject' => $subject,
+                        'body' => $body,
+                        'received_at' => $receivedAt,
+                        'is_read' => false,
+                    ]
+                );
+
+                $message->setFlag(['Seen']);
+                $this->line("Correo procesado y guardado: {$subject}");
+            }
+
+            $this->info('¡Revisión de buzón completada con éxito!');
+        } catch (\Exception $e) {
+            $this->error('Error al conectar con IMAP: ' . $e->getMessage());
+            return self::FAILURE;
+        }
+
+        return self::SUCCESS;
+    }
+}
