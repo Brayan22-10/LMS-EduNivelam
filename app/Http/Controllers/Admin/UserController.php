@@ -16,7 +16,26 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+
     public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (Auth::id() === $user->id) {
+            return redirect()->route('admin.users')
+                ->with('error', 'Por seguridad, no puedes modificar el estado de tu propia cuenta activa.');
+        }
+
+        $user->is_active = !($user->is_active ?? true);
+        $user->save();
+
+        $statusMessage = $user->is_active ? 'activada' : 'desactivada';
+
+        return redirect()->route('admin.users')
+            ->with('success', "La cuenta del usuario ha sido {$statusMessage} con éxito.");
+    }
+
+    public function forceDelete($id)
     {
         $user = User::findOrFail($id);
 
@@ -28,6 +47,6 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users')
-            ->with('success', 'La cuenta del usuario ha sido eliminada con éxito.');
+            ->with('success', 'La cuenta del usuario ha sido eliminada permanentemente.');
     }
 }

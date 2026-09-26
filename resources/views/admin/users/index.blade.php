@@ -33,7 +33,6 @@
                 <span class="badge bg-success text-white p-2">Total: {{ $users->count() }}</span>
             </div>
 
-            {{-- Alertas de éxito o error (para el bloqueo de autoeliminación) --}}
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -50,7 +49,7 @@
 
             <div class="card shadow-sm border-0 p-4">
                 <h4 class="mb-3 text-dark">Usuarios Registrados</h4>
-                <p class="text-muted mb-4">Haz clic en cualquier usuario de la lista para ver su información detallada o utiliza las acciones disponibles.</p>
+                <p class="text-muted mb-4">Haz clic en cualquier usuario de la lista para ver su información detallada o gestiona su estado y acceso.</p>
 
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
@@ -59,6 +58,7 @@
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Correo Electrónico</th>
+                                <th>Estado</th>
                                 <th>Fecha de Registro</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
@@ -66,7 +66,6 @@
                         <tbody>
                             @forelse($users as $user)
                                 <tr>
-                                    {{-- Celdas con clic para abrir el modal de detalles --}}
                                     <td class="user-row-clickable" data-bs-toggle="modal" data-bs-target="#userModal" data-name="{{ $user->name }}" data-email="{{ $user->email }}">
                                         <strong>#{{ $user->id }}</strong>
                                     </td>
@@ -76,31 +75,82 @@
                                     <td class="user-row-clickable" data-bs-toggle="modal" data-bs-target="#userModal" data-name="{{ $user->name }}" data-email="{{ $user->email }}">
                                         {{ $user->email }}
                                     </td>
+                                    <td>
+                                        @if($user->is_active ?? true)
+                                            <span class="badge bg-success">Activo</span>
+                                        @else
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        @endif
+                                    </td>
                                     <td class="user-row-clickable" data-bs-toggle="modal" data-bs-target="#userModal" data-name="{{ $user->name }}" data-email="{{ $user->email }}">
                                         {{ $user->created_at->format('d/m/Y H:i') }}
                                     </td>
                                     
-                                    {{-- Columna de Acciones (KAN-187, KAN-188, KAN-190) --}}
+                                    {{-- Columna con ambos botones de acción independientes --}}
                                     <td class="text-center">
                                         @if(Auth::id() !== $user->id)
-                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}">
-                                                <i class="bi bi-trash"></i> Eliminar
-                                            </button>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                
+                                                {{-- Botón Dinámico: Desactivar o Activar --}}
+                                                @if($user->is_active ?? true)
+                                                    <button type="button" class="btn btn-warning btn-sm text-dark fw-bold" data-bs-toggle="modal" data-bs-target="#statusModal{{ $user->id }}">
+                                                        Desactivar
+                                                    </button>
+                                                @else
+                                                    <button type="button" class="btn btn-success btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#statusModal{{ $user->id }}">
+                                                        Activar
+                                                    </button>
+                                                @endif
 
-                                            {{-- Modal de Confirmación de Borrado por Usuario --}}
-                                            <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $user->id }}" aria-hidden="true">
+                                                {{-- Botón de Eliminar Definitivo --}}
+                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}">
+                                                    Eliminar
+                                                </button>
+                                            </div>
+
+                                            {{-- Modal para cambiar Estado (Activar / Desactivar) --}}
+                                            <div class="modal fade" id="statusModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
-                                                        <div class="modal-header bg-danger text-white">
-                                                            <h5 class="modal-title" id="deleteModalLabel{{ $user->id }}">Confirmar eliminación</h5>
-                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="modal-header {{ ($user->is_active ?? true) ? 'bg-warning text-dark' : 'bg-success text-white' }}">
+                                                            <h5 class="modal-title">Confirmar cambio de estado</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body text-start">
-                                                            ¿Estás seguro de que deseas dar de baja al usuario <strong>{{ $user->name }}</strong>? Esta acción eliminará su cuenta de forma permanente.
+                                                            @if($user->is_active ?? true)
+                                                                ¿Estás seguro de desactivar a <strong>{{ $user->name }}</strong>? No podrá iniciar sesión hasta que lo vuelvas a activar.
+                                                            @else
+                                                                ¿Estás seguro de activar nuevamente a <strong>{{ $user->name }}</strong>? Recuperará el acceso a la plataforma.
+                                                            @endif
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn {{ ($user->is_active ?? true) ? 'btn-warning' : 'btn-success' }}">
+                                                                    {{ ($user->is_active ?? true) ? 'Sí, desactivar' : 'Sí, activar' }}
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- Modal para Eliminar Definitivamente --}}
+                                            <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-danger text-white">
+                                                            <h5 class="modal-title">Confirmar eliminación permanente</h5>
+                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-start">
+                                                            ¿Estás seguro de eliminar permanentemente al usuario <strong>{{ $user->name }}</strong> de la base de datos? Esta acción no se puede deshacer.
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <form action="{{ route('admin.users.forceDelete', $user->id) }}" method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-danger">Sí, eliminar</button>
@@ -109,6 +159,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         @else
                                             <span class="badge bg-secondary">Tu cuenta</span>
                                         @endif
@@ -116,7 +167,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">No hay usuarios registrados en este momento.</td>
+                                    <td colspan="6" class="text-center text-muted py-4">No hay usuarios registrados en este momento.</td>
                                 </tr>
                             @endforelse
                         </tbody>

@@ -25,7 +25,6 @@ Route::get('/courses', [SiteController::class, 'reports'])->name('courses');
 Route::resource('incidentes', IncidentController::class);
 Route::resource('posts', PostController::class);
 
-
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])
@@ -44,7 +43,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password', [AuthController::class, 'showResetForm'])->name('password.reset.form');
     Route::post('/reset-password', [AuthController::class, 'updatePassword'])->name('password.update');
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -73,7 +71,6 @@ Route::middleware('auth')->group(function () {
         return back()->with('message', '¡Se ha enviado un nuevo enlace de verificación a tu correo!');
     })->middleware(['throttle:6,1'])->name('verification.send');
 
-    
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')
         ->middleware(['can:manage-users']); 
