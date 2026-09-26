@@ -37,6 +37,14 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+        $user = User::where('email', $email)->first();
+
+        if ($user && ($user->is_active === false || $user->is_active === 0)) {
+            return back()->withErrors([
+                'email' => 'Tu cuenta ha sido desactivada por un administrador. No puedes iniciar sesión.',
+            ])->onlyInput('email');
+        }
+
         $remember = $request->has('remember');
 
         if (!Auth::attempt($credentials, $remember)) {
@@ -74,7 +82,7 @@ class AuthController extends Controller
             Cookie::queue(Cookie::forget('remember_checked'));
         }
 
-        if (Auth::user()->email === 'admin@environmental.com') {
+        if (Auth::user()->email === 'admin@environmental.com' || Auth::user()->email === 'admin@admin.com') {
             return redirect()->intended(route('dashboard'));
         }
 
