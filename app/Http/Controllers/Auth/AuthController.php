@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered; 
 
 class AuthController extends Controller
 {
@@ -63,19 +64,15 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        // --- GESTIÓN DE CREDENCIALES MEDIANTE COOKIES SEGÚN CHECKBOX ---
         if ($remember) {
-            // Guarda las credenciales en cookies cifradas por 30 días (43200 min)
             Cookie::queue('saved_email', $request->email, 43200);
             Cookie::queue('saved_password', $request->password, 43200);
             Cookie::queue('remember_checked', 'true', 43200);
         } else {
-            // Borra las cookies si no marcó la opción
             Cookie::queue(Cookie::forget('saved_email'));
             Cookie::queue(Cookie::forget('saved_password'));
             Cookie::queue(Cookie::forget('remember_checked'));
         }
-        // -------------------------------------------------------------
 
         if (Auth::user()->email === 'admin@environmental.com') {
             return redirect()->intended(route('dashboard'));
@@ -97,11 +94,13 @@ class AuthController extends Controller
             'password' => Hash::make($request->string('password')),
         ]);
 
+        event(new Registered($user));
+
         Auth::login($user);
 
         $request->session()->regenerate();
 
-        return redirect()->route('home');
+        return redirect()->route('verification.notice');
     }
 
     public function logout(Request $request)

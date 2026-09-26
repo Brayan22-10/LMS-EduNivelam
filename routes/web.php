@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest; 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ContactController;
@@ -55,12 +56,27 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/admin/correos', [ReceivedEmailController::class, 'index'])->name('admin.emails.index');
     Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->name('admin.emails.show');
+
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect()->route('home')->with('success', '¡Correo verificado con éxito!');
+    })->middleware(['signed'])->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('message', '¡Se ha enviado un nuevo enlace de verificación a tu correo!');
+    })->middleware(['throttle:6,1'])->name('verification.send');
+
     
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')
-        ->middleware('can:manage-users');
+        ->middleware(['can:manage-users', 'verified']); 
     
     Route::get('/admin/users', [UserController::class, 'index'])
         ->name('admin.users')
-        ->middleware('can:manage-users'); 
+        ->middleware(['can:manage-users', 'verified']); 
 });
