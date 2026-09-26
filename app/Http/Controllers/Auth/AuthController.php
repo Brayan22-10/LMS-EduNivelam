@@ -83,7 +83,7 @@ class AuthController extends Controller
         }
 
         if (Auth::user()->email === 'admin@environmental.com' || Auth::user()->email === 'admin@admin.com') {
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('home'));
         }
 
         return redirect()->intended(route('home'));
