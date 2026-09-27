@@ -15,7 +15,13 @@
             
             <ul class="sidebar-menu">
                 <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                <li><a href="{{ route('admin.users') }}" class="active"> Gestión de Usuarios</a></li>
+                
+                @can('manage-users')
+                    <li><a href="{{ route('admin.users') }}" class="active"> Gestión de Usuarios</a></li>
+                    <li><a href="{{ route('admin.emails.index') }}">  Buzón IMAP</a></li>
+                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
+                @endcan
+
                 <li><a href="#"> Configuración del Sistema</a></li>
             </ul>
 

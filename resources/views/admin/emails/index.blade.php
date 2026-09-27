@@ -2,6 +2,13 @@
 
 @section('title', 'Bandeja de Entrada - CMS')
 
+@section('styles')
+    @vite(['resources/css/login.css'])
+    <style>
+        footer, .footer { display: none !important; }
+    </style>
+@endsection
+
 @section('content')
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">

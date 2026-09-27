@@ -75,6 +75,10 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard')
         ->middleware(['can:manage-users']); 
     
+    Route::get('/admin/security', [DashboardController::class, 'security'])
+        ->name('admin.security')
+        ->middleware(['can:manage-users']);
+
     Route::get('/admin/users', [UserController::class, 'index'])
         ->name('admin.users')
         ->middleware(['can:manage-users']); 

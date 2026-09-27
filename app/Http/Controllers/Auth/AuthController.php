@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered; 
@@ -50,6 +51,15 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials, $remember)) {
             RateLimiter::hit($throttleKey, 300); 
 
+            DB::table('security_logs')->insert([
+                'email' => $email,
+                'ip_address' => $request->ip(),
+                'event_type' => 'failed_login',
+                'description' => "Intento de acceso fallido para el correo: {$email} desde la IP: {$request->ip()}",
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
                 $blockCount = cache()->get($lockoutCacheKey, 0) + 1;
                 cache()->put($lockoutCacheKey, $blockCount, now()->addHours(24)); 
@@ -80,10 +90,6 @@ class AuthController extends Controller
             Cookie::queue(Cookie::forget('saved_email'));
             Cookie::queue(Cookie::forget('saved_password'));
             Cookie::queue(Cookie::forget('remember_checked'));
-        }
-
-        if (Auth::user()->email === 'admin@environmental.com' || Auth::user()->email === 'admin@admin.com') {
-            return redirect()->intended(route('home'));
         }
 
         return redirect()->intended(route('home'));
