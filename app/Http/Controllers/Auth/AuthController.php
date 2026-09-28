@@ -42,6 +42,12 @@ class AuthController extends Controller
 
         $user = User::where('email', $email)->first();
 
+        if ($user && $user->role === 'teacher' && !$user->is_approved) {
+            return back()->withErrors([
+                'email' => 'Tu cuenta de docente se encuentra pendiente de aprobación por el administrador.',
+            ])->onlyInput('email');
+        }
+
         if ($user && ($user->is_active === false || $user->is_active === 0)) {
             DB::table('security_logs')->insert([
                 'user_id' => $user->id,
@@ -135,6 +141,8 @@ class AuthController extends Controller
             'name' => $request->string('name'),
             'email' => Str::lower($request->string('email')),
             'password' => Hash::make($request->string('password')),
+            'role' => 'student',
+            'is_approved' => true,
             'is_active' => true,
         ]);
 
@@ -147,11 +155,60 @@ class AuthController extends Controller
         return redirect()->route('verification.notice');
     }
 
+    public function showTeacherRegister()
+    {
+        return view('auth.register-teacher');
+    }
+
+    public function registerTeacher(Request $request)
+    {
+        $eighteenYearsAgo = Carbon::now()->subYears(18)->format('Y-m-d');
+
+        $request->validate([
+            'name' => ['required', 'string', 'min:2', 'max:100', 'unique:users,name'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:users,dni'],
+            'country_code' => ['required', 'string'],
+            'phone' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20', 'unique:users,phone'],
+            'birthdate' => ['required', 'date', 'before_or_equal:' . $eighteenYearsAgo],
+            'teaching_type' => ['required', 'in:courses,advisories'],
+        ], [
+            'name.unique' => 'Este nombre de usuario ya está en uso.',
+            'email.unique' => 'Este correo electrónico ya está registrado.',
+            'dni.required' => 'La cédula o documento es obligatorio.',
+            'dni.regex' => 'La identificación solo debe contener números (sin letras ni símbolos).',
+            'dni.unique' => 'Este número de documento ya se encuentra registrado.',
+            'phone.required' => 'El teléfono es obligatorio.',
+            'phone.regex' => 'El teléfono solo debe contener números (sin espacios, letras ni símbolos).',
+            'phone.unique' => 'Este número de teléfono ya está en uso.',
+            'birthdate.required' => 'La fecha de nacimiento es obligatoria.',
+            'birthdate.before_or_equal' => 'Debes ser mayor de 18 años para registrarte como docente.',
+            'teaching_type.required' => 'Selecciona el tipo de postulación.',
+            'teaching_type.in' => 'Selecciona un tipo de postulación válido.',
+        ]);
+
+        User::create([
+            'name' => $request->input('name'),
+            'email' => Str::lower($request->input('email')),
+            'dni' => $request->input('dni'),
+            'country_code' => $request->input('country_code'),
+            'phone' => $request->input('phone'),
+            'birthdate' => $request->input('birthdate'),
+            'teaching_type' => $request->input('teaching_type'),
+            'password' => Hash::make(Str::random(16)), 
+            'role' => 'teacher',
+            'is_approved' => 0,
+            'is_active' => 0,
+        ]);
+
+        return redirect()->route('teacher.pending');
+    }
+
     public function logout(Request $request)
     {
         $user = Auth::user();
 
-        if ($user && !$user->hasVerifiedEmail()) {
+        if ($user && !$user->hasVerifiedEmail() && $user->role === 'student') {
             $user->delete();
         }
 
@@ -160,7 +217,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home')->with('info', 'Has salido del sistema. El registro temporal ha sido descartado por falta de verificación.');
+        return redirect()->route('home')->with('info', 'Has salido del sistema.');
     }
 
     public function showLinkRequestForm()

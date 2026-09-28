@@ -18,6 +18,8 @@
                 
                 @can('manage-users')
                     <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
+                    {{-- APARTADO NUEVO: Gestión y aprobación de docentes pendientes --}}
+                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
                     <li><a href="{{ route('admin.emails.index') }}">  Buzón IMAP</a></li>
                     {{-- Enlace limpio hacia el apartado exclusivo de seguridad --}}
                     <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
@@ -68,6 +70,7 @@
                 <div class="d-flex gap-3 flex-wrap">
                     @can('manage-users')
                         <a href="{{ route('admin.users') }}" class="btn btn-dark">Administrar Usuarios</a>
+                        <a href="{{ route('admin.teachers.pending') }}" class="btn btn-success">Aceptar Docentes</a>
                         <a href="{{ route('admin.emails.index') }}" class="btn btn-primary"> Ver Buzón IMAP</a>
                         <a href="{{ route('admin.security') }}" class="btn btn-outline-danger"> Auditoría de Seguridad</a>
                     @endcan

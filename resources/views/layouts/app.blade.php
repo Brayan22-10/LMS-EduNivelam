@@ -15,8 +15,8 @@
     
     @include('layouts.navigation')
 
-    {{-- Si la ruta pertenece al dashboard o a cualquier sección de administración/auth, se muestra limpia sin footer --}}
-    @if(request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('login') || request()->routeIs('register'))
+    {{-- Oculta el footer en dashboard, administración, login, registro de estudiantes y registro/espera de docentes --}}
+    @if(request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('login') || request()->routeIs('register*') || request()->routeIs('teacher.pending'))
         @yield('content')
     @else
         <section class="py-4">  

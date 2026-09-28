@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AdminTeacherController;
 use App\Http\Controllers\ReceivedEmailController;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -33,6 +34,13 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+
+    Route::get('/register/teacher', [AuthController::class, 'showTeacherRegister'])->name('register.teacher');
+    Route::post('/register/teacher', [AuthController::class, 'registerTeacher'])->name('register.teacher.store');
+    
+    Route::get('/teacher/pending-approval', function () {
+        return view('auth.teacher-pending');
+    })->name('teacher.pending');
 
     Route::get('/forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetCode'])->name('password.email');
@@ -75,6 +83,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::get('/admin/correos', [ReceivedEmailController::class, 'index'])->name('admin.emails.index');
     Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->name('admin.emails.show');
+
+    Route::get('/admin/teachers/pending', [AdminTeacherController::class, 'index'])->name('admin.teachers.pending');
+    Route::post('/admin/teachers/{id}/approve', [AdminTeacherController::class, 'approve'])->name('admin.teachers.approve');
+    Route::delete('/admin/teachers/{id}/deny', [AdminTeacherController::class, 'deny'])->name('admin.teachers.deny');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')
