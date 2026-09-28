@@ -9,23 +9,24 @@
             
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center gap-2">
-                    <li class="nav-item">
-                        <a class="nav-link px-3" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3" href="{{ route('about') }}">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3" href="{{ route('courses') }}">Cursos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3" href="{{ route('instructors') }}">Instructores</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3" href="{{ route('contact') }}">Contact</a>
-                    </li>
-
+                    
                     @guest
+                        {{-- Menú público para visitantes --}}
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{{ route('home') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{{ route('about') }}">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{{ route('courses') }}">Cursos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{{ route('instructors') }}">Instructores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{{ route('contact') }}">Contact</a>
+                        </li>
                         <li class="nav-item ms-lg-2">
                             <a class="nav-link btn btn-outline-light px-3 py-1 rounded-pill" href="{{ route('login') }}">Login</a>
                         </li>
@@ -33,11 +34,35 @@
                             <a class="nav-link btn btn-info text-dark fw-bold px-3 py-1 rounded-pill" href="{{ route('register') }}">Sign Up</a>
                         </li>
                     @else
-                        @can('manage-users')
+                        {{-- Usuario Autenticado: Verificamos si ya validó su correo --}}
+                        @if(Auth::user()->hasVerifiedEmail())
                             <li class="nav-item">
-                                <a class="nav-link text-warning fw-bold px-3" href="{{ route('dashboard') }}">Dashboard</a>
+                                <a class="nav-link px-3" href="{{ route('home') }}">Home</a>
                             </li>
-                        @endcan
+                            <li class="nav-item">
+                                <a class="nav-link px-3" href="{{ route('about') }}">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3" href="{{ route('courses') }}">Cursos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3" href="{{ route('instructors') }}">Instructores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3" href="{{ route('contact') }}">Contact</a>
+                            </li>
+
+                            @can('manage-users')
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning fw-bold px-3" href="{{ route('dashboard') }}">Dashboard</a>
+                                </li>
+                            @endcan
+                        @else
+                            {{-- Si NO ha verificado su correo, ocultamos la navegación para evitar que escape --}}
+                            <li class="nav-item">
+                                <span class="nav-link text-warning small px-3">Verificación de correo pendiente</span>
+                            </li>
+                        @endif
 
                         <li class="nav-item ms-lg-3 text-light small">
                             <span>Hola, {{ Auth::user()->name }}</span>
@@ -49,6 +74,7 @@
                             </form>
                         </li>
                     @endguest
+
                 </ul>
             </div>
         </div>

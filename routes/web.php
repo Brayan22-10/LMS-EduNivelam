@@ -46,16 +46,13 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-    Route::post('/check-session-status', function (Request $request) {
-        return response()->json(['status' => 'active']);
+
+    Route::get('/check-session-status', function (Request $request) {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json(['status' => 'verified']);
+        }
+        return response()->json(['status' => 'pending'], 403);
     });
-    
-    Route::get('/admin/check-imap', [ContactController::class, 'validateImapConnection'])
-        ->name('admin.check.imap');
-    
-    Route::get('/admin/correos', [ReceivedEmailController::class, 'index'])->name('admin.emails.index');
-    Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->name('admin.emails.show');
 
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
@@ -63,13 +60,21 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
-        return redirect()->route('home')->with('success', '¡Correo verificado con éxito!');
+        return view('auth.verified-success');
     })->middleware(['signed'])->name('verification.verify');
 
     Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
         return back()->with('message', '¡Se ha enviado un nuevo enlace de verificación a tu correo!');
     })->middleware(['throttle:6,1'])->name('verification.send');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/check-imap', [ContactController::class, 'validateImapConnection'])
+        ->name('admin.check.imap');
+    
+    Route::get('/admin/correos', [ReceivedEmailController::class, 'index'])->name('admin.emails.index');
+    Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->name('admin.emails.show');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')

@@ -15,8 +15,8 @@
     
     @include('layouts.navigation')
 
-    {{-- Si la ruta es dashboard, administración, login o registro, no renderiza el footer ni el contenedor con padding extra --}}
-    @if(request()->routeIs('dashboard') || request()->routeIs('admin.users') || request()->routeIs('login') || request()->routeIs('register'))
+    {{-- Si la ruta pertenece al dashboard o a cualquier sección de administración/auth, se muestra limpia sin footer --}}
+    @if(request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('login') || request()->routeIs('register'))
         @yield('content')
     @else
         <section class="py-4">  

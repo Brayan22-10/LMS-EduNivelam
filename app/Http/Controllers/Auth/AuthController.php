@@ -35,12 +35,26 @@ class AuthController extends Controller
 
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required', 'string', 'regex:/^\S*$/'],
+        ], [
+            'password.regex' => 'La contraseña no puede contener espacios en blanco.',
         ]);
 
         $user = User::where('email', $email)->first();
 
         if ($user && ($user->is_active === false || $user->is_active === 0)) {
+            DB::table('security_logs')->insert([
+                'user_id' => $user->id,
+                'email' => $email,
+                'ip_address' => $request->ip(),
+                'status' => 'failed',
+                'event_type' => 'inactive_account_access',
+                'description' => "Intento de acceso bloqueado: Cuenta desactivada para {$email}",
+                'user_agent' => $request->header('User-Agent'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             return back()->withErrors([
                 'email' => 'Tu cuenta ha sido desactivada por un administrador. No puedes iniciar sesión.',
             ])->onlyInput('email');
@@ -52,10 +66,13 @@ class AuthController extends Controller
             RateLimiter::hit($throttleKey, 300); 
 
             DB::table('security_logs')->insert([
+                'user_id' => $user ? $user->id : null,
                 'email' => $email,
                 'ip_address' => $request->ip(),
+                'status' => 'failed',
                 'event_type' => 'failed_login',
                 'description' => "Intento de acceso fallido para el correo: {$email} desde la IP: {$request->ip()}",
+                'user_agent' => $request->header('User-Agent'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -82,6 +99,18 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        DB::table('security_logs')->insert([
+            'user_id' => Auth::id(),
+            'email' => Auth::user()->email,
+            'ip_address' => $request->ip(),
+            'status' => 'success',
+            'event_type' => 'successful_login',
+            'description' => "Inicio de sesión exitoso para el usuario ID: " . Auth::id(),
+            'user_agent' => $request->header('User-Agent'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         if ($remember) {
             Cookie::queue('saved_email', $request->email, 43200);
             Cookie::queue('saved_password', $request->password, 43200);
@@ -106,6 +135,7 @@ class AuthController extends Controller
             'name' => $request->string('name'),
             'email' => Str::lower($request->string('email')),
             'password' => Hash::make($request->string('password')),
+            'is_active' => true,
         ]);
 
         event(new Registered($user));
@@ -119,12 +149,18 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
+
+        if ($user && !$user->hasVerifiedEmail()) {
+            $user->delete();
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('info', 'Has salido del sistema. El registro temporal ha sido descartado por falta de verificación.');
     }
 
     public function showLinkRequestForm()

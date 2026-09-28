@@ -10,11 +10,15 @@ return new class extends Migration
     {
         Schema::create('security_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('email')->nullable();
             $table->string('ip_address')->nullable();
+            $table->string('status'); 
             $table->string('event_type');
             $table->text('description');
+            $table->text('user_agent')->nullable(); 
             $table->timestamps();
+            $table->index(['created_at', 'ip_address']);
         });
     }
 

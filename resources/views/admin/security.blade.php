@@ -52,7 +52,7 @@
                 <div class="col-md-12">
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
-                            <h5 class="mb-0"> Widget de Estadísticas de Seguridad y Accesos</h5>
+                            <h5 class="mb-0">Widget de Estadísticas de Seguridad y Accesos</h5>
                             <span class="badge bg-secondary">Últimas 24 horas</span>
                         </div>
                         <div class="card-body">
@@ -86,12 +86,19 @@
                                                 <td>{{ \Carbon\Carbon::parse($log->created_at)->format('d/m/Y H:i:s') }}</td>
                                                 <td><code>{{ $log->email ?? 'N/D' }}</code></td>
                                                 <td><span class="badge bg-light text-dark border">{{ $log->ip_address }}</span></td>
-                                                <td><span class="text-danger fw-semibold">{{ $log->description }}</span></td>
+                                                <td>
+                                                    {{-- Colores dinámicos: Verde para logins exitosos, Rojo para fallidos --}}
+                                                    @if(isset($log->status) && $log->status === 'success')
+                                                        <span class="text-success fw-semibold">{{ $log->description }}</span>
+                                                    @else
+                                                        <span class="text-danger fw-semibold">{{ $log->description }}</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
                                                 <td colspan="4" class="text-center text-muted py-4">
-                                                    No se han registrado intentos fallidos de acceso recientes. El sistema opera con total normalidad.
+                                                    No se han registrado eventos de seguridad recientes. El sistema opera con total normalidad.
                                                 </td>
                                             </tr>
                                         @endforelse
