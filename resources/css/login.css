@@ -63,3 +63,8 @@
 .lockout-btn:hover {
     background-color: #5a6268;
 }
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none !important;
+}
