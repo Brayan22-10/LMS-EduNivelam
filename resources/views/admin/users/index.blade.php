@@ -18,11 +18,12 @@
                 
                 @can('manage-users')
                     <li><a href="{{ route('admin.users') }}" class="active"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}">  Buzón IMAP</a></li>
+                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
+                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
                     <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
                 @endcan
 
-                <li><a href="#"> Configuración del Sistema</a></li>
+                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
             </ul>
 
             <div class="sidebar-footer">

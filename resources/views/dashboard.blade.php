@@ -18,14 +18,13 @@
                 
                 @can('manage-users')
                     <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    {{-- APARTADO NUEVO: Gestión y aprobación de docentes pendientes --}}
                     <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}">  Buzón IMAP</a></li>
-                    {{-- Enlace limpio hacia el apartado exclusivo de seguridad --}}
+                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
                     <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
                 @endcan
 
-                <li><a href="#"> Configuración del Sistema</a></li>
+                {{-- Enlace unificado al Centro de Configuración y Herramientas --}}
+                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
             </ul>
 
             <div class="sidebar-footer">
@@ -74,7 +73,8 @@
                         <a href="{{ route('admin.emails.index') }}" class="btn btn-primary"> Ver Buzón IMAP</a>
                         <a href="{{ route('admin.security') }}" class="btn btn-outline-danger"> Auditoría de Seguridad</a>
                     @endcan
-                    <a href="#" class="btn btn-outline-secondary">Ajustes del Sistema</a>
+                    {{-- Botón rápido en el panel hacia configuración --}}
+                    <a href="{{ route('settings.index') }}" class="btn btn-outline-secondary">Ajustes del Sistema</a>
                 </div>
             </div>
         </main>
