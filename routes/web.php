@@ -13,6 +13,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminTeacherController;
 use App\Http\Controllers\ReceivedEmailController;
+use App\Http\Controllers\SettingsController; 
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
@@ -75,6 +76,13 @@ Route::middleware('auth')->group(function () {
         $request->user()->sendEmailVerificationNotification();
         return back()->with('message', '¡Se ha enviado un nuevo enlace de verificación a tu correo!');
     })->middleware(['throttle:6,1'])->name('verification.send');
+
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::put('/settings/appearance', [SettingsController::class, 'updateAppearance'])->name('settings.appearance.update');
+    Route::get('/settings/download-data', [SettingsController::class, 'downloadPersonalData'])->name('settings.data.download');
+    Route::post('/settings/feedback', [SettingsController::class, 'sendFeedback'])->name('settings.feedback.send');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -83,10 +91,60 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::get('/admin/correos', [ReceivedEmailController::class, 'index'])->name('admin.emails.index');
     Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->name('admin.emails.show');
+    Route::delete('/admin/correos/{id}', [ReceivedEmailController::class, 'destroy'])->name('admin.emails.destroy');
+    Route::post('/admin/correos/{id}/reply', [ReceivedEmailController::class, 'reply'])->name('admin.emails.reply');
 
     Route::get('/admin/teachers/pending', [AdminTeacherController::class, 'index'])->name('admin.teachers.pending');
     Route::post('/admin/teachers/{id}/approve', [AdminTeacherController::class, 'approve'])->name('admin.teachers.approve');
     Route::delete('/admin/teachers/{id}/deny', [AdminTeacherController::class, 'deny'])->name('admin.teachers.deny');
+
+    Route::post('/admin/system/maintenance', [SettingsController::class, 'toggleMaintenance'])
+        ->name('admin.system.maintenance')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/test-email', [SettingsController::class, 'testEmailConnection'])
+        ->name('admin.system.testemail')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/backup', [SettingsController::class, 'generateBackup'])
+        ->name('admin.system.backup')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/clear-cache', [SettingsController::class, 'clearSystemCache'] ?? [DashboardController::class, 'clearSystemCache'])
+        ->name('admin.system.clearcache')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/logs/view', [SettingsController::class, 'viewLogs'])
+        ->name('admin.system.logs.view')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/logs/clear', [SettingsController::class, 'clearLogs'])
+        ->name('admin.system.logs.clear')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/smtp/test', [SettingsController::class, 'testSmtp'])
+        ->name('admin.system.smtp.test')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/db/optimize', [SettingsController::class, 'optimizeDatabase'])
+        ->name('admin.system.db.optimize')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/cache/inspect', [SettingsController::class, 'inspectCache'])
+        ->name('admin.system.cache.inspect')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/cache/granular', [SettingsController::class, 'clearGranularCache'])
+        ->name('admin.system.cache.granular')
+        ->middleware(['can:manage-users']);
+
+    Route::post('/admin/system/env/update', [SettingsController::class, 'updateEnv'])
+        ->name('admin.system.env.update')
+        ->middleware(['can:manage-users']);
+
+    Route::get('/admin/system/config', function() {
+        return redirect()->route('settings.index');
+    })->name('admin.system.config')->middleware(['can:manage-users']);
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')

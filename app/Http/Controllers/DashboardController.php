@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -41,5 +42,15 @@ class DashboardController extends Controller
         }
 
         return view('admin.security', compact('stats', 'recentFailedLogins', 'failedCount', 'securityStatus'));
+    }
+
+    public function clearSystemCache()
+    {
+        try {
+            Artisan::call('optimize:clear');
+            return back()->with('success', '¡Caché del sistema y optimizaciones limpiadas y restablecidas con éxito!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al ejecutar el mantenimiento del servidor.');
+        }
     }
 }

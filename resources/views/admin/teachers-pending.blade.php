@@ -23,7 +23,7 @@
                     <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
                 @endcan
 
-                <li><a href="#"> Configuración del Sistema</a></li>
+                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
             </ul>
 
             <div class="sidebar-footer">
