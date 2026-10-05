@@ -58,8 +58,9 @@
                 </div>
             </div>
 
+            {{-- MODAL DE RESPUESTA CON SOPORTE NATIVO OSCURO/CLARO EN SHOW --}}
             <div class="modal fade text-start" id="replyModal{{ $email->id ?? 1 }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog modal-dialog-centered" data-bs-theme="dark">
                     <div class="modal-content bg-dark text-white border border-secondary shadow-lg rounded-4">
                         <form action="{{ route('admin.emails.reply', $email->id ?? 1) }}" method="POST">
                             @csrf
@@ -72,11 +73,11 @@
                             <div class="modal-body p-4">
                                 <div class="mb-3">
                                     <label class="form-label small fw-bold text-light opacity-75">Asunto Original:</label>
-                                    <input type="text" class="form-control form-control-sm bg-black text-white border-secondary" value="{{ $email->subject ?? 'Soporte EduNivelam' }}" disabled>
+                                    <input type="text" class="form-control form-control-sm" value="{{ $email->subject ?? 'Soporte EduNivelam' }}" disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label for="reply_message{{ $email->id ?? 1 }}" class="form-label small fw-bold text-light">Mensaje de Respuesta:</label>
-                                    <textarea class="form-control bg-black text-white border-secondary @error('reply_message') is-invalid @enderror" id="reply_message{{ $email->id ?? 1 }}" name="reply_message" rows="5" placeholder="Escribe tu respuesta aquí..." required></textarea>
+                                    <textarea class="form-control @error('reply_message') is-invalid @enderror" id="reply_message{{ $email->id ?? 1 }}" name="reply_message" rows="5" placeholder="Escribe tu respuesta aquí..." required></textarea>
                                     @error('reply_message')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
