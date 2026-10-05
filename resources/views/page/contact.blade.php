@@ -26,10 +26,7 @@
         </div>
     @endif
 
-<<<<<<< HEAD
-=======
     {{-- Alerta de Error (Falla SMTP / Conexión) --}}
->>>>>>> 1e97314e18ff1f44cece9b29feae78790298efab
     @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-4 mb-4" role="alert">
             <div class="d-flex align-items-center">
