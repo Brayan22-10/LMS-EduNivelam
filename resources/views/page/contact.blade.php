@@ -12,7 +12,7 @@
         <div class="col-lg-8">
             <span class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill fw-bold">Centro de Ayuda y Soporte</span>
             <h1 class="fw-bold text-dark display-5">¿Cómo podemos ayudarte hoy?</h1>
-            <p class="text-muted lead">¿Tienes dudas sobre los cursos de nivelación, acceso a la plataforma o necesitas asistencia técnica? Escríbenos.</p>
+            <p class="text-muted lead">¿Tienes dudas sobre los cursos de nivelación, acceso a la plataforma o necesitas asistencia técnica? Escríbenos o consulta nuestras respuestas rápidas.</p>
         </div>
     </div>
 
@@ -37,37 +37,24 @@
     @endif
 
     <div class="row g-4 align-items-stretch">
+        {{-- Sección Lateral: Preguntas Frecuentes Dinámicas (Banco de 50 preguntas) --}}
         <div class="col-lg-5">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-gradient text-white bg-dark">
-                <h3 class="fw-bold mb-3 text-info">Canales Académicos</h3>
-                <p class="text-light opacity-80 small mb-4">Nuestro equipo de soporte del campus virtual está disponible para guiarte en todo tu proceso de nivelación.</p>
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="fw-bold text-dark m-0">Preguntas Frecuentes</h3>
+                    <button id="resetFaqBtn" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1" style="font-size: 0.75rem; display: none;">Ver principales</button>
+                </div>
+                <p class="text-muted small mb-3">Haz clic en una pregunta para ver su solución y filtrar temas relacionados.</p>
                 
-                <div class="d-flex mb-3 align-items-start">
-                    <div class="bg-primary text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"></div>
-                    <div>
-                        <h6 class="fw-bold mb-1 text-white">Sede Principal U</h6>
-                        <p class="text-muted small mb-0 text-light opacity-75">Campus Universitario / Edatel</p>
-                    </div>
-                </div>
-
-                <div class="d-flex mb-3 align-items-start">
-                    <div class="bg-success text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"></div>
-                    <div>
-                        <h6 class="fw-bold mb-1 text-white">Correo Electrónico</h6>
-                        <p class="text-muted small mb-0 text-light opacity-75">soporte@edunivelam.edu.co</p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-start">
-                    <div class="bg-warning text-dark rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"></div>
-                    <div>
-                        <h6 class="fw-bold mb-1 text-white">Horarios de Atención</h6>
-                        <p class="text-muted small mb-0 text-light opacity-75">Lunes a Viernes: 8:00 a.m. - 6:00 p.m.</p>
+                <div class="faq-scroll-container pe-1 flex-grow-1" style="max-height: 520px; overflow-y: auto;">
+                    <div class="accordion accordion-flush" id="faqAccordion">
+                        {{-- Las preguntas se inyectan dinámicamente mediante el archivo contact.js --}}
                     </div>
                 </div>
             </div>
         </div>
 
+        {{-- Formulario de Contacto Principal --}}
         <div class="col-lg-7">
             <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
                 <h3 class="fw-bold text-dark mb-4">Envíanos un mensaje</h3>
@@ -113,7 +100,12 @@
                             @enderror
                         </div>
 
-                        <div class="col-12 mt-4">
+                        <div class="col-12 my-3">
+                            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+                            <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
+                        </div>
+
+                        <div class="col-12 mt-2">
                             <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold shadow-sm py-3">Enviar Mensaje de Soporte</button>
                         </div>
                     </div>
