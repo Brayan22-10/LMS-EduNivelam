@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered; 
@@ -34,13 +35,53 @@ class AuthController extends Controller
 
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required', 'string', 'regex:/^\S*$/'],
+        ], [
+            'password.regex' => 'La contraseña no puede contener espacios en blanco.',
         ]);
+
+        $user = User::where('email', $email)->first();
+
+        if ($user && $user->role === 'teacher' && !$user->is_approved) {
+            return back()->withErrors([
+                'email' => 'Tu cuenta de docente se encuentra pendiente de aprobación por el administrador.',
+            ])->onlyInput('email');
+        }
+
+        if ($user && ($user->is_active === false || $user->is_active === 0)) {
+            DB::table('security_logs')->insert([
+                'user_id' => $user->id,
+                'email' => $email,
+                'ip_address' => $request->ip(),
+                'status' => 'failed',
+                'event_type' => 'inactive_account_access',
+                'description' => "Intento de acceso bloqueado: Cuenta desactivada para {$email}",
+                'user_agent' => $request->header('User-Agent'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return back()->withErrors([
+                'email' => 'Tu cuenta ha sido desactivada por un administrador. No puedes iniciar sesión.',
+            ])->onlyInput('email');
+        }
 
         $remember = $request->has('remember');
 
         if (!Auth::attempt($credentials, $remember)) {
             RateLimiter::hit($throttleKey, 300); 
+
+            DB::table('security_logs')->insert([
+                'user_id' => $user ? $user->id : null,
+                'email' => $email,
+                'ip_address' => $request->ip(),
+                'status' => 'failed',
+                'event_type' => 'failed_login',
+                'description' => "Intento de acceso fallido para el correo: {$email} desde la IP: {$request->ip()}",
+                'user_agent' => $request->header('User-Agent'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
             if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
                 $blockCount = cache()->get($lockoutCacheKey, 0) + 1;
@@ -64,6 +105,18 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        DB::table('security_logs')->insert([
+            'user_id' => Auth::id(),
+            'email' => Auth::user()->email,
+            'ip_address' => $request->ip(),
+            'status' => 'success',
+            'event_type' => 'successful_login',
+            'description' => "Inicio de sesión exitoso para el usuario ID: " . Auth::id(),
+            'user_agent' => $request->header('User-Agent'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         if ($remember) {
             Cookie::queue('saved_email', $request->email, 43200);
             Cookie::queue('saved_password', $request->password, 43200);
@@ -72,10 +125,6 @@ class AuthController extends Controller
             Cookie::queue(Cookie::forget('saved_email'));
             Cookie::queue(Cookie::forget('saved_password'));
             Cookie::queue(Cookie::forget('remember_checked'));
-        }
-
-        if (Auth::user()->email === 'admin@environmental.com') {
-            return redirect()->intended(route('dashboard'));
         }
 
         return redirect()->intended(route('home'));
@@ -92,6 +141,9 @@ class AuthController extends Controller
             'name' => $request->string('name'),
             'email' => Str::lower($request->string('email')),
             'password' => Hash::make($request->string('password')),
+            'role' => 'student',
+            'is_approved' => true,
+            'is_active' => true,
         ]);
 
         event(new Registered($user));
@@ -103,14 +155,69 @@ class AuthController extends Controller
         return redirect()->route('verification.notice');
     }
 
+    public function showTeacherRegister()
+    {
+        return view('auth.register-teacher');
+    }
+
+    public function registerTeacher(Request $request)
+    {
+        $eighteenYearsAgo = Carbon::now()->subYears(18)->format('Y-m-d');
+
+        $request->validate([
+            'name' => ['required', 'string', 'min:2', 'max:100', 'unique:users,name'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:users,dni'],
+            'country_code' => ['required', 'string'],
+            'phone' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20', 'unique:users,phone'],
+            'birthdate' => ['required', 'date', 'before_or_equal:' . $eighteenYearsAgo],
+            'teaching_type' => ['required', 'in:courses,advisories'],
+        ], [
+            'name.unique' => 'Este nombre de usuario ya está en uso.',
+            'email.unique' => 'Este correo electrónico ya está registrado.',
+            'dni.required' => 'La cédula o documento es obligatorio.',
+            'dni.regex' => 'La identificación solo debe contener números (sin letras ni símbolos).',
+            'dni.unique' => 'Este número de documento ya se encuentra registrado.',
+            'phone.required' => 'El teléfono es obligatorio.',
+            'phone.regex' => 'El teléfono solo debe contener números (sin espacios, letras ni símbolos).',
+            'phone.unique' => 'Este número de teléfono ya está en uso.',
+            'birthdate.required' => 'La fecha de nacimiento es obligatoria.',
+            'birthdate.before_or_equal' => 'Debes ser mayor de 18 años para registrarte como docente.',
+            'teaching_type.required' => 'Selecciona el tipo de postulación.',
+            'teaching_type.in' => 'Selecciona un tipo de postulación válido.',
+        ]);
+
+        User::create([
+            'name' => $request->input('name'),
+            'email' => Str::lower($request->input('email')),
+            'dni' => $request->input('dni'),
+            'country_code' => $request->input('country_code'),
+            'phone' => $request->input('phone'),
+            'birthdate' => $request->input('birthdate'),
+            'teaching_type' => $request->input('teaching_type'),
+            'password' => Hash::make(Str::random(16)), 
+            'role' => 'teacher',
+            'is_approved' => 0,
+            'is_active' => 0,
+        ]);
+
+        return redirect()->route('teacher.pending');
+    }
+
     public function logout(Request $request)
     {
+        $user = Auth::user();
+
+        if ($user && !$user->hasVerifiedEmail() && $user->role === 'student') {
+            $user->delete();
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('info', 'Has salido del sistema.');
     }
 
     public function showLinkRequestForm()

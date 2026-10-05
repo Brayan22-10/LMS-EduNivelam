@@ -16,14 +16,15 @@
             <ul class="sidebar-menu">
                 <li><a href="{{ route('dashboard') }}" class="active"> Resumen General</a></li>
                 
-                {{-- Autorización en vista alineada con la protección por middleware en el servidor --}}
                 @can('manage-users')
                     <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    {{-- Enlace añadido para la Bandeja de Entrada IMAP --}}
-                    <li><a href="{{ route('admin.emails.index') }}">  Buzón IMAP</a></li>
+                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
+                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
+                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
                 @endcan
 
-                <li><a href="#"> Configuración del Sistema</a></li>
+                {{-- Enlace unificado al Centro de Configuración y Herramientas --}}
+                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
             </ul>
 
             <div class="sidebar-footer">
@@ -45,7 +46,6 @@
                     <div class="stat-card shadow-sm border-0 p-3 bg-white rounded">
                         <div>
                             <h6 class="text-muted mb-1">Usuarios Registrados</h6>
-                            {{-- Conteo dinámico inyectado desde DashboardController --}}
                             <h3 class="fw-bold mb-0">{{ $stats['users'] }}</h3>
                         </div>
                     </div>
@@ -54,7 +54,6 @@
                     <div class="stat-card shadow-sm border-0 p-3 bg-white rounded">
                         <div>
                             <h6 class="text-muted mb-1">Publicaciones Activas</h6>
-                            {{-- Métrica adicional de publicaciones traída del controlador --}}
                             <h3 class="fw-bold mb-0 text-success">{{ $stats['posts'] }}</h3>
                         </div>
                     </div>
@@ -64,15 +63,18 @@
             <div class="card shadow-sm border-0 p-4">
                 <h4 class="mb-3 text-dark">Panel de Control General</h4>
                 <p class="text-muted">
-                    Este panel se encuentra protegido por un middleware de autenticación del servidor a nivel estricto. Desde aquí puedes supervisar las métricas de usuarios, revisar el buzón de soporte y administrar la configuración general del sistema mediante la barra lateral izquierda.
+                    Este panel se encuentra protegido por un middleware de autenticación del servidor a nivel estricto. Desde aquí puedes supervisar las métricas de usuarios, revisar el buzón de soporte y administrar la seguridad general del sistema mediante la barra lateral izquierda.
                 </p>
                 <hr>
                 <div class="d-flex gap-3 flex-wrap">
                     @can('manage-users')
                         <a href="{{ route('admin.users') }}" class="btn btn-dark">Administrar Usuarios</a>
+                        <a href="{{ route('admin.teachers.pending') }}" class="btn btn-success">Aceptar Docentes</a>
                         <a href="{{ route('admin.emails.index') }}" class="btn btn-primary"> Ver Buzón IMAP</a>
+                        <a href="{{ route('admin.security') }}" class="btn btn-outline-danger"> Auditoría de Seguridad</a>
                     @endcan
-                    <a href="#" class="btn btn-outline-secondary">Ajustes del Sistema</a>
+                    {{-- Botón rápido en el panel hacia configuración --}}
+                    <a href="{{ route('settings.index') }}" class="btn btn-outline-secondary">Ajustes del Sistema</a>
                 </div>
             </div>
         </main>

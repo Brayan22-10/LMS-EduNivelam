@@ -18,3 +18,83 @@ body {
     color: #0dcaf0 !important;
     transform: translateY(-1px);
 }
+
+body.bg-dark-mode {
+    background-color: #0b0f17 !important;
+    color: #f8f9fa !important;
+}
+
+body.bg-dark-mode h1,
+body.bg-dark-mode h2,
+body.bg-dark-mode h3,
+body.bg-dark-mode h4,
+body.bg-dark-mode h5,
+body.bg-dark-mode h6,
+body.bg-dark-mode p,
+body.bg-dark-mode span:not(.badge),
+body.bg-dark-mode label,
+body.bg-dark-mode .text-dark,
+body.bg-dark-mode .text-muted {
+    color: #f8f9fa !important;
+}
+
+body.bg-dark-mode .card,
+body.bg-dark-mode .card-settings,
+body.bg-dark-mode .stat-card,
+body.bg-dark-mode .dashboard-main-content,
+body.bg-dark-mode .container {
+    background-color: #0b0f17 !important;
+    color: #f8f9fa !important;
+}
+
+body.bg-dark-mode .card.shadow-sm,
+body.bg-dark-mode .table,
+body.bg-dark-mode .table-responsive,
+body.bg-dark-mode tr,
+body.bg-dark-mode td,
+body.bg-dark-mode th {
+    background-color: #161d26 !important;
+    color: #f8f9fa !important;
+    border-color: #26303d !important;
+}
+
+body.bg-dark-mode .admin-sidebar {
+    background-color: #111822 !important;
+    border-right: 1px solid #212c3d;
+}
+
+body.bg-dark-mode .sidebar-menu a {
+    color: #ced4da !important;
+}
+
+body.bg-dark-mode .sidebar-menu a:hover,
+body.bg-dark-mode .sidebar-menu a.active {
+    background-color: #1f2b3c !important;
+    color: #ffffff !important;
+}
+
+body.bg-dark-mode .form-control,
+body.bg-dark-mode .form-select,
+body.bg-dark-mode textarea {
+    background-color: #1e2936 !important;
+    border-color: #2e3c4f !important;
+    color: #ffffff !important;
+}
+
+body.bg-dark-mode .form-control:focus,
+body.bg-dark-mode .form-select:focus,
+body.bg-dark-mode textarea:focus {
+    background-color: #1e2936 !important;
+    color: #ffffff !important;
+    border-color: #6c757d !important;
+}
+
+body.bg-dark-mode .bg-light,
+body.bg-dark-mode .bg-white {
+    background-color: #161d26 !important;
+    color: #f8f9fa !important;
+}
+
+body.bg-dark-mode hr {
+    border-color: #2e3c4f !important;
+}
