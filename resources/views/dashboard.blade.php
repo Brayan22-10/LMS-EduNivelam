@@ -19,6 +19,8 @@
                 {{-- Autorización en vista alineada con la protección por middleware en el servidor --}}
                 @can('manage-users')
                     <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
+                    {{-- Enlace añadido para la Bandeja de Entrada IMAP --}}
+                    <li><a href="{{ route('admin.emails.index') }}">  Buzón IMAP</a></li>
                 @endcan
 
                 <li><a href="#"> Configuración del Sistema</a></li>
@@ -62,12 +64,13 @@
             <div class="card shadow-sm border-0 p-4">
                 <h4 class="mb-3 text-dark">Panel de Control General</h4>
                 <p class="text-muted">
-                    Este panel se encuentra protegido por un middleware de autenticación del servidor a nivel estricto. Desde aquí puedes supervisar las métricas de usuarios y administrar la configuración general del sistema mediante la barra lateral izquierda.
+                    Este panel se encuentra protegido por un middleware de autenticación del servidor a nivel estricto. Desde aquí puedes supervisar las métricas de usuarios, revisar el buzón de soporte y administrar la configuración general del sistema mediante la barra lateral izquierda.
                 </p>
                 <hr>
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-3 flex-wrap">
                     @can('manage-users')
                         <a href="{{ route('admin.users') }}" class="btn btn-dark">Administrar Usuarios</a>
+                        <a href="{{ route('admin.emails.index') }}" class="btn btn-primary"> Ver Buzón IMAP</a>
                     @endcan
                     <a href="#" class="btn btn-outline-secondary">Ajustes del Sistema</a>
                 </div>

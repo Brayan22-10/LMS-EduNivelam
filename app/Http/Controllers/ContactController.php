@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactMessage;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+=======
+use Illuminate\Support\Facades\Mail;
+>>>>>>> 1e97314e18ff1f44cece9b29feae78790298efab
 
 class ContactController extends Controller
 {
@@ -33,6 +37,7 @@ class ContactController extends Controller
             'message' => ['required', 'string', 'max:1000'],
         ]);
 
+<<<<<<< HEAD
         $turnstileResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
             'secret'   => config('services.turnstile.secret_key'),
             'response' => $request->input('cf-turnstile-response'),
@@ -43,6 +48,8 @@ class ContactController extends Controller
             return back()->withInput()->with('error', 'La verificación de seguridad de Cloudflare ha fallado. Por favor intenta de nuevo.');
         }
 
+=======
+>>>>>>> 1e97314e18ff1f44cece9b29feae78790298efab
         try {
             Mail::to('edunivelamsoporte@gmail.com')
             ->send(new ContactMessage(

@@ -1,0 +1,22 @@
+.instructors-hero {
+    background: linear-gradient(135deg, #198754 0%, #0f5132 100%);
+    border-radius: 1.5rem;
+}
+
+.instructor-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffff;
+}
+
+.instructor-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.instructor-avatar {
+    transition: transform 0.3s ease;
+}
+
+.instructor-card:hover .instructor-avatar {
+    transform: scale(1.08);
+}

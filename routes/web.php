@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ContactController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ReceivedEmailController;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
@@ -34,6 +36,16 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
+    Route::post('/check-session-status', function (Request $request) {
+        return response()->json(['status' => 'active']);
+    });
+    
+    Route::get('/admin/check-imap', [ContactController::class, 'validateImapConnection'])
+        ->name('admin.check.imap');
+    
+    Route::get('/admin/correos', [ReceivedEmailController::class, 'index'])->name('admin.emails.index');
+    Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->name('admin.emails.show');
     
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')

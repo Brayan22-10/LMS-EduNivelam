@@ -16,16 +16,20 @@
         </div>
     </div>
 
+    {{-- Alerta de Éxito --}}
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-4 mb-4" role="alert">
             <div class="d-flex align-items-center">
-                <span class="fs-4 me-2"></span>
                 <div>{{ session('success') }}</div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
+<<<<<<< HEAD
+=======
+    {{-- Alerta de Error (Falla SMTP / Conexión) --}}
+>>>>>>> 1e97314e18ff1f44cece9b29feae78790298efab
     @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-4 mb-4" role="alert">
             <div class="d-flex align-items-center">
@@ -82,9 +86,9 @@
                             <label for="subject" class="form-label fw-bold small text-muted">Asunto o Motivo</label>
                             <select class="form-select rounded-pill px-3 py-2 @error('subject') is-invalid @enderror" id="subject" name="subject" required>
                                 <option value="" selected disabled>Selecciona...</option>
-                                <option value="Soporte Técnico / Plataforma" {{ old('subject') == 'Soporte Técnico / Plataforma' ? 'selected' : '' }}> Soporte Técnico</option>
-                                <option value="Inscripción a Cursos" {{ old('subject') == 'Inscripción a Cursos' ? 'selected' : '' }}> Inscripción a Cursos</option>
-                                <option value="Asesoría con Instructores" {{ old('subject') == 'Asesoría con Instructores' ? 'selected' : '' }}> Asesoría Instructores</option>
+                                <option value="Soporte Técnico / Plataforma" {{ old('subject') == 'Soporte Técnico / Plataforma' ? 'selected' : '' }}>Soporte Técnico</option>
+                                <option value="Inscripción a Cursos" {{ old('subject') == 'Inscripción a Cursos' ? 'selected' : '' }}>Inscripción a Cursos</option>
+                                <option value="Asesoría con Instructores" {{ old('subject') == 'Asesoría con Instructores' ? 'selected' : '' }}>Asesoría Instructores</option>
                             </select>
                             @error('subject')
                                 <div class="invalid-feedback">{{ $message }}</div>

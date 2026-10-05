@@ -6,7 +6,7 @@
 
 @section('content')
 @php
-    $throttleKey = Str::lower(old('email', '')) . '|' . request()->ip();
+    $throttleKey = \Illuminate\Support\Str::lower(old('email', '')) . '|' . request()->ip();
     $secondsRemaining = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
     $isLocked = \Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5);
     
