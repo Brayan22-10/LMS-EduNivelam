@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ContactController extends Controller
 {
@@ -13,13 +17,45 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
+        $rateLimitKey = 'public-contact-' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 3)) {
+            $seconds = RateLimiter::availableIn($rateLimitKey);
+            return back()->withInput()->with('error', 'Has enviado demasiados mensajes. Por favor espera ' . ceil($seconds / 60) . ' minutos antes de intentar de nuevo.');
+        }
+
+        RateLimiter::hit($rateLimitKey, 900);
+
         $validated = $request->validate([
-            'name'    => ['required', 'string', 'max:255'],
-            'email'   => ['required', 'email', 'max:160'],
+            'name'    => ['required', 'string', 'max:100'],
+            'email'   => ['required', 'email', 'max:255'],
             'subject' => ['required', 'string', 'max:120'],
             'message' => ['required', 'string', 'max:1000'],
         ]);
 
-        return redirect()->route('contact')->with('success', '¡Mensaje enviado correctamente! Nuestro equipo de soporte académico se pondrá en contacto contigo pronto.');
+        $turnstileResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret'   => config('services.turnstile.secret_key'),
+            'response' => $request->input('cf-turnstile-response'),
+            'remoteip' => $request->ip(),
+        ]);
+
+        if (!$turnstileResponse->json('success')) {
+            return back()->withInput()->with('error', 'La verificación de seguridad de Cloudflare ha fallado. Por favor intenta de nuevo.');
+        }
+
+        try {
+            Mail::to('edunivelamsoporte@gmail.com')
+            ->send(new ContactMessage(
+                $validated['name'],
+                $validated['email'],
+                $validated['subject'],
+                $validated['message']
+            ));
+
+            return back()->with('success', '¡Mensaje enviado correctamente! Nuestro equipo de soporte académico se pondrá en contacto contigo pronto.');
+            
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Ocurrió un error al enviar el correo. Por favor, inténtalo más tarde.');
+        }
     }
 }
