@@ -63,7 +63,15 @@
                             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
                         </div>
 
-                        <button type="submit" id="submit-btn" class="btn btn-dark w-100" disabled>Registrarse</button>
+                        <button type="submit" id="submit-btn" class="btn btn-dark w-100 mb-3" disabled>Registrarse</button>
+
+                        {{-- ENLACE NUEVO HACIA EL REGISTRO DE DOCENTES --}}
+                        <div class="text-center mt-3 pt-3 border-top">
+                            <p class="text-muted small mb-1">¿Eres profesor y deseas formar parte de la plataforma?</p>
+                            <a href="{{ route('register.teacher') }}" class="text-decoration-none fw-bold text-dark">
+                                Regístrate como docente aquí →
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>

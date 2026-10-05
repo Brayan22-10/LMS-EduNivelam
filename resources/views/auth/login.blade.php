@@ -12,6 +12,11 @@
     
     $initialMinutes = ceil($secondsRemaining / 60);
     $initialMinutesFormatted = ($initialMinutes < 10 ? "0" : "") . $initialMinutes . ":00";
+
+    // Recuperamos nuestras cookies personalizadas si existen
+    $savedEmail = \Illuminate\Support\Facades\Cookie::get('saved_email');
+    $savedPassword = \Illuminate\Support\Facades\Cookie::get('saved_password');
+    $rememberChecked = \Illuminate\Support\Facades\Cookie::get('remember_checked');
 @endphp
 
 {{-- Ventana emergente (Modal) --}}
@@ -39,19 +44,40 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required>
+                            <label class="form-label">Dirección de correo electrónico</label>
+                            {{-- Solo muestra el correo si $rememberChecked está activo --}}
+                            <input type="email" name="email" value="{{ old('email', $rememberChecked ? $savedEmail : '') }}" class="form-control @error('email') is-invalid @enderror" required autocomplete="off">
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <label class="form-label">Contraseña</label>
+                            {{-- Contenedor con posicionamiento relativo para el icono flotante del ojo --}}
+                            <div class="position-relative">
+                                {{-- Solo muestra la contraseña si $rememberChecked está activo --}}
+                                <input type="password" name="password" id="password" value="{{ $rememberChecked ? $savedPassword : '' }}" class="form-control pe-5 @error('password') is-invalid @enderror" required autocomplete="new-password">
+                                
+                                <button class="btn border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y me-2 text-muted" type="button" id="togglePassword" style="z-index: 10; box-shadow: none;">
+                                    <i class="bi bi-eye-slash fs-5" id="toggleIcon"></i>
+                                </button>
+
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check d-flex justify-content-between align-items-center">
+                            <div>
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember" {{ old('remember') || $rememberChecked ? 'checked' : '' }}>
+                                <label class="form-check-label" for="remember">Recordar datos</label>
+                            </div>
+                            
+                            <div>
+                                <a href="{{ route('password.request') }}" class="text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-dark w-100">Sign In</button>
