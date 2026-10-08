@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminTeacherController;
 use App\Http\Controllers\ReceivedEmailController;
 use App\Http\Controllers\SettingsController; 
+use App\Http\Controllers\NewsController; 
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
@@ -23,6 +24,8 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 Route::get('/instructors', [SiteController::class, 'directory'])->name('instructors');
 Route::get('/courses', [SiteController::class, 'reports'])->name('courses');
+
+Route::get('/news', [NewsController::class, 'publicIndex'])->name('news.index');
 
 Route::resource('incidentes', IncidentController::class);
 Route::resource('posts', PostController::class);
@@ -105,6 +108,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/teachers/pending', [AdminTeacherController::class, 'index'])->name('admin.teachers.pending');
     Route::post('/admin/teachers/{id}/approve', [AdminTeacherController::class, 'approve'])->name('admin.teachers.approve');
     Route::delete('/admin/teachers/{id}/deny', [AdminTeacherController::class, 'deny'])->name('admin.teachers.deny');
+
+    Route::get('/admin/news', [NewsController::class, 'index'])
+        ->name('admin.news.index')
+        ->middleware(['can:manage-users']);
+        
+    Route::get('/admin/news/create', [NewsController::class, 'create'])
+        ->name('admin.news.create')
+        ->middleware(['can:manage-users']);
+        
+    Route::post('/admin/news', [NewsController::class, 'store'])
+        ->name('admin.news.store')
+        ->middleware(['can:manage-users']);
+
+    Route::get('/admin/news/{news}', [NewsController::class, 'show'])
+        ->name('admin.news.show')
+        ->middleware(['can:manage-users']);
+
+    Route::get('/admin/news/{news}/edit', [NewsController::class, 'edit'])
+        ->name('admin.news.edit')
+        ->middleware(['can:manage-users']);
+
+    Route::put('/admin/news/{news}', [NewsController::class, 'update'])
+        ->name('admin.news.update')
+        ->middleware(['can:manage-users']);
+
+    Route::delete('/admin/news/{news}', [NewsController::class, 'destroy'])
+        ->name('admin.news.destroy')
+        ->middleware(['can:manage-users']);
 
     Route::post('/admin/system/maintenance', [SettingsController::class, 'toggleMaintenance'])
         ->name('admin.system.maintenance')
