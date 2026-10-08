@@ -19,6 +19,9 @@
                             <a class="nav-link px-3" href="{{ route('about') }}">About</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}" href="{{ route('news.index') }}">News</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link px-3" href="{{ route('courses') }}">Cursos</a>
                         </li>
                         <li class="nav-item">
@@ -41,6 +44,10 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link px-3" href="{{ route('about') }}">About</a>
+                            </li>
+                            {{-- OPCIÓN NEWS AÑADIDA PARA USUARIOS LOGUEADOS --}}
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}" href="{{ route('news.index') }}">News</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link px-3" href="{{ route('courses') }}">Cursos</a>
@@ -71,7 +78,7 @@
                                 </li>
                             @endif
                         @else
-                            {{-- Si NO ha verificado su correo, ocultamos la navegación para evitar que escape --}}
+                            {{-- Si NO ha verificado su correo --}}
                             <li class="nav-item">
                                 <span class="nav-link text-warning small px-3">Verificación de correo pendiente</span>
                             </li>

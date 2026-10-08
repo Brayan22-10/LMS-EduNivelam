@@ -20,6 +20,8 @@
                     <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
                     <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
                     <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
+                    {{-- Opción de Gestión de Noticias añadida al menú lateral --}}
+                    <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
                     <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
                 @endcan
 
@@ -71,6 +73,8 @@
                         <a href="{{ route('admin.users') }}" class="btn btn-dark">Administrar Usuarios</a>
                         <a href="{{ route('admin.teachers.pending') }}" class="btn btn-success">Aceptar Docentes</a>
                         <a href="{{ route('admin.emails.index') }}" class="btn btn-primary"> Ver Buzón IMAP</a>
+                        {{-- Botón rápido en el panel hacia la gestión de noticias --}}
+                        <a href="{{ route('admin.news.index') }}" class="btn btn-info text-dark fw-bold"> Gestión de Noticias</a>
                         <a href="{{ route('admin.security') }}" class="btn btn-outline-danger"> Auditoría de Seguridad</a>
                     @endcan
                     {{-- Botón rápido en el panel hacia configuración --}}

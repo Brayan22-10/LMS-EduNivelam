@@ -25,6 +25,7 @@
                     <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
                     <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
                     <li><a href="{{ route('admin.emails.index') }}" class="active"> Buzón IMAP</a></li>
+                    <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
                     <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
                 @endcan
 
