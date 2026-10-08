@@ -83,6 +83,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/appearance', [SettingsController::class, 'updateAppearance'])->name('settings.appearance.update');
     Route::get('/settings/download-data', [SettingsController::class, 'downloadPersonalData'])->name('settings.data.download');
     Route::post('/settings/feedback', [SettingsController::class, 'sendFeedback'])->name('settings.feedback.send');
+
+    Route::get('/student/dashboard', function () {
+        return view('student.dashboard');
+    })->name('student.dashboard');
+
+    Route::get('/teacher/dashboard', function () {
+        return view('teacher.dashboard');
+    })->name('teacher.dashboard');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -52,11 +52,24 @@
                                 <a class="nav-link px-3" href="{{ route('contact') }}">Contact</a>
                             </li>
 
-                            @can('manage-users')
+                            {{-- Botón rápido dinámico según el Rol del usuario --}}
+                            @if(Auth::user()->role === 'admin' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('admin')))
                                 <li class="nav-item">
                                     <a class="nav-link text-warning fw-bold px-3" href="{{ route('dashboard') }}">Dashboard</a>
                                 </li>
-                            @endcan
+                            @elseif(Auth::user()->role === 'teacher' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('teacher')))
+                                <li class="nav-item ms-lg-2">
+                                    <a class="btn btn-warning btn-sm text-dark fw-bold px-3 py-1 rounded-pill shadow-sm" href="{{ route('teacher.dashboard') }}">
+                                        Mi Campus
+                                    </a>
+                                </li>
+                            @else
+                                <li class="nav-item ms-lg-2">
+                                    <a class="btn btn-info btn-sm text-dark fw-bold px-3 py-1 rounded-pill shadow-sm" href="{{ route('student.dashboard') }}">
+                                        Mi Campus
+                                    </a>
+                                </li>
+                            @endif
                         @else
                             {{-- Si NO ha verificado su correo, ocultamos la navegación para evitar que escape --}}
                             <li class="nav-item">

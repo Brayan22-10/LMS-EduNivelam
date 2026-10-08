@@ -126,6 +126,15 @@ class AuthController extends Controller
             Cookie::queue(Cookie::forget('saved_password'));
             Cookie::queue(Cookie::forget('remember_checked'));
         }
+        $authenticatedUser = Auth::user();
+
+        if ($authenticatedUser->role === 'admin') {
+            return redirect()->intended(route('home'));
+        } elseif ($authenticatedUser->role === 'teacher') {
+            return redirect()->intended(route('home'));
+        } elseif ($authenticatedUser->role === 'student') {
+            return redirect()->intended(route('home'));
+        }
 
         return redirect()->intended(route('home'));
     }

@@ -18,6 +18,7 @@ class SettingsController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $isAdmin = ($user->role === 'admin' || (method_exists($user, 'hasRole') && $user->hasRole('admin')));
 
         $activeDevices = collect();
         if (\Schema::hasTable('user_devices')) {
@@ -37,11 +38,11 @@ class SettingsController extends Controller
         }
         
         $storageUsage = 0;
-        if ($user->role === 'admin' or method_exists($user, 'hasRole') and $user->hasRole('admin')) {
+        if ($isAdmin) {
             $storageUsage = $this->getStorageUsage();
         }
 
-        return view('settings.index', compact('user', 'activeDevices', 'activityLogs', 'storageUsage'));
+        return view('settings.index', compact('user', 'activeDevices', 'activityLogs', 'storageUsage', 'isAdmin'));
     }
 
     public function updateProfile(Request $request)

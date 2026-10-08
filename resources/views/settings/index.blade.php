@@ -9,21 +9,43 @@
     <div class="dashboard-wrapper">
         <aside class="admin-sidebar">
             <div class="sidebar-header">
-                <h4>Panel Admin</h4>
-                <span class="sidebar-role">Gestión General</span>
+                @if(isset($isAdmin) && $isAdmin)
+                    <h4>Panel Admin</h4>
+                    <span class="sidebar-role">Gestión General</span>
+                @elseif(Auth::user()->role === 'teacher' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('teacher')))
+                    <h4>Panel Docente</h4>
+                    <span class="sidebar-role">Gestión Académica</span>
+                @else
+                    <h4>Panel Estudiante</h4>
+                    <span class="sidebar-role">Nivelación Académica</span>
+                @endif
             </div>
             
             <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                
-                @can('manage-users')
-                    <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
-                @endcan
+                @if(isset($isAdmin) && $isAdmin)
+                    <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
+                    
+                    @can('manage-users')
+                        <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
+                        <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
+                        <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
+                        <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
+                    @endcan
 
-                <li><a href="{{ route('settings.index') }}" class="active"> Configuración del Sistema</a></li>
+                    <li><a href="{{ route('settings.index') }}" class="active"> Configuración del Sistema</a></li>
+                @elseif(Auth::user()->role === 'teacher' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('teacher')))
+                    {{-- Menú adaptado para el Docente --}}
+                    <li><a href="{{ route('teacher.dashboard') }}"> Inicio Docente</a></li>
+                    <li><a href="#" onclick="return false;" > Mis Cursos</a></li>
+                    <li><a href="#" onclick="return false;" > Gestión de Cursos</a></li>
+                    <li><a href="{{ route('settings.index') }}" class="active"> Configuración de Cuenta</a></li>
+                @else
+                    {{-- Menú adaptado para el Estudiante --}}
+                    <li><a href="{{ route('student.dashboard') }}"> Inicio Estudiante</a></li>
+                    <li><a href="#" onclick="return false;" > Mis Cursos</a></li>
+                    <li><a href="#" onclick="return false;" > Catalogo</a></li>
+                    <li><a href="{{ route('settings.index') }}" class="active"> Configuración de Cuenta</a></li>
+                @endif
             </ul>
 
             <div class="sidebar-footer">
@@ -43,7 +65,7 @@
                 </div>
                 <div class="mt-3 mt-md-0">
                     <span class="badge bg-dark text-white px-3 py-2 rounded-pill fs-6">
-                        Rol: {{ ucfirst(Auth::user()->role ?? 'Administrador') }}
+                        Rol: {{ ucfirst(Auth::user()->role ?? 'Estudiante') }}
                     </span>
                 </div>
             </div>
@@ -116,11 +138,11 @@
                                 <i class="bi bi-question-circle fs-6 me-2"></i> Ayuda y Comentarios
                             </button>
 
-                            @can('manage-users')
+                            @if(isset($isAdmin) && $isAdmin)
                                 <button class="nav-link text-start d-flex align-items-center" id="server-tab" data-bs-toggle="pill" data-bs-target="#server" type="button">
                                     <i class="bi bi-hdd-rack fs-6 me-2"></i> Configuración del Servidor
                                 </button>
-                            @endcan
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -405,7 +427,7 @@
                             </div>
                         </div>
 
-                        @can('manage-users')
+                        @if(isset($isAdmin) && $isAdmin)
                             <div class="tab-pane fade" id="server" role="tabpanel">
                                 <div class="card card-settings p-4 p-lg-5 border-dark">
                                     <h4 class="fw-bold text-dark mb-1">Centro de Comando y Mantenimiento Avanzado</h4>
@@ -569,7 +591,7 @@
 
                                 </div>
                             </div>
-                        @endcan
+                        @endif
 
                     </div>
                 </div>
