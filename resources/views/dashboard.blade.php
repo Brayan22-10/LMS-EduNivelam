@@ -20,7 +20,7 @@
                     <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
                     <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
                     <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                    {{-- Opción de Gestión de Noticias añadida al menú lateral --}}
+                    <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
                     <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
                     <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
                 @endcan
