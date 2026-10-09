@@ -22,10 +22,10 @@
                             <a class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}" href="{{ route('news.index') }}">News</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{{ route('courses') }}">Cursos</a>
+                            <a class="nav-link px-3" href="{{ route('courses') }}">courses</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{{ route('instructors') }}">Instructores</a>
+                            <a class="nav-link px-3" href="{{ route('instructors') }}">Instructors</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-3" href="{{ route('contact') }}">Contact</a>
