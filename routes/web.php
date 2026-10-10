@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminTeacherController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\ReceivedEmailController;
 use App\Http\Controllers\SettingsController; 
 use App\Http\Controllers\NewsController; 
@@ -135,6 +136,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::delete('/admin/news/{news}', [NewsController::class, 'destroy'])
         ->name('admin.news.destroy')
+        ->middleware(['can:manage-users']);
+
+    Route::resource('/admin/banners', BannerController::class)
+        ->names('admin.banners')
         ->middleware(['can:manage-users']);
 
     Route::post('/admin/system/maintenance', [SettingsController::class, 'toggleMaintenance'])
