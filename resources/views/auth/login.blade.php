@@ -13,13 +13,11 @@
     $initialMinutes = ceil($secondsRemaining / 60);
     $initialMinutesFormatted = ($initialMinutes < 10 ? "0" : "") . $initialMinutes . ":00";
 
-    // Recuperamos nuestras cookies personalizadas si existen
     $savedEmail = \Illuminate\Support\Facades\Cookie::get('saved_email');
     $savedPassword = \Illuminate\Support\Facades\Cookie::get('saved_password');
     $rememberChecked = \Illuminate\Support\Facades\Cookie::get('remember_checked');
 @endphp
 
-{{-- Ventana emergente (Modal) --}}
 <div id="lockout-modal" class="lockout-modal-overlay" style="display: {{ $isLocked ? 'flex' : 'none' }};">
     <div class="lockout-modal-card">
         <h3 class="lockout-title">¡Acceso Bloqueado!</h3>
@@ -45,7 +43,6 @@
 
                         <div class="mb-3">
                             <label class="form-label">Dirección de correo electrónico</label>
-                            {{-- Solo muestra el correo si $rememberChecked está activo --}}
                             <input type="email" name="email" value="{{ old('email', $rememberChecked ? $savedEmail : '') }}" class="form-control @error('email') is-invalid @enderror" required autocomplete="off">
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -54,9 +51,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Contraseña</label>
-                            {{-- Contenedor con posicionamiento relativo para el icono flotante del ojo --}}
                             <div class="position-relative">
-                                {{-- Solo muestra la contraseña si $rememberChecked está activo --}}
                                 <input type="password" name="password" id="password" value="{{ $rememberChecked ? $savedPassword : '' }}" class="form-control pe-5 @error('password') is-invalid @enderror" required autocomplete="new-password">
                                 
                                 <button class="btn border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y me-2 text-muted" type="button" id="togglePassword" style="z-index: 10; box-shadow: none;">

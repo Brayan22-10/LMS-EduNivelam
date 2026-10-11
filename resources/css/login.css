@@ -68,3 +68,18 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
     display: none !important;
 }
+
+html.public-root,
+html.public-root body {
+    height: auto !important;
+    min-height: 100vh !important;
+    background-color: #f8f9fa !important;
+    overflow-y: auto !important;
+}
+
+.container,
+#login-container {
+    height: auto !important;
+    min-height: auto !important;
+    padding-bottom: 4rem;
+}
