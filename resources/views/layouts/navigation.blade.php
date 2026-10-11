@@ -11,24 +11,23 @@
                 <ul class="navbar-nav align-items-center gap-2">
                     
                     @guest
-                        {{-- Menú público para visitantes --}}
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{{ route('home') }}">Home</a>
+                            <a class="nav-link px-3 rounded-pill {{ request()->routeIs('home') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{{ route('about') }}">About</a>
+                            <a class="nav-link px-3 rounded-pill {{ request()->routeIs('about') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('about') }}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}" href="{{ route('news.index') }}">News</a>
+                            <a class="nav-link px-3 rounded-pill {{ request()->routeIs('news.*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('news.index') }}">News</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{{ route('courses') }}">Courses</a>
+                            <a class="nav-link px-3 rounded-pill {{ request()->routeIs('courses*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('courses') }}">Courses</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{{ route('instructors') }}">Instructors</a>
+                            <a class="nav-link px-3 rounded-pill {{ request()->routeIs('instructors*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('instructors') }}">Instructors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" href="{{ route('contact') }}">Contact</a>
+                            <a class="nav-link px-3 rounded-pill {{ request()->routeIs('contact*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('contact') }}">Contact</a>
                         </li>
                         <li class="nav-item ms-lg-2">
                             <a class="nav-link btn btn-outline-light px-3 py-1 rounded-pill" href="{{ route('login') }}">Login</a>
@@ -37,29 +36,26 @@
                             <a class="nav-link btn btn-info text-dark fw-bold px-3 py-1 rounded-pill" href="{{ route('register') }}">Sign Up</a>
                         </li>
                     @else
-                        {{-- Usuario Autenticado: Verificamos si ya validó su correo --}}
                         @if(Auth::user()->hasVerifiedEmail())
                             <li class="nav-item">
-                                <a class="nav-link px-3" href="{{ route('home') }}">Home</a>
+                                <a class="nav-link px-3 rounded-pill {{ request()->routeIs('home') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('home') }}">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link px-3" href="{{ route('about') }}">About</a>
-                            </li>
-                            {{-- OPCIÓN NEWS AÑADIDA PARA USUARIOS LOGUEADOS --}}
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}" href="{{ route('news.index') }}">News</a>
+                                <a class="nav-link px-3 rounded-pill {{ request()->routeIs('about') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('about') }}">About</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link px-3" href="{{ route('courses') }}">Cursos</a>
+                                <a class="nav-link px-3 rounded-pill {{ request()->routeIs('news.*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('news.index') }}">News</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link px-3" href="{{ route('instructors') }}">Instructores</a>
+                                <a class="nav-link px-3 rounded-pill {{ request()->routeIs('courses*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('courses') }}">Cursos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link px-3" href="{{ route('contact') }}">Contact</a>
+                                <a class="nav-link px-3 rounded-pill {{ request()->routeIs('instructors*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('instructors') }}">Instructores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 rounded-pill {{ request()->routeIs('contact*') ? 'bg-primary text-white fw-semibold shadow-sm' : '' }}" href="{{ route('contact') }}">Contact</a>
                             </li>
 
-                            {{-- Botón rápido dinámico según el Rol del usuario --}}
                             @if(Auth::user()->role === 'admin' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('admin')))
                                 <li class="nav-item">
                                     <a class="nav-link text-warning fw-bold px-3" href="{{ route('dashboard') }}">Dashboard</a>
@@ -78,7 +74,6 @@
                                 </li>
                             @endif
                         @else
-                            {{-- Si NO ha verificado su correo --}}
                             <li class="nav-item">
                                 <span class="nav-link text-warning small px-3">Verificación de correo pendiente</span>
                             </li>
