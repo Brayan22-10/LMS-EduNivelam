@@ -45,6 +45,12 @@ class SettingsController extends Controller
         return view('settings.index', compact('user', 'activeDevices', 'activityLogs', 'storageUsage', 'isAdmin'));
     }
 
+    public function profileView()
+    {
+        $user = Auth::user();
+        return view('admin.profile', compact('user'));
+    }
+
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -85,7 +91,7 @@ class SettingsController extends Controller
             $user->bio = strip_tags($request->input('bio')); 
         }
 
-        if ($request->has('remove_avatar') and $request->input('remove_avatar') == '1') {
+        if ($request->has('remove_avatar') and$request->input('remove_avatar') == '1') {
             if ($user->avatar and Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
@@ -97,10 +103,8 @@ class SettingsController extends Controller
                 Storage::disk('public')->delete($user->avatar);
             }
 
-            $file = $request->file('avatar');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('avatars', $filename, 'public');
-            $user->avatar = $path;
+            $file = $request->file('avatar');$filename = Str::uuid() . '.' . $file->getClientOriginalExtension();$path = $file->storeAs('avatars',$filename, 'public');
+            $user->avatar =$path;
         }
 
         $user->save();
@@ -122,9 +126,8 @@ class SettingsController extends Controller
                 'min:8', 
                 'confirmed', 
                 'regex:/^\S*$/', 
-                function ($attribute, $value, $fail) use ($user) {
-                    if (strtolower($value) === strtolower($user->name) or str_contains(strtolower($value), strtolower($user->name))) {
-                        $fail('La contraseña no puede contener tu nombre de usuario.');
+                function ($attribute,$value, $fail) use ($user) {
+                    if (strtolower($value) === strtolower($user->name) or str_contains(strtolower($value), strtolower($user->name))) {$fail('La contraseña no puede contener tu nombre de usuario.');
                     }
                 },
             ],
@@ -137,8 +140,7 @@ class SettingsController extends Controller
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
         ]);
 
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
+        $user->password = Hash::make($request->input('password'));$user->save();
 
         $this->logActivity($user->id, 'Cambio de contraseña de acceso', $request->ip());
 
@@ -157,8 +159,8 @@ class SettingsController extends Controller
             'font_size.in' => 'El tamaño de tipografía seleccionado no es válido.',
         ]);
 
-        $user->font_size = $request->input('font_size');
-        $user->high_contrast = $request->has('high_contrast') ? true : false;
+        $user->font_size =$request->input('font_size');
+        $user->high_contrast =$request->has('high_contrast') ? true : false;
         $user->save();
 
         $this->logActivity($user->id, 'Modificación de preferencias visuales y accesibilidad', $request->ip());
@@ -168,15 +170,14 @@ class SettingsController extends Controller
 
     public function downloadPersonalData(Request $request)
     {
-        $user = Auth::user();
-        $data = [
+        $user = Auth::user();$data = [
             'perfil' => $user->toArray(),
             'fecha_exportacion' => now()->toDateTimeString(),
             'plataforma' => 'EduNivelam'
         ];
 
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        $fileName = 'mis-datos-edunivelam-' . $user->id . '.json';
+        $fileName = 'mis-datos-edunivelam-' .$user->id . '.json';
 
         $this->logActivity($user->id, 'Exportación y descarga de datos personales', $request->ip());
 
@@ -195,11 +196,11 @@ class SettingsController extends Controller
         ]);
 
         $user = Auth::user();
-        $messageContent = $request->input('feedback_message');
+        $messageContent =$request->input('feedback_message');
 
         try {
             $supportEmail = 'edunivelamsoporte@gmail.com';
-            Mail::to($supportEmail)->send(new UserFeedbackMail($messageContent, $user));
+            Mail::to($supportEmail)->send(new UserFeedbackMail($messageContent,$user));
             $this->logActivity($user->id, 'Envío exitoso de comentarios al correo de soporte', $request->ip());
 
             return back()->with('success', '¡Gracias por tus comentarios! Tu mensaje ha sido enviado directamente al equipo de soporte.');
@@ -212,7 +213,7 @@ class SettingsController extends Controller
     public function toggleMaintenance(Request $request)
     {
         $this->authorizeAdmin();
-        $action = $request->input('action'); 
+        $action =$request->input('action'); 
 
         try {
             if ($action === 'down') {
@@ -229,9 +230,7 @@ class SettingsController extends Controller
 
     public function testEmailConnection(Request $request)
     {
-        $this->authorizeAdmin();
-        $isSimulation = $request->has('simular_falla');
-        $startTime = microtime(true);
+        $this->authorizeAdmin();$isSimulation = $request->has('simular_falla');$startTime = microtime(true);
 
         try {
             $pdo = DB::connection()->getPdo();
@@ -240,15 +239,14 @@ class SettingsController extends Controller
             }
 
             $dbName = DB::getDatabaseName();
-            $driver = DB::getDriverName();
-            $tables = DB::select('SHOW TABLES');
+            $driver = DB::getDriverName();$tables = DB::select('SHOW TABLES');
             $tablesCount = count($tables);
 
             if ($isSimulation) {
                 throw new \Exception("Simulación de fallo crítico: El servicio IMAP no responde al comando AUTH y la réplica de base de datos presenta timeout (>5000ms).");
             }
 
-            $latency = round((microtime(true) - $startTime) * 1000, 2);
+            $latency = round((microtime(true) -$startTime) * 1000, 2);
 
             $diagnosticData = [
                 'estado' => 'ESTABLE (Operación Normal)',
@@ -271,7 +269,7 @@ class SettingsController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            $latency = round((microtime(true) - $startTime) * 1000, 2);
+            $latency = round((microtime(true) -$startTime) * 1000, 2);
 
             $diagnosticData = [
                 'estado' => 'ANORMAL / CRÍTICO (Fallo Operativo)',
@@ -298,8 +296,7 @@ class SettingsController extends Controller
 
         try {
             $filename = 'backup_edunivelam_completo_' . date('Y-m-d_H-i-s') . '.sql';
-            $dbName = DB::getDatabaseName();
-            $sqlContent = "-- ========================================================\n";
+            $dbName = DB::getDatabaseName();$sqlContent = "-- ========================================================\n";
             $sqlContent .= "-- EDUNIVELAM - RESPALDO ÍNTEGRO DE BASE DE DATOS\n";
             $sqlContent .= "-- Base de datos: {$dbName}\n";
             $sqlContent .= "-- Fecha de generación: " . now()->toDateTimeString() . "\n";
@@ -307,11 +304,9 @@ class SettingsController extends Controller
             $sqlContent .= "-- ========================================================\n\n";
 
             $tablesResult = DB::select('SHOW TABLES');
-            $tableKey = 'Tables_in_' . $dbName;
+            $tableKey = 'Tables_in_' .$dbName;
             
-            foreach ($tablesResult as $row) {
-                $tableName = $row->$tableKey ?? reset($row);
-                $createTable = DB::select("SHOW CREATE TABLE `{$tableName}`");
+            foreach ($tablesResult as $row) {$tableName = $row->$tableKey ?? reset($row);$createTable = DB::select("SHOW CREATE TABLE `{$tableName}`");
                 $createSql =$createTable[0]->{'Create Table'} ?? '';
 
                 $sqlContent .= "-- --------------------------------------------------------\n";
@@ -624,13 +619,12 @@ class SettingsController extends Controller
 
     public function toggleTheme(Request $request)
     {
-    $user = Auth::user();
-    $user->high_contrast = $request->input('high_contrast', !$user->high_contrast);
-    $user->save();
+        $user = Auth::user();
+        $user->high_contrast =$request->input('high_contrast', !$user->high_contrast);$user->save();
 
-    return response()->json([
-        'success' => true,
-        'high_contrast' => $user->high_contrast
-    ]);
+        return response()->json([
+            'success' => true,
+            'high_contrast' => $user->high_contrast
+        ]);
     }
 }

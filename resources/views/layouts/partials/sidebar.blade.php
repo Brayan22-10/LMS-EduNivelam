@@ -33,7 +33,10 @@
         <li><a href="{{ route('settings.index') }}" class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">Configuración</a></li>
     </ul>
 
-    <div class="sidebar-footer">
+    <div class="sidebar-footer d-flex flex-column gap-2">
+        <a href="{{ route('admin.profile') }}" class="btn w-100 text-start py-2 px-3 rounded-6 fw-bold text-decoration-none d-flex align-items-center gap-2 {{ request()->routeIs('admin.profile') ? 'active' : '' }}" style="background-color: #343a40; color: #fff; font-size: 0.88rem; border: none;">
+            <i class="bi bi-person-circle fs-6"></i> Mi Perfil
+        </a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>

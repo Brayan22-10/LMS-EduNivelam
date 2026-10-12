@@ -88,6 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/toggle-theme', [SettingsController::class, 'toggleTheme'])->name('settings.toggle-theme');
     Route::get('/settings/download-data', [SettingsController::class, 'downloadPersonalData'])->name('settings.data.download');
     Route::post('/settings/feedback', [SettingsController::class, 'sendFeedback'])->name('settings.feedback.send');
+    Route::get('/admin/profile', [SettingsController::class, 'profileView'])->name('admin.profile');
 
     Route::get('/student/dashboard', function () {
         return view('student.dashboard');

@@ -69,10 +69,7 @@
                         </div>
 
                         <div class="nav flex-column settings-sidebar" id="settingsTab" role="tablist">
-                            <button class="nav-link active text-start d-flex align-items-center" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile" type="button">
-                                <i class="bi bi-person-gear fs-6 me-2"></i> Perfil y Cuenta
-                            </button>
-                            <button class="nav-link text-start d-flex align-items-center" id="security-tab" data-bs-toggle="pill" data-bs-target="#security" type="button">
+                            <button class="nav-link active text-start d-flex align-items-center" id="security-tab" data-bs-toggle="pill" data-bs-target="#security" type="button">
                                 <i class="bi bi-shield-lock fs-6 me-2"></i> Seguridad
                             </button>
                             <button class="nav-link text-start d-flex align-items-center" id="appearance-tab" data-bs-toggle="pill" data-bs-target="#appearance" type="button">
@@ -103,68 +100,7 @@
                 <div class="col-lg-8 col-xl-9">
                     <div class="tab-content pb-5" id="settingsTabContent">
                         
-                        <div class="tab-pane fade show active" id="profile" role="tabpanel">
-                            <div class="card card-settings p-4 p-lg-5">
-                                <h4 class="fw-bold text-dark mb-1">Información de Perfil</h4>
-                                <p class="text-muted small mb-4">Actualiza tu foto de avatar, nombre de usuario y descripción profesional.</p>
-                                <hr class="text-muted opacity-25 mb-4">
-
-                                <form action="{{ route('settings.profile.update') }}" method="POST" enctype="multipart/form-data" id="profileForm">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="remove_avatar" id="remove_avatar" value="0">
-
-                                    <div class="d-flex flex-column flex-sm-row align-items-center bg-light p-4 rounded-4 mb-4">
-                                        <div class="avatar-upload-box mb-3 mb-sm-0 me-sm-4">
-                                            @if($user->avatar && Storage::disk('public')->exists($user->avatar))
-                                                <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="avatar-preview">
-                                            @else
-                                                <div class="avatar-preview bg-secondary text-white d-flex align-items-center justify-content-center fw-bold fs-2 shadow-sm" style="width: 90px; height: 90px; border-radius: 50%;">
-                                                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="flex-grow-1 text-center text-sm-start">
-                                            <label for="avatar" class="form-label fw-bold text-dark">Fotografía de Perfil</label>
-                                            <input type="file" class="form-control form-control-sm @error('avatar') is-invalid @enderror mb-2" id="avatar" name="avatar" accept="image/png, image/jpeg, image/jpg, image/webp">
-                                            
-                                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center justify-content-sm-start">
-                                                <div class="form-text text-muted m-0">Formatos: JPEG, PNG, WEBP. Máx: 2MB.</div>
-                                                @if($user->avatar && Storage::disk('public')->exists($user->avatar))
-                                                    <button type="button" class="btn btn-outline-danger btn-sm py-0 px-2" id="removeAvatarBtn" style="font-size: 0.75rem;">
-                                                        <i class="bi bi-trash"></i> Eliminar foto actual
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-md-6">
-                                            <label for="name" class="form-label fw-semibold text-dark">Nombre de usuario</label>
-                                            <input type="text" class="form-control py-2" id="name" name="name" value="{{ old('name', $user->name) }}" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="email" class="form-label fw-semibold text-dark">Correo Electrónico</label>
-                                            <input type="email" class="form-control py-2" id="email" name="email" value="{{ old('email', $user->email) }}" required>
-                                        </div>
-                                    </div>
-
-                                    @if(\Schema::hasColumn('users', 'bio'))
-                                        <div class="mb-4">
-                                            <label for="bio" class="form-label fw-semibold text-dark">Biografía Profesional o Descripción</label>
-                                            <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="Escribe algo interesante sobre ti...">{{ old('bio', $user->bio ?? '') }}</textarea>
-                                        </div>
-                                    @endif
-
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-dark px-5 py-2 fw-semibold shadow-sm">Guardar Cambios</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="security" role="tabpanel">
+                        <div class="tab-pane fade show active" id="security" role="tabpanel">
                             <div class="card card-settings p-4 p-lg-5">
                                 <h4 class="fw-bold text-dark mb-1">Seguridad y Credenciales</h4>
                                 <p class="text-muted small mb-4">Protege tu cuenta actualizando tu contraseña bajo los estándares avanzados de seguridad.</p>
@@ -349,7 +285,6 @@
                                 <div class="bg-light p-4 rounded-4 mb-4 border">
                                     <h6 class="fw-bold text-dark mb-1"><i class="bi bi-chat-heart me-2"></i> Envíanos tus Comentarios o Sugerencias</h6>
                                     <p class="text-muted small mb-3">Tu opinión es vital para mejorar la plataforma. ¿Tienes alguna idea o reportas un error de interfaz?</p>
-                                    
                                     <form action="{{ route('settings.feedback.send') }}" method="POST">
                                         @csrf
                                         <div class="mb-3">
@@ -368,7 +303,6 @@
                                         <button type="button" class="btn btn-outline-secondary btn-sm fw-bold px-3" data-bs-toggle="modal" data-bs-target="#privacyModal">Política de Privacidad</button>
                                     </div>
                                 </div>
-
                                 <div class="bg-white p-4 rounded-4 border text-center">
                                     <div class="avatar-upload-box mx-auto mb-2 bg-dark text-white d-flex align-items-center justify-content-center fw-bold fs-4 rounded-circle shadow-sm" style="width: 50px; height: 50px;">
                                         E
@@ -682,7 +616,7 @@
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#helpAccordion">
-                            <div class="accordion-body small text-muted">
+                            <div class="accordion-body small text-dark fw-medium" style="color: #212529 !important;">
                                 Dirígete al apartado de "Cursos" en el menú superior, explora el catálogo disponible y haz clic en el botón de inscripción directa o solicitud de aprobación docente.
                             </div>
                         </div>
@@ -694,7 +628,7 @@
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
-                            <div class="accordion-body small text-muted">
+                            <div class="accordion-body small text-dark fw-medium" style="color: #212529 !important;">
                                 En la pantalla de inicio de sesión, selecciona la opción "¿Olvidaste tu contraseña?" e ingresa tu correo registrado para recibir un enlace seguro de restablecimiento.
                             </div>
                         </div>
@@ -748,7 +682,6 @@
 @section('scripts')
     @vite([
         'resources/js/settings/password-validation.js',
-        'resources/js/settings/profile-settings.js',
         'resources/js/settings/appearance-settings.js',
         'resources/js/settings/server-actions.js'
     ])
