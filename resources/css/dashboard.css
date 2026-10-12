@@ -4,27 +4,37 @@ body {
     overflow: hidden;
     margin: 0;
     padding: 0;
-    background-color: #f4f6f9;
 }
 
 .dashboard-fullscreen-fix {
     position: absolute;
-    top: 95px;
+    top: 0;
     left: 0;
     width: 100%;
-    height: calc(100vh - 95px);
-    background-color: #f4f6f9;
+    height: 100vh;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+body.admin-fixed-body nav.navbar,
+body.admin-fixed-body header {
+    flex-shrink: 0;
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    z-index: 1050;
 }
 
 .dashboard-wrapper {
     display: flex;
     width: 100%;
-    height: 100%;
+    flex-grow: 1;
+    height: calc(100vh - 55px);
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 .admin-sidebar {
@@ -34,7 +44,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 12px 15px;
+    padding: 20px 15px;
     flex-shrink: 0;
     height: 100%;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -57,19 +67,19 @@ body {
 .sidebar-menu {
     list-style: none;
     padding: 0;
-    margin-top: 8px;
+    margin-top: 15px;
     flex-grow: 1;
 }
 
 .sidebar-menu li {
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .sidebar-menu li a {
     display: block;
     color: #ced4da;
     text-decoration: none;
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-radius: 6px;
     transition: all 0.2s ease;
     font-weight: 500;
@@ -84,8 +94,8 @@ body {
 }
 
 .sidebar-footer {
-    padding-top: 2px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .btn-logout-sidebar {
@@ -93,7 +103,7 @@ body {
     background-color: #dc3545;
     color: white;
     border: none;
-    padding: 6px;
+    padding: 8px;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
@@ -107,9 +117,8 @@ body {
 
 .dashboard-main-content {
     flex-grow: 1;
-    padding: 18px 25px;
-    overflow-y: hidden;
-    background-color: #f4f6f9;
+    padding: 20px 25px;
+    overflow-y: auto !important;
     height: 100%;
 }
 
@@ -117,7 +126,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .dashboard-topbar h2 {
@@ -134,4 +143,87 @@ body {
 
 .stat-card:hover {
     transform: translateY(-2px);
+}
+
+html.public-root,
+html.public-root body {
+    overflow: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    position: static !important;
+}
+
+html.admin-root,
+html.admin-root body,
+body.admin-fixed-body {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
+
+body.admin-fixed-body nav.navbar,
+body.admin-fixed-body header.navbar {
+    position: sticky !important;
+    top: 0 !important;
+    left: 260px !important;
+    width: calc(100% - 260px) !important;
+    height: 55px !important;
+    min-height: 55px !important;
+    padding: 0.2rem 1.5rem !important;
+    background-color: #161a22 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 1030;
+    display: flex;
+    align-items: center;
+}
+
+body.admin-fixed-body .dashboard-main-content {
+    margin-top: 0 !important;
+    height: 100% !important;
+    padding-top: 80px !important;
+}
+
+.dashboard-main-content .tab-content {
+    padding-bottom: 2rem !important;
+}
+
+.card-settings {
+    margin-bottom: 1rem;
+}
+
+html,
+body,
+.dashboard-fullscreen-fix,
+.dashboard-wrapper,
+.dashboard-main-content {
+    background-color: #f8f9fa !important;
+    color: #212529 !important;
+}
+
+.bg-card-adaptive {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+}
+
+.text-dark-adaptive {
+    color: #212529 !important;
+}
+
+body.bg-dark-mode,
+body.bg-dark-mode .dashboard-fullscreen-fix,
+body.bg-dark-mode .dashboard-wrapper,
+body.bg-dark-mode .dashboard-main-content {
+    background-color: #0f1115 !important;
+    color: #f8f9fa !important;
+}
+
+body.bg-dark-mode .bg-card-adaptive {
+    background-color: #161d26 !important;
+    color: #f8f9fa !important;
+    border: 1px solid #26303d !important;
+    box-shadow: none !important;
+}
+
+body.bg-dark-mode .text-dark-adaptive {
+    color: #f8f9fa !important;
 }

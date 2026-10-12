@@ -1,7 +1,21 @@
+.dashboard-fullscreen-fix {
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+.dashboard-wrapper {
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
 .dashboard-main-content {
+    flex-grow: 1 !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
     overflow-y: auto !important;
-    max-height: calc(100vh - 100px);
-    padding-bottom: 3rem !important;
+    overflow-x: hidden !important;
+    padding-bottom: 4rem !important;
+    padding-top: 25px !important;
 }
 
 .settings-container {
@@ -53,6 +67,9 @@
     box-shadow: 0 0.5rem 1.2rem rgba(18, 38, 63, 0.04);
     background: #ffffff;
 }
+
+
+/* Modo Oscuro Adaptativo */
 
 body.bg-dark-mode {
     background-color: #0b0f17 !important;

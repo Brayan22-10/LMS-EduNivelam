@@ -12,42 +12,13 @@
 @section('content')
 <div class="dashboard-fullscreen-fix">
     <div class="dashboard-wrapper">
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h4>Panel Admin</h4>
-                <span class="sidebar-role">Gestión General</span>
-            </div>
-            
-            <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                
-                @can('manage-users')
-                    <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}" class="active"> Buzón IMAP</a></li>
-                    <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
-                    <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
-                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
-                @endcan
-
-                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
-                </form>
-            </div>
-        </aside>
+        @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar">
+            <div class="dashboard-topbar mb-4">
                 <h2>Bandeja de Entrada (IMAP)</h2>
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm rounded-pill">Volver al Dashboard</a>
             </div>
 
-            {{-- Alertas de éxito o error --}}
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show rounded-4 mb-4" role="alert">
                     {{ session('success') }}
@@ -90,19 +61,16 @@
                                     <td>{{ $email->received_at ? $email->received_at->format('d/m/Y H:i') : 'N/A' }}</td>
                                     <td class="text-center">
                                         <div class="d-inline-flex align-items-center gap-1">
-                                            {{-- Botón Ver Mensaje --}}
                                             <a href="{{ route('admin.emails.show', $email->id) }}" 
                                                class="btn btn-sm btn-outline-primary px-2 py-1 rounded-pill" title="Ver Mensaje">
                                                 <i class="bi bi-eye-fill"></i> Ver
                                             </a>
 
-                                            {{-- Botón Responder que abre el Modal --}}
                                             <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-1 rounded-pill" 
                                                     data-bs-toggle="modal" data-bs-target="#replyModal{{ $email->id }}" title="Responder">
                                                 <i class="bi bi-reply-fill"></i> Responder
                                             </button>
 
-                                            {{-- Botón Eliminar --}}
                                             <form action="{{ route('admin.emails.destroy', $email->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este correo de la bandeja?');" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -112,9 +80,7 @@
                                             </form>
                                         </div>
 
-                                        {{-- MODAL DE RESPUESTA CON SOPORTE NATIVO OSCURO/CLARO --}}
                                         <div class="modal fade text-start" id="replyModal{{ $email->id }}" tabindex="-1" aria-labelledby="replyModalLabel{{ $email->id }}" aria-hidden="true">
-                                            {{-- data-bs-theme="dark" fuerza a que Bootstrap pinte los inputs y textos oscuros correctamente --}}
                                             <div class="modal-dialog modal-dialog-centered" data-bs-theme="dark">
                                                 <div class="modal-content bg-dark text-white border border-secondary shadow-lg rounded-4">
                                                     <form action="{{ route('admin.emails.reply', $email->id) }}" method="POST">
@@ -146,7 +112,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- FIN DEL MODAL --}}
 
                                     </td>
                                 </tr>

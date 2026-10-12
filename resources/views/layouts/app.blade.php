@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ request()->routeIs('dashboard') || request()->routeIs('admin.*') ? 'admin-root' : 'public-root' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ (request()->routeIs('dashboard') || request()->routeIs('admin.*')) ? 'admin-root' : 'public-root' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,13 +11,11 @@
     @vite(['resources/css/app.css', 'resources/css/dashboard.css', 'resources/js/app.js'])
     @yield('styles')
 </head>
-<body style="font-size: {{ (Auth::check() && Auth::user()->font_size) ? Auth::user()->font_size : '14px' }};" class="{{ (Auth::check() && Auth::user()->high_contrast) ? 'bg-dark-mode text-light' : 'bg-light text-dark' }} {{ request()->routeIs('dashboard') || request()->routeIs('admin.*') ? 'admin-fixed-body' : 'public-scroll-body' }}">
+<body style="font-size: {{ (Auth::check() && Auth::user()->font_size) ? Auth::user()->font_size : '14px' }};" class="{{ (Auth::check() && Auth::user()->high_contrast) ? 'bg-dark-mode text-light' : 'bg-light text-dark' }} {{ (request()->routeIs('dashboard') || request()->routeIs('admin.*')) ? 'admin-fixed-body' : 'public-scroll-body' }}">
     
-    @if(!request()->routeIs('admin.*'))
-        @include('layouts.navigation')
-    @endif
+    @include('layouts.navigation')
 
-    @if(request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('login*') || request()->routeIs('register*') || request()->routeIs('teacher.pending'))
+    @if(request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->teacher_pending ?? false)
         <div class="auth-wrapper-content">
             @yield('content')
         </div>
@@ -27,7 +25,10 @@
                 @yield('content')
             </div>
         </main>
-        @include('layouts.footer')
+        
+        @if(!request()->routeIs('login*') && !request()->routeIs('register*'))
+            @include('layouts.footer')
+        @endif
     @endif
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>

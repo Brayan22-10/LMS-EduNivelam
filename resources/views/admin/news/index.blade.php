@@ -9,37 +9,8 @@
 @section('content')
 <div class="dashboard-fullscreen-fix">
     <div class="dashboard-wrapper">
-        {{-- Menú Lateral del Administrador --}}
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h4>Panel Admin</h4>
-                <span class="sidebar-role">Gestión General</span>
-            </div>
-            
-            <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                
-                @can('manage-users')
-                    <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                    <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
-                    <li><a href="{{ route('admin.news.index') }}" class="active"> Gestión de Noticias</a></li>
-                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
-                @endcan
+        @include('layouts.partials.sidebar')
 
-                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- Contenido Principal --}}
         <main class="dashboard-main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
@@ -85,15 +56,12 @@
                                     <td class="text-muted">{{ $item->created_at->format('d/m/Y H:i') }}</td>
                                     <td class="text-end pe-3">
                                         <div class="d-flex justify-content-end gap-2">
-                                            {{-- Botón Ver minimalista estilo outline con icono --}}
                                             <a href="{{ route('admin.news.show', $item->id) }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
                                                 <i class="bi bi-eye me-1"></i> Ver
                                             </a>
-                                            {{-- Botón Editar minimalista estilo outline con icono --}}
                                             <a href="{{ route('admin.news.edit', $item->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 text-dark">
                                                 <i class="bi bi-pencil me-1"></i> Editar
                                             </a>
-                                            {{-- Botón Eliminar minimalista estilo outline con icono --}}
                                             <form action="{{ route('admin.news.destroy', $item->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta noticia?');" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

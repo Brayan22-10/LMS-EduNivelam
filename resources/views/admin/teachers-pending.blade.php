@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Gestión de Solicitudes de Docentes - EduNivelam')
+
 @section('styles')
     @vite(['resources/css/dashboard.css'])
 @endsection
@@ -7,37 +9,10 @@
 @section('content')
 <div class="dashboard-fullscreen-fix">
     <div class="dashboard-wrapper">
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h4>Panel Admin</h4>
-                <span class="sidebar-role">Gestión General</span>
-            </div>
-            
-            <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                
-                @can('manage-users')
-                    <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.teachers.pending') }}" class="active"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                    <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
-                    <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
-                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
-                @endcan
-
-                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
-                </form>
-            </div>
-        </aside>
+        @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar">
+            <div class="dashboard-topbar mb-4">
                 <h2>Gestión de Solicitudes de Docentes</h2>
                 <span class="badge bg-warning text-dark p-2">Pendientes: {{ $pendingTeachers->count() }}</span>
             </div>

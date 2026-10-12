@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Gestión de Usuarios - EduNivelam')
+
 @section('styles')
     @vite(['resources/css/dashboard.css', 'resources/css/admin-users.css'])
 @endsection
@@ -7,37 +9,11 @@
 @section('content')
 <div class="dashboard-fullscreen-fix">
     <div class="dashboard-wrapper">
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h4>Panel Admin</h4>
-                <span class="sidebar-role">Gestión General</span>
-            </div>
-            
-            <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                
-                @can('manage-users')
-                    <li><a href="{{ route('admin.users') }}" class="active"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                    <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
-                    <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
-                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
-                @endcan
-
-                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
-                </form>
-            </div>
-        </aside>
+        @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar">
+            {{-- Barra de título superior recuperada --}}
+            <div class="dashboard-topbar mb-4">
                 <h2>Gestión de Usuarios</h2>
                 <span class="badge bg-success text-white p-2">Total: {{ $users->count() }}</span>
             </div>
@@ -95,12 +71,9 @@
                                         {{ $user->created_at->format('d/m/Y H:i') }}
                                     </td>
                                     
-                                    {{-- Columna con ambos botones de acción independientes --}}
                                     <td class="text-center">
                                         @if(Auth::id() !== $user->id)
                                             <div class="d-flex justify-content-center gap-2">
-                                                
-                                                {{-- Botón Dinámico: Desactivar o Activar --}}
                                                 @if($user->is_active ?? true)
                                                     <button type="button" class="btn btn-warning btn-sm text-dark fw-bold" data-bs-toggle="modal" data-bs-target="#statusModal{{ $user->id }}">
                                                         Desactivar
@@ -111,13 +84,11 @@
                                                     </button>
                                                 @endif
 
-                                                {{-- Botón de Eliminar Definitivo --}}
                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}">
                                                     Eliminar
                                                 </button>
                                             </div>
 
-                                            {{-- Modal para cambiar Estado (Activar / Desactivar) --}}
                                             <div class="modal fade" id="statusModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
@@ -146,7 +117,6 @@
                                                 </div>
                                             </div>
 
-                                            {{-- Modal para Eliminar Definitivamente --}}
                                             <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
@@ -168,7 +138,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         @else
                                             <span class="badge bg-secondary">Tu cuenta</span>
                                         @endif
@@ -187,7 +156,6 @@
     </div>
 </div>
 
-{{-- Modal para ver detalles del usuario --}}
 <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

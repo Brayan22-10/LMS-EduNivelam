@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Monitoreo de Seguridad - Admin')
+
 @section('styles')
     @vite(['resources/css/dashboard.css'])
 @endsection
@@ -7,40 +9,12 @@
 @section('content')
 <div class="dashboard-fullscreen-fix">
     <div class="dashboard-wrapper">
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h4>Panel Admin</h4>
-                <span class="sidebar-role">Gestión General</span>
-            </div>
-            
-            <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                
-                @can('manage-users')
-                    <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                    <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
-                    <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
-                    <li><a href="{{ route('admin.security') }}" class="active"> Seguridad y Accesos</a></li>
-                @endcan
-
-                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
-                </form>
-            </div>
-        </aside>
+        @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
             <div class="dashboard-topbar">
                 <h2>Monitoreo de Seguridad</h2>
                 
-                {{-- Indicador visual de estado de seguridad --}}
                 @if($securityStatus === 'secure')
                     <span class="badge bg-success text-white p-2">Sistema Seguro (Operación Normal)</span>
                 @elseif($securityStatus === 'warning')
@@ -50,7 +24,6 @@
                 @endif
             </div>
 
-            {{-- APARTADO EXCLUSIVO DEL WIDGET DE SEGURIDAD Y ACCESOS --}}
             <div class="row mb-4">
                 <div class="col-md-12">
                     <div class="card shadow-sm border-0">
@@ -90,7 +63,6 @@
                                                 <td><code>{{ $log->email ?? 'N/D' }}</code></td>
                                                 <td><span class="badge bg-light text-dark border">{{ $log->ip_address }}</span></td>
                                                 <td>
-                                                    {{-- Colores dinámicos: Verde para logins exitosos, Rojo para fallidos --}}
                                                     @if(isset($log->status) && $log->status === 'success')
                                                         <span class="text-success fw-semibold">{{ $log->description }}</span>
                                                     @else

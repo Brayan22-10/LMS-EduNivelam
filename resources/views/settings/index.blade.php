@@ -7,58 +7,9 @@
 @section('content')
 <div class="dashboard-fullscreen-fix" data-server-active="{{ (session('success') || session('cache_modal') || session('db_report_modal') || session('log_modal') || session('diagnostic_modal')) ? 'true' : 'false' }}">
     <div class="dashboard-wrapper">
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                @if(isset($isAdmin) && $isAdmin)
-                    <h4>Panel Admin</h4>
-                    <span class="sidebar-role">Gestión General</span>
-                @elseif(Auth::user()->role === 'teacher' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('teacher')))
-                    <h4>Panel Docente</h4>
-                    <span class="sidebar-role">Gestión Académica</span>
-                @else
-                    <h4>Panel Estudiante</h4>
-                    <span class="sidebar-role">Nivelación Académica</span>
-                @endif
-            </div>
-            
-            <ul class="sidebar-menu">
-                @if(isset($isAdmin) && $isAdmin)
-                    <li><a href="{{ route('dashboard') }}"> Resumen General</a></li>
-                    
-                    @can('manage-users')
-                        <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                        <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                        <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                        <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
-                        <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
-                        <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
-                    @endcan
+        @include('layouts.partials.sidebar')
 
-                    <li><a href="{{ route('settings.index') }}" class="active"> Configuración del Sistema</a></li>
-                @elseif(Auth::user()->role === 'teacher' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('teacher')))
-                    {{-- Menú adaptado para el Docente --}}
-                    <li><a href="{{ route('teacher.dashboard') }}"> Inicio Docente</a></li>
-                    <li><a href="#" onclick="return false;" > Mis Cursos</a></li>
-                    <li><a href="#" onclick="return false;" > Gestión de Cursos</a></li>
-                    <li><a href="{{ route('settings.index') }}" class="active"> Configuración de Cuenta</a></li>
-                @else
-                    {{-- Menú adaptado para el Estudiante --}}
-                    <li><a href="{{ route('student.dashboard') }}"> Inicio Estudiante</a></li>
-                    <li><a href="#" onclick="return false;" > Mis Cursos</a></li>
-                    <li><a href="#" onclick="return false;" > Catalogo</a></li>
-                    <li><a href="{{ route('settings.index') }}" class="active"> Configuración de Cuenta</a></li>
-                @endif
-            </ul>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
-                </form>
-            </div>
-        </aside>
-
-        <main class="dashboard-main-content py-4 px-lg-5">
+        <main class="dashboard-main-content py-3 px-lg-4">
             
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom">
                 <div>

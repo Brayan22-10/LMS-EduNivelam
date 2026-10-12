@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Panel General - EduNivelam')
+
 @section('styles')
     @vite(['resources/css/dashboard.css'])
 @endsection
@@ -7,78 +9,48 @@
 @section('content')
 <div class="dashboard-fullscreen-fix">
     <div class="dashboard-wrapper">
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h4>Panel Admin</h4>
-                <span class="sidebar-role">Gestión General</span>
-            </div>
-            
-            <ul class="sidebar-menu">
-                <li><a href="{{ route('dashboard') }}" class="active"> Resumen General</a></li>
-                
-                @can('manage-users')
-                    <li><a href="{{ route('admin.users') }}"> Gestión de Usuarios</a></li>
-                    <li><a href="{{ route('admin.teachers.pending') }}"> Aceptar Docentes</a></li>
-                    <li><a href="{{ route('admin.emails.index') }}"> Buzón IMAP</a></li>
-                    <li><a href="{{ route('admin.banners.index') }}"> Gestión de Banners</a></li>
-                    <li><a href="{{ route('admin.news.index') }}"> Gestión de Noticias</a></li>
-                    <li><a href="{{ route('admin.security') }}"> Seguridad y Accesos</a></li>
-                @endcan
+        @include('layouts.partials.sidebar')
 
-                {{-- Enlace unificado al Centro de Configuración y Herramientas --}}
-                <li><a href="{{ route('settings.index') }}"> Configuración del Sistema</a></li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
-                </form>
-            </div>
-        </aside>
-
-        <main class="dashboard-main-content">
-            <div class="dashboard-topbar">
-                <h2>Bienvenido, {{ Auth::user()->name }}</h2>
-                <span class="badge bg-success text-white p-2">Sistema Activo</span>
+        <main class="dashboard-main-content py-4 px-4">
+            <div class="dashboard-topbar mb-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold mb-1 text-dark-adaptive">Bienvenido, {{ Auth::user()->name }}</h2>
+                    <p class="text-muted small mb-0">Panel de control y supervisión general del sistema.</p>
+                </div>
+                <span class="badge bg-success text-white px-3 py-2 rounded-pill">Sistema Activo</span>
             </div>
 
             <div class="row g-4 mb-4">
                 <div class="col-md-6">
-                    <div class="stat-card shadow-sm border-0 p-3 bg-white rounded">
-                        <div>
-                            <h6 class="text-muted mb-1">Usuarios Registrados</h6>
-                            <h3 class="fw-bold mb-0">{{ $stats['users'] }}</h3>
-                        </div>
+                    <div class="stat-card shadow-sm border-0 p-4 rounded-4 h-100 bg-card-adaptive">
+                        <h6 class="text-muted mb-2 text-uppercase small fw-bold">Usuarios Registrados</h6>
+                        <h3 class="fw-bold mb-0 display-6 text-dark-adaptive">{{ $stats['users'] }}</h3>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="stat-card shadow-sm border-0 p-3 bg-white rounded">
-                        <div>
-                            <h6 class="text-muted mb-1">Publicaciones Activas</h6>
-                            <h3 class="fw-bold mb-0 text-success">{{ $stats['posts'] }}</h3>
-                        </div>
+                    <div class="stat-card shadow-sm border-0 p-4 rounded-4 h-100 bg-card-adaptive">
+                        <h6 class="text-muted mb-2 text-uppercase small fw-bold">Publicaciones Activas</h6>
+                        <h3 class="fw-bold mb-0 text-success display-6">{{ $stats['posts'] }}</h3>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-sm border-0 p-4">
-                <h4 class="mb-3 text-dark">Panel de Control General</h4>
-                <p class="text-muted">
+            <div class="card shadow-sm border-0 p-4 rounded-4 bg-card-adaptive">
+                <h4 class="mb-3 fw-bold text-dark-adaptive">Panel de Control General</h4>
+                <p class="text-secondary small lh-relaxed">
                     Este panel se encuentra protegido por un middleware de autenticación del servidor a nivel estricto. Desde aquí puedes supervisar las métricas de usuarios, revisar el buzón de soporte y administrar la seguridad general del sistema mediante la barra lateral izquierda.
                 </p>
-                <hr>
-                <div class="d-flex gap-3 flex-wrap">
+                <hr class="text-muted opacity-25">
+                <div class="d-flex gap-2 flex-wrap pt-2">
                     @can('manage-users')
-                        <a href="{{ route('admin.users') }}" class="btn btn-dark">Administrar Usuarios</a>
-                        <a href="{{ route('admin.teachers.pending') }}" class="btn btn-success">Aceptar Docentes</a>
-                        <a href="{{ route('admin.emails.index') }}" class="btn btn-primary"> Ver Buzón IMAP</a>
-                        {{-- Botón rápido en el panel hacia la gestión de noticias --}}
-                        <a href="{{ route('admin.news.index') }}" class="btn btn-info text-dark fw-bold"> Gestión de Noticias</a>
-                        <a href="{{ route('admin.security') }}" class="btn btn-outline-danger"> Auditoría de Seguridad</a>
+                        <a href="{{ route('admin.users') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">Administrar Usuarios</a>
+                        <a href="{{ route('admin.teachers.pending') }}" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white">Aceptar Docentes</a>
+                        <a href="{{ route('admin.emails.index') }}" class="btn btn-primary btn-sm rounded-pill px-3 fw-bold">Ver Buzón IMAP</a>
+                        <a href="{{ route('admin.banners.index') }}" class="btn btn-primary btn-sm rounded-pill px-3 fw-bold">Gestión de Banners</a>
+                        <a href="{{ route('admin.news.index') }}" class="btn btn-info text-dark btn-sm rounded-pill px-3 fw-bold">Gestión de Noticias</a>
+                        <a href="{{ route('admin.security') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold">Auditoría de Seguridad</a>
                     @endcan
-                    {{-- Botón rápido en el panel hacia configuración --}}
-                    <a href="{{ route('settings.index') }}" class="btn btn-outline-secondary">Ajustes del Sistema</a>
+                    <a href="{{ route('settings.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold">Ajustes del Sistema</a>
                 </div>
             </div>
         </main>
