@@ -621,4 +621,16 @@ class SettingsController extends Controller
             ]);
         }
     }
+
+    public function toggleTheme(Request $request)
+    {
+    $user = Auth::user();
+    $user->high_contrast = $request->input('high_contrast', !$user->high_contrast);
+    $user->save();
+
+    return response()->json([
+        'success' => true,
+        'high_contrast' => $user->high_contrast
+    ]);
+    }
 }

@@ -85,6 +85,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');
     Route::put('/settings/appearance', [SettingsController::class, 'updateAppearance'])->name('settings.appearance.update');
+    Route::post('/settings/toggle-theme', [SettingsController::class, 'toggleTheme'])->name('settings.toggle-theme');
     Route::get('/settings/download-data', [SettingsController::class, 'downloadPersonalData'])->name('settings.data.download');
     Route::post('/settings/feedback', [SettingsController::class, 'sendFeedback'])->name('settings.feedback.send');
 

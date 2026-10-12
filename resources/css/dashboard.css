@@ -227,3 +227,53 @@ body.bg-dark-mode .bg-card-adaptive {
 body.bg-dark-mode .text-dark-adaptive {
     color: #f8f9fa !important;
 }
+
+.theme-switch-container {
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 50rem;
+    padding: 3px;
+    gap: 3px;
+    border: 1px solid rgba(100, 100, 100, 0.15);
+}
+
+body.bg-dark-mode .theme-switch-container {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-switch-btn {
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+
+.theme-switch-btn:hover {
+    color: #212529;
+}
+
+body.bg-dark-mode .theme-switch-btn:hover {
+    color: #ffffff;
+}
+
+.theme-switch-btn.active {
+    background-color: #ffffff;
+    color: #ffc107;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+body.bg-dark-mode .theme-switch-btn.active {
+    background-color: #212b38;
+    color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
