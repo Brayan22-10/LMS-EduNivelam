@@ -89,6 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/download-data', [SettingsController::class, 'downloadPersonalData'])->name('settings.data.download');
     Route::post('/settings/feedback', [SettingsController::class, 'sendFeedback'])->name('settings.feedback.send');
     Route::get('/admin/profile', [SettingsController::class, 'profileView'])->name('admin.profile');
+    Route::put('/admin/profile', [SettingsController::class, 'updateProfile'])->name('admin.profile.update');
 
     Route::get('/student/dashboard', function () {
         return view('student.dashboard');

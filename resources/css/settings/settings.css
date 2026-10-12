@@ -1,18 +1,18 @@
 .dashboard-fullscreen-fix {
-    height: 100vh !important;
-    overflow: hidden !important;
+    min-height: calc(100vh - 70px) !important;
+    overflow: visible !important;
 }
 
 .dashboard-wrapper {
-    height: 100vh !important;
-    overflow: hidden !important;
+    min-height: calc(100vh - 70px) !important;
+    overflow: visible !important;
 }
 
 .dashboard-main-content {
     flex-grow: 1 !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-    overflow-y: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: visible !important;
     overflow-x: hidden !important;
     padding-bottom: 4rem !important;
     padding-top: 25px !important;

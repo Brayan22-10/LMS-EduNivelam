@@ -56,62 +56,65 @@ class SettingsController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => ['required', 'string', 'min:2', 'max:100', 'unique:users,name,' . $user->id],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'name' => ['nullable', 'string', 'min:2', 'max:100', 'unique:users,name,' . $user->id],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'bio' => ['nullable', 'string', 'max:500'],
+            'github_url' => ['nullable', 'url', 'max:255'],
+            'linkedin_url' => ['nullable', 'url', 'max:255'],
+            'portfolio_url' => ['nullable', 'url', 'max:255'],
             'avatar' => [
                 'nullable', 
                 'image', 
                 'mimes:jpeg,png,jpg,webp',
                 'max:2048',            
             ],
-        ], [
-            'name.required' => 'El campo de nombre de usuario es obligatorio.',
-            'name.string' => 'El nombre debe ser una cadena de texto válida.',
-            'name.min' => 'El nombre de usuario debe tener al menos 2 caracteres.',
-            'name.max' => 'El nombre de usuario no puede superar los 100 caracteres.',
-            'name.unique' => 'Este nombre de usuario ya está registrado por otra cuenta.',
-
-            'email.required' => 'El correo electrónico es obligatorio.',
-            'email.email' => 'Debes ingresar una dirección de correo electrónico válida.',
-            'email.max' => 'El correo electrónico no puede superar los 255 caracteres.',
-            'email.unique' => 'Este correo electrónico ya se encuentra registrado en otra cuenta.',
-
-            'bio.max' => 'La biografía profesional no puede superar los 500 caracteres.',
-
-            'avatar.image' => 'El archivo adjunto debe ser una imagen válida.',
-            'avatar.mimes' => 'La imagen debe tener un formato permitido (JPEG, PNG, JPG, WEBP).',
-            'avatar.max' => 'La imagen de perfil no puede pesar más de 2MB.',
         ]);
 
-        $user->name = $request->input('name');
-        $user->email = Str::lower($request->input('email'));
+        if ($request->filled('name')) {
+            $user->name = $request->input('name');
+        }
+        if ($request->filled('email')) {
+            $user->email = Str::lower($request->input('email'));
+        }
         
-        if (\Schema::hasColumn('users', 'bio')) {
+        if ($request->has('bio') && \Schema::hasColumn('users', 'bio')) {
             $user->bio = strip_tags($request->input('bio')); 
         }
 
-        if ($request->has('remove_avatar') and$request->input('remove_avatar') == '1') {
-            if ($user->avatar and Storage::disk('public')->exists($user->avatar)) {
+        if ($request->has('github_url') && \Schema::hasColumn('users', 'github_url')) {
+            $user->github_url = $request->input('github_url');
+        }
+        if ($request->has('linkedin_url') && \Schema::hasColumn('users', 'linkedin_url')) {
+            $user->linkedin_url = $request->input('linkedin_url');
+        }
+        if ($request->has('portfolio_url') && \Schema::hasColumn('users', 'portfolio_url')) {
+            $user->portfolio_url = $request->input('portfolio_url');
+        }
+
+        if ($request->has('remove_avatar') && $request->input('remove_avatar') == '1') {
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
             $user->avatar = null;
         }
 
         if ($request->hasFile('avatar')) {
-            if ($user->avatar and Storage::disk('public')->exists($user->avatar)) {
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
 
-            $file = $request->file('avatar');$filename = Str::uuid() . '.' . $file->getClientOriginalExtension();$path = $file->storeAs('avatars',$filename, 'public');
-            $user->avatar =$path;
+            $file = $request->file('avatar');
+            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('avatars', $filename, 'public');
+            $user->avatar = $path;
         }
 
         $user->save();
+        $user->refresh(); 
 
-        $this->logActivity($user->id, 'Actualización de perfil e identidad', $request->ip());
+        $this->logActivity($user->id, 'Actualización de perfil y redes sociales', $request->ip());
 
-        return back()->with('success', '¡Perfil y foto actualizados correctamente!');
+        return back()->with('success', '¡Perfil y enlaces actualizados correctamente!');
     }
 
     public function updatePassword(Request $request)

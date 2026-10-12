@@ -162,24 +162,29 @@ body.admin-fixed-body {
 
 body.admin-fixed-body nav.navbar,
 body.admin-fixed-body header.navbar {
-    position: sticky !important;
-    top: 0 !important;
-    left: 260px !important;
-    width: calc(100% - 260px) !important;
-    height: 55px !important;
-    min-height: 55px !important;
-    padding: 0.2rem 1.5rem !important;
-    background-color: #161a22 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: fixed !important;
+    top: 15px !important;
+    left: calc(260px + 20px) !important;
+    right: 20px !important;
+    width: auto !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    margin: 0 !important;
+    border-radius: 50rem !important;
+    padding: 0 2rem !important;
+    background-color: #12161f !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3) !important;
     z-index: 1030;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 body.admin-fixed-body .dashboard-main-content {
-    margin-top: 0 !important;
+    margin-top: 15px !important;
     height: 100% !important;
-    padding-top: 80px !important;
+    padding-top: 90px !important;
 }
 
 .dashboard-main-content .tab-content {

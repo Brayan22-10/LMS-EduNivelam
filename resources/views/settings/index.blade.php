@@ -4,7 +4,12 @@
     @vite(['resources/css/dashboard.css', 'resources/css/settings/settings.css'])
 @endsection
 
+@section('hide_footer')
+@endsection
+
 @section('content')
+@include('layouts.navigation')
+
 <div class="dashboard-fullscreen-fix" data-server-active="{{ (session('success') || session('cache_modal') || session('db_report_modal') || session('log_modal') || session('diagnostic_modal')) ? 'true' : 'false' }}">
     <div class="dashboard-wrapper">
         @include('layouts.partials.sidebar')

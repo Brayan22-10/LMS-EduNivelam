@@ -34,6 +34,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'bio',
         'font_size',      
         'high_contrast',
+        'github_url',
+        'linkedin_url',
+        'portfolio_url',
     ];
 
     /**
