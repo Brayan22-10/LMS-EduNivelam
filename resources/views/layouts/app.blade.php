@@ -8,11 +8,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-    @vite(['resources/css/app.css', 'resources/css/dashboard.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/dashboard.css', 'resources/js/app.js', 'resources/js/dashboard.js'])
     @yield('styles')
 </head>
 <body style="font-size: {{ (Auth::check() && Auth::user()->font_size) ? Auth::user()->font_size : '14px' }};" class="{{ (Auth::check() && Auth::user()->high_contrast) ? 'bg-dark-mode text-light' : 'bg-light text-dark' }} {{ (request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('settings.*')) ? 'admin-fixed-body' : 'public-scroll-body' }}">
     
+    @if(request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('settings.*'))
+        <button class="btn btn-dark text-white border shadow" id="sidebarToggleFloat" title="Mostrar Menú" style="position: fixed; top: 22px; left: 15px; z-index: 1020; display: none; width: 40px; height: 40px; border-radius: 50%; align-items: center; justify-content: center; padding: 0;">
+            <i class="bi bi-list fs-5"></i>
+        </button>
+    @endif
+
     @if(request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('settings.*'))
         <div class="dashboard-nav-container">
             @include('layouts.navigation')

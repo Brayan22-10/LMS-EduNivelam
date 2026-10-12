@@ -1,15 +1,20 @@
 <aside class="admin-sidebar">
-    <div class="sidebar-header">
-        @if(Auth::user()->role === 'admin' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('admin')))
-            <h4>Panel Admin</h4>
-            <span class="sidebar-role">Gestión General</span>
-        @elseif(Auth::user()->role === 'teacher')
-            <h4>Panel Docente</h4>
-            <span class="sidebar-role">Cuerpo Académico</span>
-        @else
-            <h4>Panel Estudiante</h4>
-            <span class="sidebar-role">Nivelación Académica</span>
-        @endif
+    <div class="sidebar-header d-flex justify-content-between align-items-center">
+        <div>
+            @if(Auth::user()->role === 'admin' || (method_exists(Auth::user(), 'hasRole') && Auth::user()->hasRole('admin')))
+                <h4>Panel Admin</h4>
+                <span class="sidebar-role">Gestión General</span>
+            @elseif(Auth::user()->role === 'teacher')
+                <h4>Panel Docente</h4>
+                <span class="sidebar-role">Cuerpo Académico</span>
+            @else
+                <h4>Panel Estudiante</h4>
+                <span class="sidebar-role">Nivelación Académica</span>
+            @endif
+        </div>
+        <button class="btn btn-sm btn-dark text-white border-0 shadow-none" id="sidebarToggle" title="Ocultar / Mostrar Menú" style="background-color: rgba(255,255,255,0.08);">
+            <i class="bi bi-list fs-5"></i>
+        </button>
     </div>
     
     <ul class="sidebar-menu">

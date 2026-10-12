@@ -4,8 +4,8 @@
 @endphp
 
 @if($isInAnyPanel)
-    <div class="w-100 px-0 pt-2 mb-3">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded-pill px-4 shadow-lg floating-navbar w-100 d-flex justify-content-between align-items-center">
+    <div class="panel-nav-container px-0 pt-2 mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded-pill px-4 shadow-lg floating-navbar d-flex justify-content-between align-items-center">
             <div class="container-fluid px-0 d-flex justify-content-between align-items-center w-100">
                 
                 <a class="navbar-brand fw-bold text-info" href="{{ route('home') }}">EduNivelam</a>
@@ -142,6 +142,7 @@
                                 </li>
                             @endif
 
+                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
                             <li class="nav-item ms-lg-3 text-light small">
                                 <span>Hola, {{ Auth::user()->name }}</span>
                             </li>

@@ -72,4 +72,8 @@
 
 @section('scripts')
     @vite(['resources/js/dashboard.js'])
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        });
+    </script>
 @endsection

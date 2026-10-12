@@ -1,9 +1,41 @@
-html,
-body {
-    height: 100%;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
+#sidebarToggleFloat {
+    position: fixed;
+    top: 15px !important;
+    left: 20px;
+    z-index: 1065;
+    display: none;
+    width: 64px;
+    height: 64px;
+    border-radius: 50rem;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background: rgba(33, 37, 41, 0.95) !important;
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.sidebar-collapsed #sidebarToggleFloat {
+    display: flex !important;
+}
+
+html.public-root,
+html.public-root body,
+body.public-scroll-body {
+    overflow: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    position: static !important;
+}
+
+html.admin-root,
+html.admin-root body,
+body.admin-fixed-body {
+    overflow: hidden !important;
+    height: 100vh !important;
 }
 
 .dashboard-fullscreen-fix {
@@ -19,12 +51,53 @@ body {
     flex-direction: column;
 }
 
-body.admin-fixed-body nav.navbar,
-body.admin-fixed-body header {
-    flex-shrink: 0;
-    margin-left: 260px;
-    width: calc(100% - 260px);
-    z-index: 1050;
+.panel-nav-container,
+body.admin-fixed-body nav.navbar.floating-navbar,
+body.admin-fixed-body header.navbar {
+    position: fixed !important;
+    top: 15px !important;
+    left: 280px !important;
+    right: 20px !important;
+    width: auto !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    margin: 0 !important;
+    border-radius: 50rem !important;
+    padding: 0 2rem !important;
+    background-color: rgba(33, 37, 41, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3) !important;
+    z-index: 1030;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease-in-out;
+}
+
+.panel-nav-container nav.navbar {
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.sidebar-collapsed .panel-nav-container,
+body.admin-fixed-body.sidebar-collapsed .panel-nav-container,
+body.admin-fixed-body.sidebar-collapsed nav.navbar.floating-navbar,
+body.admin-fixed-body.sidebar-collapsed header.navbar,
+body.sidebar-collapsed.admin-fixed-body nav.navbar.floating-navbar {
+    position: fixed !important;
+    top: 15px !important;
+    left: 72px !important;
+    right: 20px !important;
+    width: auto !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    border-radius: 50rem !important;
+    padding: 0 2rem !important;
 }
 
 .dashboard-wrapper {
@@ -35,10 +108,13 @@ body.admin-fixed-body header {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease-in-out;
 }
 
 .admin-sidebar {
     width: 260px;
+    min-width: 260px;
     background-color: #212529;
     color: #fff;
     display: flex;
@@ -47,7 +123,14 @@ body.admin-fixed-body header {
     padding: 20px 15px;
     flex-shrink: 0;
     height: 100%;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    z-index: 1040;
+}
+
+.dashboard-wrapper.sidebar-collapsed .admin-sidebar,
+body.sidebar-collapsed .admin-sidebar {
+    margin-left: -260px;
 }
 
 .sidebar-header h4 {
@@ -69,6 +152,7 @@ body.admin-fixed-body header {
     padding: 0;
     margin-top: 15px;
     flex-grow: 1;
+    overflow-y: auto;
 }
 
 .sidebar-menu li {
@@ -120,6 +204,7 @@ body.admin-fixed-body header {
     padding: 20px 25px;
     overflow-y: auto !important;
     height: 100%;
+    transition: all 0.3s ease-in-out;
 }
 
 .dashboard-topbar {
@@ -145,46 +230,10 @@ body.admin-fixed-body header {
     transform: translateY(-2px);
 }
 
-html.public-root,
-html.public-root body {
-    overflow: auto !important;
-    height: auto !important;
-    max-height: none !important;
-    position: static !important;
-}
-
-html.admin-root,
-html.admin-root body,
-body.admin-fixed-body {
-    overflow: hidden !important;
-    height: 100vh !important;
-}
-
-body.admin-fixed-body nav.navbar,
-body.admin-fixed-body header.navbar {
-    position: fixed !important;
-    top: 15px !important;
-    left: calc(260px + 20px) !important;
-    right: 20px !important;
-    width: auto !important;
-    height: 64px !important;
-    min-height: 64px !important;
-    margin: 0 !important;
-    border-radius: 50rem !important;
-    padding: 0 2rem !important;
-    background-color: #12161f !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3) !important;
-    z-index: 1030;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
 body.admin-fixed-body .dashboard-main-content {
-    margin-top: 15px !important;
+    margin-top: 0 !important;
+    padding-top: 85px !important;
     height: 100% !important;
-    padding-top: 90px !important;
 }
 
 .dashboard-main-content .tab-content {
