@@ -13,6 +13,8 @@ class Banner extends Model
         'page_identifier',
         'title',
         'subtitle',
+        'badge_text',
+        'content_text',
         'image_path',
         'is_active',
     ];

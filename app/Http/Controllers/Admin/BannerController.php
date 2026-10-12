@@ -25,7 +25,9 @@ class BannerController extends Controller
         $request->validate([
             'page_identifier' => 'required|string|in:home,about,news,courses,instructors,contact|unique:banners',
             'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:500',
+            'subtitle' => 'nullable|string|max:1000',
+            'badge_text' => 'nullable|string|max:150',
+            'content_text' => 'nullable|string',
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -38,11 +40,13 @@ class BannerController extends Controller
             'page_identifier' => $request->page_identifier,
             'title' => $request->title,
             'subtitle' => $request->subtitle,
+            'badge_text' => $request->badge_text,
+            'content_text' => $request->content_text,
             'image_path' => $imagePath,
             'is_active' => $request->has('is_active'),
         ]);
 
-        return redirect()->route('admin.banners.index')->with('success', '¡Banner creado exitosamente!');
+        return redirect()->route('admin.banners.index')->with('success', '¡Banner y sección configurados exitosamente!');
     }
 
     public function edit(Banner $banner)
@@ -55,7 +59,9 @@ class BannerController extends Controller
         $request->validate([
             'page_identifier' => 'required|string|in:home,about,news,courses,instructors,contact|unique:banners,page_identifier,' . $banner->id,
             'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:500',
+            'subtitle' => 'nullable|string|max:1000',
+            'badge_text' => 'nullable|string|max:150',
+            'content_text' => 'nullable|string',
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -71,6 +77,8 @@ class BannerController extends Controller
             'page_identifier' => $request->page_identifier,
             'title' => $request->title,
             'subtitle' => $request->subtitle,
+            'badge_text' => $request->badge_text,
+            'content_text' => $request->content_text,
             'image_path' => $imagePath,
             'is_active' => $request->has('is_active'),
         ]);

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Banner;
 
 class PageController extends Controller
 {
     public function home()
     {
-        return view('page.home');
+        $banner = Banner::where('page_identifier', 'home')->where('is_active', true)->first();
+
+        return view('page.home', compact('banner'));
     }
 
     public function about()
@@ -20,5 +23,4 @@ class PageController extends Controller
     {
         return view('page.contact');
     }
-
 }
