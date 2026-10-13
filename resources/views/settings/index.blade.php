@@ -333,7 +333,7 @@
                                                 <p class="text-muted small mb-0">Bloquea el acceso a usuarios comunes mostrando una pantalla de mantenimiento programado.</p>
                                             </div>
                                             <div>
-                                                @if(app()->isDownForMaintenance())
+                                                @if(isset($isMaintenanceActive) && $isMaintenanceActive)
                                                     <form action="{{ route('admin.system.maintenance') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="action" value="up">
@@ -343,7 +343,7 @@
                                                     <form action="{{ route('admin.system.maintenance') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="action" value="down">
-                                                        <button type="submit" class="btn btn-danger btn-sm fw-bold px-3" onclick="return confirm('¿Activar modo mantenimiento en toda la plataforma?');">Activar Modo Mantenimiento</button>
+                                                        <button type="submit" class="btn btn-danger btn-sm fw-bold px-3" onclick="return confirm('¿Activar modo mantenimiento para estudiantes y docentes?');">Activar Modo Mantenimiento</button>
                                                     </form>
                                                 @endif
                                             </div>
