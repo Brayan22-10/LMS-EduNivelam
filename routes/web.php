@@ -91,13 +91,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/profile', [SettingsController::class, 'profileView'])->name('admin.profile');
     Route::put('/admin/profile', [SettingsController::class, 'updateProfile'])->name('admin.profile.update');
 
-    Route::get('/student/dashboard', function () {
-        return view('student.dashboard');
-    })->name('student.dashboard');
+    Route::middleware(['maintenance'])->group(function () {
+        Route::get('/student/dashboard', function () {
+            return view('student.dashboard');
+        })->name('student.dashboard');
 
-    Route::get('/teacher/dashboard', function () {
-        return view('teacher.dashboard');
-    })->name('teacher.dashboard');
+        Route::get('/teacher/dashboard', function () {
+            return view('teacher.dashboard');
+        })->name('teacher.dashboard');
+    });
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

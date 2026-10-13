@@ -19,6 +19,7 @@ class SettingsController extends Controller
     {
         $user = Auth::user();
         $isAdmin = ($user->role === 'admin' || (method_exists($user, 'hasRole') && $user->hasRole('admin')));
+        $isMaintenanceActive = \Illuminate\Support\Facades\Cache::get('system_maintenance', false);
 
         $activeDevices = collect();
         if (\Schema::hasTable('user_devices')) {
@@ -42,7 +43,7 @@ class SettingsController extends Controller
             $storageUsage = $this->getStorageUsage();
         }
 
-        return view('settings.index', compact('user', 'activeDevices', 'activityLogs', 'storageUsage', 'isAdmin'));
+        return view('settings.index', compact('user', 'activeDevices', 'activityLogs', 'storageUsage', 'isAdmin', 'isMaintenanceActive'));
     }
 
     public function profileView()
@@ -216,14 +217,14 @@ class SettingsController extends Controller
     public function toggleMaintenance(Request $request)
     {
         $this->authorizeAdmin();
-        $action =$request->input('action'); 
+        $action = $request->input('action'); 
 
         try {
             if ($action === 'down') {
-                Artisan::call('down', ['--secret' => 'edunivelam-bypass-token']);
-                return back()->with('success', '¡Modo mantenimiento activado globalmente!');
+                \Illuminate\Support\Facades\Cache::put('system_maintenance', true);
+                return back()->with('success', '¡Modo mantenimiento activado para estudiantes y docentes!');
             } else {
-                Artisan::call('up');
+                \Illuminate\Support\Facades\Cache::put('system_maintenance', false);
                 return back()->with('success', '¡El sistema ha salido del modo mantenimiento!');
             }
         } catch (\Exception $e) {
