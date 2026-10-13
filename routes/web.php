@@ -205,6 +205,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('admin.users')
         ->middleware(['can:manage-users']); 
 
+    Route::put('/admin/users/{id}/role', [UserController::class, 'updateRole'])
+        ->name('admin.users.updateRole')
+        ->middleware(['can:manage-users']);
+
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])
         ->name('admin.users.destroy')
         ->middleware(['can:manage-users']);
