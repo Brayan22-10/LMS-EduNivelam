@@ -4,6 +4,7 @@
 
 @section('styles')
     @vite(['resources/css/dashboard.css', 'resources/css/settings/settings.css'])
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
 @endsection
 
 @section('content')
@@ -93,7 +94,7 @@
                                     <div class="mb-4 d-flex align-items-center gap-3">
                                         <div class="avatar-upload-box" style="width: 60px; height: 60px; min-width: 60px;">
                                             @if(Auth::user()->avatar && Storage::disk('public')->exists(Auth::user()->avatar))
-                                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar" class="avatar-preview">
+                                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" id="existingAvatarSrc" alt="Avatar" class="avatar-preview">
                                             @else
                                                 <div class="avatar-preview bg-secondary text-white d-flex align-items-center justify-content-center fw-bold fs-4">
                                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -103,7 +104,9 @@
                                         <div class="flex-grow-1">
                                             <label class="form-label fw-semibold">Fotografía de Perfil</label>
                                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                <input type="file" name="avatar" class="form-control form-control-sm" style="max-width: 280px;">
+                                                <input type="file" id="imageInput" class="form-control form-control-sm" accept="image/png, image/jpeg, image/jpg, image/webp" style="max-width: 280px;">
+                                                <input type="hidden" name="cropped_avatar" id="croppedImageOutput">
+                                                
                                                 @if(Auth::user()->avatar)
                                                     <div class="form-check m-0">
                                                         <input class="form-check-input border-danger" type="checkbox" name="remove_avatar" value="1" id="removeAvatarCheck">
@@ -113,7 +116,36 @@
                                                     </div>
                                                 @endif
                                             </div>
+
+                                            @if(Auth::user()->avatar && Storage::disk('public')->exists(Auth::user()->avatar))
+                                                <div class="mt-1">
+                                                    <button type="button" 
+                                                            id="reajustAvatarBtn" 
+                                                            data-original="{{ Auth::user()->original_avatar && Storage::disk('public')->exists(Auth::user()->original_avatar) ? asset('storage/' . Auth::user()->original_avatar) : asset('storage/' . Auth::user()->avatar) }}" 
+                                                            class="btn btn-link btn-sm p-0 text-decoration-underline fw-semibold text-primary" 
+                                                            style="font-size: 0.8rem;">
+                                                        <i class="bi bi-crop me-1"></i> Reajustar encuadre / zoom desde la imagen original
+                                                    </button>
+                                                </div>
+                                            @endif
+
                                             <div class="form-text text-muted small">Formatos: JPEG, PNG, WEBP. Máx: 2MB.</div>
+
+                                            <div id="cropperWrapper" class="mt-3 p-3 bg-dark rounded-4 d-none">
+                                                <p class="text-white small fw-bold mb-2"><i class="bi bi-crop me-1"></i> Ajusta el encuadre cuadrado de tu avatar:</p>
+                                                <div style="width: 100%; height: 300px; background-color: #000; overflow: hidden; display: flex; align-items: center; justify-content: center;" class="rounded-3 mb-3 border border-secondary">
+                                                    <img id="imageToCrop" src="" alt="Previsualización" style="max-width: 100%; display: block;">
+                                                </div>
+                                                <div class="d-flex gap-2 justify-content-end">
+                                                    <button type="button" id="cancelCropButton" class="btn btn-outline-light btn-sm rounded-pill px-3">Cancelar</button>
+                                                    <button type="button" id="cropButton" class="btn btn-success btn-sm rounded-pill px-4 fw-bold">Aplicar Recorte</button>
+                                                </div>
+                                            </div>
+
+                                            <div id="previewContainer" class="mt-2 d-none">
+                                                <span class="text-success small fw-bold d-block mb-1"><i class="bi bi-check-circle-fill me-1"></i> Avatar ajustado listo para guardar:</span>
+                                                <img id="croppedPreview" class="rounded-circle border shadow-sm" style="width: 70px; height: 70px; object-fit: cover;" alt="Preview">
+                                            </div>
                                         </div>
                                     </div>
 
@@ -333,5 +365,6 @@
 @endsection
 
 @section('scripts')
-    @vite(['resources/js/dashboard.js'])
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    @vite(['resources/js/dashboard.js', 'resources/js/profile-cropper.js'])
 @endsection

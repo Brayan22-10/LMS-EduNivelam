@@ -63,12 +63,7 @@ class SettingsController extends Controller
             'github_url' => ['nullable', 'url', 'max:255'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
             'portfolio_url' => ['nullable', 'url', 'max:255'],
-            'avatar' => [
-                'nullable', 
-                'image', 
-                'mimes:jpeg,png,jpg,webp',
-                'max:2048',            
-            ],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ]);
 
         if ($request->filled('name')) {
@@ -96,26 +91,53 @@ class SettingsController extends Controller
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
+            if ($user->original_avatar && Storage::disk('public')->exists($user->original_avatar)) {
+                Storage::disk('public')->delete($user->original_avatar);
+            }
             $user->avatar = null;
+            $user->original_avatar = null;
         }
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
+            if ($user->original_avatar && Storage::disk('public')->exists($user->original_avatar)) {
+                Storage::disk('public')->delete($user->original_avatar);
+            }
 
             $file = $request->file('avatar');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('avatars', $filename, 'public');
-            $user->avatar = $path;
+            $originalFilename = 'original_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $originalPath = $file->storeAs('avatars', $originalFilename, 'public');
+            $user->original_avatar = $originalPath;
+            $user->avatar = $originalPath; 
+        }
+
+        if ($request->filled('cropped_avatar')) {
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar) && $user->avatar !== $user->original_avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $base64Image = $request->input('cropped_avatar');
+            list($type, $base64Image) = explode(';', $base64Image);
+            list(, $base64Image)      = explode(',', $base64Image);
+            $imageBytes = base64_decode($base64Image);
+
+            $filename = 'avatar_' . Str::uuid() . '.jpg';
+            Storage::disk('public')->put('avatars/' . $filename, $imageBytes);
+            $user->avatar = 'avatars/' . $filename;
+
+            if (!$user->original_avatar) {
+                $user->original_avatar = $user->avatar;
+            }
         }
 
         $user->save();
         $user->refresh(); 
 
-        $this->logActivity($user->id, 'Actualización de perfil y redes sociales', $request->ip());
+        $this->logActivity($user->id, 'Actualización de perfil y avatar', $request->ip());
 
-        return back()->with('success', '¡Perfil y enlaces actualizados correctamente!');
+        return back()->with('success', '¡Perfil y avatar actualizados correctamente!');
     }
 
     public function updatePassword(Request $request)
