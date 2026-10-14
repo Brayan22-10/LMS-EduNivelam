@@ -4,6 +4,7 @@
 
 @section('styles')
     @vite(['resources/css/dashboard.css'])
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
 @endsection
 
 @section('content')
@@ -15,7 +16,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <h2 class="fw-bold mb-1 text-dark fs-4">Editar Noticia o Aviso</h2>
-                    <p class="text-muted small mb-0">Modifica los campos del aviso institucional.</p>
+                    <p class="text-muted small mb-0">Modifica los campos y ajusta la imagen ilustrativa del aviso institucional.</p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.news.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
@@ -68,11 +69,50 @@
                     </div>
 
                     <div class="row g-3 mb-3">
-                        <div class="col-lg-6">
-                            <label for="image" class="form-label small fw-semibold text-dark mb-1">Imagen Ilustrativa <span class="text-muted">(Opcional)</span></label>
-                            <input type="file" class="form-control form-control-sm border py-1" id="image" name="image" accept="image/png, image/jpeg, image/jpg, image/webp">
-                        </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="form-label small fw-semibold text-dark mb-1">Imagen Ilustrativa <span class="text-muted">(Opcional)</span></label>
+                            
+                            @if($news->image)
+                                <div class="mb-2 p-2 bg-light rounded-3 border d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="{{ asset('storage/' . $news->image) }}" id="existingImageSrc" class="rounded-2 border" style="height: 50px; width: 80px; object-fit: cover;" alt="Actual">
+                                        <div>
+                                            <span class="text-muted small d-block">Imagen actual cargada en el sistema.</span>
+                                            <button type="button" id="reajustBtn" class="btn btn-link btn-sm p-0 text-decoration-underline fw-semibold" style="font-size: 0.8rem;">
+                                                <i class="bi bi-crop me-1"></i> Reajustar encuadre / zoom de esta foto
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="remove_image" value="1" id="remove_image">
+                                        <label class="form-check-label text-danger small fw-bold" for="remove_image">
+                                            Eliminar foto
+                                        </label>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <input type="file" class="form-control form-control-sm border py-1" id="imageInput" accept="image/png, image/jpeg, image/jpg, image/webp">
+                            <input type="hidden" name="cropped_image" id="croppedImageOutput">
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Sube una nueva foto o reajusta la actual.</small>
+
+                            <div id="cropperWrapper" class="mt-3 p-3 bg-dark rounded-4 d-none">
+                                <p class="text-white small fw-bold mb-2"><i class="bi bi-crop me-1"></i> Ajusta el zoom y encuadre de la imagen:</p>
+                                <div style="width: 100%; height: 320px; background-color: #000; overflow: hidden; display: flex; align-items: center; justify-content: center;" class="rounded-3 mb-3 border border-secondary">
+                                    <img id="imageToCrop" src="" alt="Previsualización" style="max-width: 100%; display: block;">
+                                </div>
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <button type="button" id="cancelCropButton" class="btn btn-outline-light btn-sm rounded-pill px-3">Cancelar</button>
+                                    <button type="button" id="cropButton" class="btn btn-success btn-sm rounded-pill px-4 fw-bold">Aplicar Recorte</button>
+                                </div>
+                            </div>
+
+                            <div id="previewContainer" class="mt-2 d-none">
+                                <span class="text-success small fw-bold d-block mb-1"><i class="bi bi-check-circle-fill me-1"></i> Imagen ajustada lista para guardar:</span>
+                                <img id="croppedPreview" class="rounded-3 border shadow-sm" style="height: 90px; object-fit: cover;" alt="Preview">
+                            </div>
+
+                        <div class="col-lg-12">
                             <label for="status" class="form-label small fw-semibold text-dark mb-1">Estado de Publicación <span class="text-danger">*</span></label>
                             <select class="form-select form-select-sm border py-1.5" id="status" name="status" required>
                                 <option value="publicado" {{ old('status', $news->status) == 'publicado' ? 'selected' : '' }}>Publicado (Visible)</option>
@@ -90,4 +130,9 @@
         </main>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    @vite(['resources/js/news-cropper.js'])
 @endsection

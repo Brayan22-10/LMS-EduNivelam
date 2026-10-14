@@ -11,32 +11,51 @@
     <div class="dashboard-wrapper">
         @include('layouts.partials.sidebar')
 
-        <main class="dashboard-main-content py-4 px-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+        <main class="dashboard-main-content py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                    <h2 class="fw-bold mb-1 text-dark">Detalle del Aviso</h2>
-                    <p class="text-muted small mb-0">Vista previa de la publicación tal como la visualizarán los usuarios.</p>
+                    <h2 class="fw-bold mb-1 text-dark fs-4">Vista Previa del Aviso</h2>
+                    <p class="text-muted small mb-0">Así es exactamente como visualizan la noticia los usuarios en la plataforma.</p>
                 </div>
-                <div class="d-flex gap-2">
+                <div>
                     <a href="{{ route('admin.news.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
                         <i class="bi bi-arrow-left me-1"></i> Volver al Listado
                     </a>
                 </div>
             </div>
 
-            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 p-lg-5">
-                <div class="mb-3">
-                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill mb-2">
-                        {{ ucfirst($news->status) }}
-                    </span>
-                    <h3 class="fw-bold text-dark mb-2">{{ $news->title }}</h3>
-                    <small class="text-muted">Emitido por: <strong>{{ $news->user->name ?? 'Administrador' }}</strong> el {{ $news->created_at->format('d/m/Y H:i') }}</small>
-                </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-md-9">
+                    <div class="card border-0 shadow-lg rounded-4 text-white overflow-hidden bg-dark">
+                        
+                        <div class="border-bottom border-secondary border-opacity-25 px-4 py-3">
+                            <span class="badge bg-info bg-opacity-25 text-info px-2 py-0.5 rounded-pill mb-1" style="font-size: 0.75rem;">
+                                {{ $news->category ?? 'General' }}
+                            </span>
+                            <h5 class="fw-bold text-white mb-0">{{ $news->title }}</h5>
+                        </div>
 
-                <hr class="my-4">
+                        @if($news->image)
+                            <div>
+                                <img src="{{ asset('storage/' . $news->image) }}" class="w-100" style="height: 280px; object-fit: cover;" alt="{{ $news->title }}">
+                            </div>
+                        @endif
 
-                <div class="text-secondary" style="white-space: pre-wrap; line-height: 1.8; font-size: 1rem;">
-                    {{ $news->content }}
+                        <div class="px-4 py-3 text-muted small border-bottom border-secondary border-opacity-25">
+                            Emitido por: <strong class="text-light">{{ $news->user->name ?? 'Administrador' }}</strong> el {{ $news->created_at->format('d/m/Y H:i') }}
+                        </div>
+
+                        <div class="px-4 py-3 text-light" style="font-size: 0.95rem; line-height: 1.7;">
+                            {!! $news->content !!}
+                        </div>
+
+                        <div class="border-top border-secondary border-opacity-25 px-4 py-3 d-flex justify-content-end">
+                            <a href="{{ route('admin.news.index') }}" class="btn btn-outline-light btn-sm rounded-pill px-4">
+                                Volver
+                            </a>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </main>

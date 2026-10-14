@@ -3,6 +3,7 @@
 @section('title', 'Crear Noticia - Admin')
 
 @section('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
     @vite(['resources/css/dashboard.css'])
 @endsection
 
@@ -65,11 +66,29 @@
                     </div>
 
                     <div class="row g-3 mb-3">
-                        <div class="col-lg-6">
-                            <label for="image" class="form-label small fw-semibold text-dark mb-1">Imagen Ilustrativa <span class="text-muted">(Opcional)</span></label>
-                            <input type="file" class="form-control form-control-sm border py-1" id="image" name="image" accept="image/png, image/jpeg, image/jpg, image/webp">
-                        </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="form-label small fw-semibold text-dark mb-1">Imagen Ilustrativa <span class="text-muted">(Opcional)</span></label>
+                            <input type="file" class="form-control form-control-sm border py-1" id="imageInput" accept="image/png, image/jpeg, image/jpg, image/webp">
+                            <input type="hidden" name="cropped_image" id="croppedImageOutput">
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Sube una nueva foto o reajusta la actual.</small>
+
+                            <div id="cropperWrapper" class="mt-3 p-3 bg-dark rounded-4 d-none">
+                                <p class="text-white small fw-bold mb-2"><i class="bi bi-crop me-1"></i> Ajusta el zoom y encuadre de la imagen:</p>
+                                <div style="width: 100%; height: 320px; background-color: #000; overflow: hidden; display: flex; align-items: center; justify-content: center;" class="rounded-3 mb-3 border border-secondary">
+                                    <img id="imageToCrop" src="" alt="Previsualización" style="max-width: 100%; display: block;">
+                                </div>
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <button type="button" id="cancelCropButton" class="btn btn-outline-light btn-sm rounded-pill px-3">Cancelar</button>
+                                    <button type="button" id="cropButton" class="btn btn-success btn-sm rounded-pill px-4 fw-bold">Aplicar Recorte</button>
+                                </div>
+                            </div>
+
+                            <div id="previewContainer" class="mt-2 d-none">
+                                <span class="text-success small fw-bold d-block mb-1"><i class="bi bi-check-circle-fill me-1"></i> Imagen ajustada lista para guardar:</span>
+                                <img id="croppedPreview" class="rounded-3 border shadow-sm" style="height: 90px; object-fit: cover;" alt="Preview">
+                            </div>
+
+                        <div class="col-lg-12">
                             <label for="status" class="form-label small fw-semibold text-dark mb-1">Estado de Publicación <span class="text-danger">*</span></label>
                             <select class="form-select form-select-sm border py-1.5" id="status" name="status" required>
                                 <option value="publicado" {{ old('status') == 'publicado' ? 'selected' : '' }}>Publicado (Visible para todos)</option>
@@ -87,4 +106,9 @@
         </main>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    @vite(['resources/js/news-cropper.js'])
 @endsection

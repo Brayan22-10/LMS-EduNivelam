@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\News;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
@@ -27,20 +28,24 @@ class NewsController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:300',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'status' => 'required|in:publicado,borrador',
         ], [
             'title.required' => 'El título del aviso es obligatorio.',
             'category.required' => 'La categoría es obligatoria.',
             'content.required' => 'El contenido detallado de la noticia no puede estar vacío.',
             'status.required' => 'El estado de publicación es obligatorio.',
-            'image.image' => 'El archivo debe ser una imagen válida.',
-            'image.max' => 'La imagen no debe pesar más de 2MB.',
         ]);
 
         $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('news-images', 'public');
+        if ($request->filled('cropped_image')) {
+            $base64Image = $request->input('cropped_image');
+            list($type, $base64Image) = explode(';', $base64Image);
+            list(, $base64Image)      = explode(',', $base64Image);
+            $imageBytes = base64_decode($base64Image);
+
+            $filename = 'news_' . Str::uuid() . '.jpg';
+            Storage::disk('public')->put('news-images/' . $filename, $imageBytes);
+            $imagePath = 'news-images/' . $filename;
         }
 
         News::create([
@@ -79,7 +84,6 @@ class NewsController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:300',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'status' => 'required|in:publicado,borrador',
         ], [
             'title.required' => 'El título del aviso es obligatorio.',
@@ -89,11 +93,27 @@ class NewsController extends Controller
         ]);
 
         $imagePath = $news->image;
-        if ($request->hasFile('image')) {
+
+        if ($request->has('remove_image') && $request->input('remove_image') == '1') {
             if ($imagePath && Storage::disk('public')->exists($imagePath)) {
                 Storage::disk('public')->delete($imagePath);
             }
-            $imagePath = $request->file('image')->store('news-images', 'public');
+            $imagePath = null;
+        }
+
+        if ($request->filled('cropped_image')) {
+            if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
+            }
+
+            $base64Image = $request->input('cropped_image');
+            list($type, $base64Image) = explode(';', $base64Image);
+            list(, $base64Image)      = explode(',', $base64Image);
+            $imageBytes = base64_decode($base64Image);
+
+            $filename = 'news_' . Str::uuid() . '.jpg';
+            Storage::disk('public')->put('news-images/' . $filename, $imageBytes);
+            $imagePath = 'news-images/' . $filename;
         }
 
         $news->update([
