@@ -87,12 +87,20 @@
                                 <span class="text-success small fw-bold d-block mb-1"><i class="bi bi-check-circle-fill me-1"></i> Imagen ajustada lista para guardar:</span>
                                 <img id="croppedPreview" class="rounded-3 border shadow-sm" style="height: 90px; object-fit: cover;" alt="Preview">
                             </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <label for="scheduled_at" class="form-label small fw-semibold text-dark mb-1">Programar Fecha y Hora de Publicación <span class="text-muted">(Opcional)</span></label>
+                            <input type="datetime-local" class="form-control form-control-sm border py-1.5" id="scheduled_at" name="scheduled_at" value="{{ old('scheduled_at') }}">
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Si seleccionas una fecha futura, la noticia permanecerá oculta hasta que llegue el día y la hora programada.</small>
+                        </div>
 
                         <div class="col-lg-12">
                             <label for="status" class="form-label small fw-semibold text-dark mb-1">Estado de Publicación <span class="text-danger">*</span></label>
                             <select class="form-select form-select-sm border py-1.5" id="status" name="status" required>
                                 <option value="publicado" {{ old('status') == 'publicado' ? 'selected' : '' }}>Publicado (Visible para todos)</option>
                                 <option value="borrador" {{ old('status') == 'borrador' ? 'selected' : '' }}>Borrador (Oculto / En revisión)</option>
+                                <option value="programado" {{ old('status') == 'programado' ? 'selected' : '' }}>Próximamente a publicar (Programado)</option>
                             </select>
                         </div>
                     </div>

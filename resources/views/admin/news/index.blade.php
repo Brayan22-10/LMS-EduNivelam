@@ -31,6 +31,33 @@
                 </div>
             @endif
 
+            <ul class="nav nav-pills gap-2 mb-4">
+                <li class="nav-item">
+                    <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? 'all') == 'all' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
+                        href="{{ route('admin.news.index', ['tab' => 'all']) }}">
+                        Todas <span class="badge bg-secondary ms-1">{{ $countAll ?? 0 }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'publicado' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
+                        href="{{ route('admin.news.index', ['tab' => 'publicado']) }}">
+                        Publicadas <span class="badge bg-success ms-1">{{ $countPublished ?? 0 }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'programado' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
+                        href="{{ route('admin.news.index', ['tab' => 'programado']) }}">
+                        Programadas <span class="badge bg-warning text-dark ms-1">{{ $countScheduled ?? 0 }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'borrador' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
+                        href="{{ route('admin.news.index', ['tab' => 'borrador']) }}">
+                        Borradores <span class="badge bg-secondary ms-1">{{ $countDrafts ?? 0 }}</span>
+                    </a>
+                </li>
+            </ul>
+
             <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
@@ -39,7 +66,7 @@
                                 <th class="py-3 px-3">ESTADO</th>
                                 <th class="py-3">TÍTULO DEL AVISO</th>
                                 <th class="py-3">AUTOR</th>
-                                <th class="py-3">FECHA DE EMISIÓN</th>
+                                <th class="py-3">PROGRAMACIÓN / EMISIÓN</th>
                                 <th class="py-3 text-end pe-3">ACCIONES</th>
                             </tr>
                         </thead>
@@ -47,13 +74,23 @@
                             @forelse($news as $item)
                                 <tr>
                                     <td class="px-3">
-                                        <span class="badge bg-success text-white px-3 py-1 rounded-pill">
-                                            {{ ucfirst($item->status) }}
-                                        </span>
+                                        @if($item->status == 'publicado')
+                                            <span class="badge bg-success text-white px-3 py-1 rounded-pill">Publicado</span>
+                                        @elseif($item->status == 'programado')
+                                            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill"><i class="bi bi-clock me-1"></i> Programado</span>
+                                        @else
+                                            <span class="badge bg-secondary text-white px-3 py-1 rounded-pill">Borrador</span>
+                                        @endif
                                     </td>
                                     <td class="fw-semibold text-dark">{{ $item->title }}</td>
                                     <td class="text-muted">{{ $item->user->name ?? 'Administrador' }}</td>
-                                    <td class="text-muted">{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                                    <td class="text-muted small">
+                                        @if($item->scheduled_at)
+                                            <i class="bi bi-calendar-event text-primary me-1"></i> {{ \Carbon\Carbon::parse($item->scheduled_at)->format('d/m/Y H:i') }}
+                                        @else
+                                            {{ $item->created_at->format('d/m/Y H:i') }}
+                                        @endif
+                                    </td>
                                     <td class="text-end pe-3">
                                         <div class="d-flex justify-content-end gap-2">
                                             <a href="{{ route('admin.news.show', $item->id) }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
@@ -75,7 +112,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="text-center text-muted py-5">
-                                        No hay avisos o noticias registrados actualmente.
+                                        No hay avisos o noticias registrados en esta sección.
                                     </td>
                                 </tr>
                             @endforelse

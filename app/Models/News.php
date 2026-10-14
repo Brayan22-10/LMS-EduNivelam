@@ -16,6 +16,7 @@ class News extends Model
         'content',
         'image',
         'status',
+        'scheduled_at',
         'user_id'
     ];
 

@@ -16,7 +16,9 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\ReceivedEmailController;
 use App\Http\Controllers\SettingsController; 
 use App\Http\Controllers\NewsController; 
+use Illuminate\Support\Facades\Schedule;
 
+Schedule::command('news:publish-scheduled')->everyMinute();
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 

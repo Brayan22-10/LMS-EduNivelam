@@ -7,13 +7,39 @@ use App\Models\News;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $news = News::latest()->paginate(10);
-        return view('admin.news.index', compact('news'));
+        News::where('status', 'programado')
+            ->whereNotNull('scheduled_at')
+            ->where('scheduled_at', '<=', Carbon::now())
+            ->update([
+                'status' => 'publicado',
+                'scheduled_at' => null
+            ]);
+
+        $tab = $request->get('tab', 'all');
+        $query = News::latest();
+
+        if ($tab === 'publicado') {
+            $query->where('status', 'publicado');
+        } elseif ($tab === 'programado') {
+            $query->where('status', 'programado');
+        } elseif ($tab === 'borrador') {
+            $query->where('status', 'borrador');
+        }
+
+        $news = $query->paginate(10)->appends(['tab' => $tab]);
+
+        $countAll = News::count();
+        $countPublished = News::where('status', 'publicado')->count();
+        $countScheduled = News::where('status', 'programado')->count();
+        $countDrafts = News::where('status', 'borrador')->count();
+
+        return view('admin.news.index', compact('news', 'tab', 'countAll', 'countPublished', 'countScheduled', 'countDrafts'));
     }
 
     public function create()
@@ -28,12 +54,8 @@ class NewsController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:300',
-            'status' => 'required|in:publicado,borrador',
-        ], [
-            'title.required' => 'El título del aviso es obligatorio.',
-            'category.required' => 'La categoría es obligatoria.',
-            'content.required' => 'El contenido detallado de la noticia no puede estar vacío.',
-            'status.required' => 'El estado de publicación es obligatorio.',
+            'status' => 'required|in:publicado,borrador,programado', 
+            'scheduled_at' => 'nullable',
         ]);
 
         $imagePath = null;
@@ -48,22 +70,45 @@ class NewsController extends Controller
             $imagePath = 'news-images/' . $filename;
         }
 
+        $scheduledAt = null;
+        $status = $request->status;
+
+        if ($request->filled('scheduled_at')) {
+            $cleanDate = str_replace('T', ' ', $request->input('scheduled_at'));
+            $scheduledAt = Carbon::parse($cleanDate)->format('Y-m-d H:i:s');
+            if (Carbon::parse($scheduledAt)->isFuture()) {
+                $status = 'programado';
+            }
+        }
+
         News::create([
             'title' => $request->title,
             'category' => $request->category,
             'excerpt' => $request->excerpt,
             'content' => $request->content,
             'image' => $imagePath,
-            'status' => $request->status,
+            'status' => $status,
+            'scheduled_at' => $scheduledAt,
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('admin.news.index')->with('success', '¡Aviso o noticia guardado exitosamente!');
+        return redirect()->route('admin.news.index')->with('success', '¡Aviso guardado exitosamente!');
     }
 
     public function publicIndex()
     {
-        $news = News::where('status', 'publicado')->latest()->paginate(9);
+        News::where('status', 'programado')
+            ->whereNotNull('scheduled_at')
+            ->where('scheduled_at', '<=', Carbon::now())
+            ->update([
+                'status' => 'publicado',
+                'scheduled_at' => null
+            ]);
+
+        $news = News::where('status', 'publicado')
+                    ->latest()
+                    ->paginate(9);
+
         return view('news.index', compact('news'));
     }
 
@@ -74,6 +119,12 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
+        $rawDate = $news->getRawOriginal('scheduled_at') ?? $news->scheduled_at;
+        
+        if ($rawDate) {
+            $news->scheduled_at = Carbon::parse($rawDate)->format('Y-m-d\TH:i');
+        }
+
         return view('admin.news.edit', compact('news'));
     }
 
@@ -84,12 +135,8 @@ class NewsController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:300',
-            'status' => 'required|in:publicado,borrador',
-        ], [
-            'title.required' => 'El título del aviso es obligatorio.',
-            'category.required' => 'La categoría es obligatoria.',
-            'content.required' => 'El contenido detallado de la noticia no puede estar vacío.',
-            'status.required' => 'El estado de publicación es obligatorio.',
+            'status' => 'required|in:publicado,borrador,programado', 
+            'scheduled_at' => 'nullable',
         ]);
 
         $imagePath = $news->image;
@@ -116,13 +163,27 @@ class NewsController extends Controller
             $imagePath = 'news-images/' . $filename;
         }
 
+        $scheduledAt = $news->scheduled_at;
+
+        if ($request->filled('scheduled_at')) {
+            $cleanDate = str_replace('T', ' ', $request->input('scheduled_at'));
+            $scheduledAt = Carbon::parse($cleanDate)->format('Y-m-d H:i:s');
+        }
+
+        $status = $request->status;
+
+        if ($scheduledAt && Carbon::parse($scheduledAt)->isFuture()) {
+            $status = 'programado';
+        }
+
         $news->update([
             'title' => $request->title,
             'category' => $request->category,
             'excerpt' => $request->excerpt,
             'content' => $request->content,
             'image' => $imagePath,
-            'status' => $request->status,
+            'status' => $status,
+            'scheduled_at' => $scheduledAt,
         ]);
 
         return redirect()->route('admin.news.index')->with('success', '¡Noticia actualizada correctamente!');
