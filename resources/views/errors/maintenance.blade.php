@@ -9,7 +9,8 @@
 <body class="maintenance-body">
 
     <div class="maintenance-card">
-        <div class="maintenance-icon">🛠️</div>
+        <div id="lottie-maintenance-animation" style="width: 100%; max-width: 220px; height: 180px; margin: 0 auto 0.5rem auto;"></div>
+
         <h2 class="maintenance-title">Sistema en Mantenimiento</h2>
         <p class="maintenance-text">
             Estamos realizando mejoras y actualizaciones en la plataforma EduNivelam. Estaremos de regreso muy pronto. Gracias por tu paciencia.
@@ -20,6 +21,19 @@
             </a>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            lottie.loadAnimation({
+                container: document.getElementById('lottie-maintenance-animation'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: "{{ asset('animations/maintenance.json') }}"
+            });
+        });
+    </script>
 
 </body>
 </html>
