@@ -1,6 +1,6 @@
-<form method="POST" action="{{ route('logout') }}" class="d-inline">
+<form action="{{ route('logout') }}" method="POST" style="display: inline;">
     @csrf
-    <button type="submit" class="btn btn-outline-danger btn-sm">
-        Cerrar sesión
+    <button type="submit" class="btn-logout" style="background: none; border: none; cursor: pointer;">
+        Cerrar Sesión
     </button>
 </form>

@@ -62,12 +62,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/check-session-status', function (Request $request) {
-        if ($request->user()->hasVerifiedEmail()) {
-            return response()->json(['status' => 'verified']);
-        }
-        return response()->json(['status' => 'pending'], 403);
-    });
+    Route::get('/session-expired', function (Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return response()->view('errors.419', [], 419);
+    })->name('session.expired');
 
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
