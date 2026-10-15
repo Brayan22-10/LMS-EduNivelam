@@ -9,6 +9,10 @@
 <body class="error-403-body">
 
     <div class="error-card">
+        <div style="max-width: 200px; margin: 0 auto 1rem auto;">
+            <img src="{{ asset('animations/error-403.svg') }}" alt="Acceso Restringido" style="width: 100%; height: auto;">
+        </div>
+
         <div class="error-code">403</div>
         <h2 class="error-title">Acceso Restringido</h2>
         <p class="error-text">
@@ -28,8 +32,8 @@
                     }
                 }
             @endphp
-            <a href="{{ route('home') }}" class="btn-home">
-                Regresar al Inicio
+            <a href="{{ route($dashboardRoute) }}" class="btn-home">
+                Regresar a mi Panel
             </a>
         </div>
     </div>
