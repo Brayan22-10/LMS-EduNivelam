@@ -2,10 +2,6 @@
 
 @section('title', 'Soporte y Contacto - EduNivelam')
 
-@section('styles')
-    @vite(['resources/css/contact.css'])
-@endsection
-
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center text-center mb-5">
