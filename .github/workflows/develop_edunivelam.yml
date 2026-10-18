@@ -31,8 +31,21 @@ jobs:
 
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress --no-dev --optimize-autoloader
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Build assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Remove node_modules
+        run: rm -rf node_modules
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
