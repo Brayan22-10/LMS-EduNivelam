@@ -23,3 +23,14 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<IfModule mod_headers.c>
+    # Previene ataques de MIME-sniffing (Soluciona las alertas de ZAP en robots.txt y storage)
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Previene ataques de Clickjacking en páginas estáticas o de error
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Activa la protección contra XSS en navegadores antiguos
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
