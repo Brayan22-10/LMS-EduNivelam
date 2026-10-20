@@ -160,6 +160,21 @@
                                         </div>
                                     </div>
 
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">
+                                                Número de Teléfono 
+                                                @if(Auth::user()->role === 'teacher')
+                                                    <span class="text-danger">*</span>
+                                                @else
+                                                    <span class="text-muted small fw-normal">(Opcional)</span>
+                                                @endif
+                                            </label>
+                                            <input type="text" name="phone" value="{{ old('phone', Auth::user()->phone ?? '') }}" class="form-control py-2 @error('phone') is-invalid @enderror" placeholder="Ej: 3001234567" {{ Auth::user()->role === 'teacher' ? 'required' : '' }}>
+                                            @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                        </div>
+                                    </div>
+
                                     <div class="mb-4">
                                         <label class="form-label fw-semibold">Biografía o Descripción</label>
                                         <textarea name="bio" rows="3" class="form-control" placeholder="Cuéntanos sobre tus intereses de aprendizaje autónomo...">{{ old('bio', Auth::user()->bio ?? '') }}</textarea>

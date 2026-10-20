@@ -55,15 +55,25 @@ class SettingsController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
+        $isTeacher = ($user->role === 'teacher' || (method_exists($user, 'hasRole') && $user->hasRole('teacher')));
 
         $request->validate([
             'name' => ['nullable', 'string', 'min:2', 'max:100', 'unique:users,name,' . $user->id],
             'email' => ['nullable', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'phone' => [
+                $isTeacher ? 'required' : 'nullable', 
+                'string', 
+                'max:20', 
+                'unique:users,phone,' . $user->id
+            ],
             'bio' => ['nullable', 'string', 'max:500'],
             'github_url' => ['nullable', 'url', 'max:255'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
             'portfolio_url' => ['nullable', 'url', 'max:255'],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+        ], [
+            'phone.required' => 'El número de teléfono es obligatorio para los profesores.',
+            'phone.unique' => 'Este número de teléfono ya se encuentra registrado por otro usuario en el sistema.'
         ]);
 
         if ($request->filled('name')) {
@@ -71,6 +81,9 @@ class SettingsController extends Controller
         }
         if ($request->filled('email')) {
             $user->email = Str::lower($request->input('email'));
+        }
+        if ($request->has('phone') && \Schema::hasColumn('users', 'phone')) {
+            $user->phone = $request->input('phone');
         }
         
         if ($request->has('bio') && \Schema::hasColumn('users', 'bio')) {

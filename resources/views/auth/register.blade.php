@@ -21,7 +21,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">
-                <div class="card-header bg-dark text-white">Registro de Usuario</div>
+                <div class="card-header bg-dark text-white">Registro de Estudiante - EduNivelam</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('register.store') }}" id="register-form">
                         @csrf
@@ -36,6 +36,13 @@
                             <label class="form-label">Cédula / Documento de Identidad</label>
                             <input type="text" name="dni" value="{{ old('dni') }}" class="form-control @error('dni') is-invalid @enderror" required>
                             @error('dni') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Número de Teléfono <span class="text-muted small">(Opcional)</span></label>
+                            <input type="text" name="phone" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" placeholder="Ej: 3001234567">
+                            @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            <small class="text-muted">Puedes registrarlo ahora o agregarlo después desde tu perfil con validación SMS.</small>
                         </div>
 
                         <div class="mb-3">
@@ -71,7 +78,7 @@
                         <button type="submit" id="submit-btn" class="btn btn-dark w-100 mb-3" disabled>Registrarse</button>
 
                         <div class="text-center mt-3 pt-3 border-top">
-                            <p class="text-muted small mb-1">¿Eres profesor y deseas formar parte de la plataforma?</p>
+                            <p class="text-muted small mb-1">¿Eres docente y deseas formar parte de la plataforma?</p>
                             <a href="{{ route('register.teacher') }}" class="text-decoration-none fw-bold text-dark">
                                 Regístrate como docente aquí →
                             </a>
