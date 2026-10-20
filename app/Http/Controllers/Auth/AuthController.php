@@ -152,11 +152,14 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->string('name'),
             'dni' => $request->input('dni'),
+            'phone' => '', 
             'email' => Str::lower($request->string('email')),
             'password' => Hash::make($request->string('password')),
             'role' => 'student',
             'is_approved' => true,
             'is_active' => true,
+            'font_size' => 'normal', 
+            'locale' => 'es',
         ]);
 
         event(new Registered($user));
@@ -212,6 +215,8 @@ class AuthController extends Controller
             'role' => 'teacher',
             'is_approved' => 0,
             'is_active' => 0,
+            'font_size' => 'normal', 
+            'locale' => 'es',      
         ]);
 
         return redirect()->route('teacher.pending');
