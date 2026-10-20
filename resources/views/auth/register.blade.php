@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-{{-- Ventana emergente (Modal) genérica de error para el registro --}}
 @if(session('registration_error'))
 <div id="error-modal" class="register-modal-overlay" style="display: flex;">
     <div class="register-modal-card">
@@ -31,6 +30,12 @@
                             <label class="form-label">Nombre</label>
                             <input type="text" name="name" id="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" required autofocus>
                             @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Cédula / Documento de Identidad</label>
+                            <input type="text" name="dni" value="{{ old('dni') }}" class="form-control @error('dni') is-invalid @enderror" required>
+                            @error('dni') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
@@ -65,7 +70,6 @@
 
                         <button type="submit" id="submit-btn" class="btn btn-dark w-100 mb-3" disabled>Registrarse</button>
 
-                        {{-- ENLACE NUEVO HACIA EL REGISTRO DE DOCENTES --}}
                         <div class="text-center mt-3 pt-3 border-top">
                             <p class="text-muted small mb-1">¿Eres profesor y deseas formar parte de la plataforma?</p>
                             <a href="{{ route('register.teacher') }}" class="text-decoration-none fw-bold text-dark">

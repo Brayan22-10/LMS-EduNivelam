@@ -135,10 +135,23 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(RegisterUserRequest $request): \Illuminate\Http\RedirectResponse
+    public function register(Request $request): \Illuminate\Http\RedirectResponse
     {
+        $request->validate([
+            'name' => ['required', 'string', 'min:2', 'max:100'],
+            'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:users,dni'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8'],
+        ], [
+            'dni.required' => 'La cédula o documento es obligatorio.',
+            'dni.regex' => 'La identificación solo debe contener números.',
+            'dni.unique' => 'Este número de documento ya se encuentra registrado.',
+            'email.unique' => 'Este correo electrónico ya está registrado.',
+        ]);
+
         $user = User::create([
             'name' => $request->string('name'),
+            'dni' => $request->input('dni'),
             'email' => Str::lower($request->string('email')),
             'password' => Hash::make($request->string('password')),
             'role' => 'student',
