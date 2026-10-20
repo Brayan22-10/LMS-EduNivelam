@@ -158,7 +158,7 @@ class AuthController extends Controller
             'role' => 'student',
             'is_approved' => true,
             'is_active' => true,
-            'font_size' => 'normal', 
+            'font_size' => '14px', 
             'locale' => 'es',
         ]);
 
