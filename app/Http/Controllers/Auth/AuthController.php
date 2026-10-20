@@ -140,19 +140,22 @@ class AuthController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'min:2', 'max:100'],
             'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:users,dni'],
+            'phone' => ['nullable', 'string', 'regex:/^[0-9]+$/', 'max:20', 'unique:users,phone'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
         ], [
             'dni.required' => 'La cédula o documento es obligatorio.',
             'dni.regex' => 'La identificación solo debe contener números.',
             'dni.unique' => 'Este número de documento ya se encuentra registrado.',
+            'phone.regex' => 'El teléfono solo debe contener números.',
+            'phone.unique' => 'Este número de teléfono ya está en uso por otra cuenta.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
         ]);
 
         $user = User::create([
             'name' => $request->string('name'),
             'dni' => $request->input('dni'),
-            'phone' => '', 
+            'phone' => $request->filled('phone') ? $request->input('phone') : null, 
             'email' => Str::lower($request->string('email')),
             'password' => Hash::make($request->string('password')),
             'role' => 'student',
