@@ -14,7 +14,7 @@
         <main class="dashboard-main-content">
             <div class="dashboard-topbar mb-4 d-flex justify-content-between align-items-center">
                 <div>
-                    <h2>Gestión de Usuarios</h2>
+                    <h2 class="fw-bold text-dark-adaptive">Gestión de Usuarios</h2>
                 </div>
                 <div class="d-flex align-items-center gap-3">
                     <button type="button" class="btn btn-info text-white fw-bold px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#kanbanRolesModal">
@@ -27,20 +27,20 @@
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
             @if(session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
-            <div class="card shadow-sm border-0 p-4">
-                <h4 class="mb-3 text-dark">Usuarios Registrados</h4>
-                <p class="text-muted mb-4">Haz clic en cualquier usuario de la lista para ver su información detallada o gestiona su estado y acceso.</p>
+            <div class="card shadow-sm border-0 p-4 bg-card-adaptive">
+                <h4 class="mb-3 text-dark-adaptive">Usuarios Registrados</h4>
+                <p class="text-secondary mb-4">Administra los roles, estados y accesos de los usuarios registrados en la plataforma.</p>
 
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
@@ -58,9 +58,7 @@
                         <tbody>
                             @forelse($users as $user)
                                 <tr>
-                                    <td class="user-row-clickable" data-bs-toggle="modal" data-bs-target="#userModal">
-                                        <strong>#{{ $user->id }}</strong>
-                                    </td>
+                                    <td><strong>#{{ $user->id }}</strong></td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
@@ -73,23 +71,31 @@
                                             <span class="badge bg-danger">Inactivo</span>
                                         @endif
                                     </td>
-                                    <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
+                                    <td>{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : 'N/D' }}</td>
                                     <td class="text-center">
                                         @if(Auth::id() !== $user->id)
                                             <div class="d-flex justify-content-center gap-2">
-                                                @if($user->is_active ?? true)
-                                                    <button type="button" class="btn btn-warning btn-sm text-dark fw-bold" data-bs-toggle="modal" data-bs-target="#statusModal{{ $user->id }}">
-                                                        Desactivar
-                                                    </button>
-                                                @else
-                                                    <button type="button" class="btn btn-success btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#statusModal{{ $user->id }}">
-                                                        Activar
-                                                    </button>
-                                                @endif
+                                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    @if($user->is_active ?? true)
+                                                        <button type="submit" class="btn btn-warning btn-sm text-dark fw-bold" onclick="return confirm('¿Estás seguro de desactivar a este usuario?')">
+                                                            Desactivar
+                                                        </button>
+                                                    @else
+                                                        <button type="submit" class="btn btn-success btn-sm fw-bold">
+                                                            Activar
+                                                        </button>
+                                                    @endif
+                                                </form>
 
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}">
-                                                    Eliminar
-                                                </button>
+                                                <form action="{{ route('admin.users.forceDelete', $user->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¡Atención! Esta acción eliminará permanentemente al usuario. ¿Deseas continuar?')">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
                                             </div>
                                         @else
                                             <span class="badge bg-secondary">Tu cuenta</span>
@@ -111,13 +117,13 @@
 
 <div class="modal fade" id="kanbanRolesModal" tabindex="-1" aria-labelledby="kanbanRolesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content bg-light">
+        <div class="modal-content bg-card-adaptive">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title" id="kanbanRolesModalLabel"><i class="bi bi-kanban me-2"></i> Tablero de Gestión de Roles de Usuarios</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted text-center mb-4">Visualiza los usuarios clasificados por su rol actual y reasignales un nuevo rol de forma inmediata.</p>
+                <p class="text-secondary text-center mb-4">Visualiza los usuarios clasificados por su rol actual y reasignales un nuevo rol de forma inmediata.</p>
                 
                 <div class="row g-3">
                     @php
@@ -131,7 +137,7 @@
 
                     @foreach($rolesList as $roleKey => $roleData)
                         <div class="col-md-3">
-                            <div class="card border-0 shadow-sm h-100">
+                            <div class="card border-0 shadow-sm h-100 bg-card-adaptive">
                                 <div class="card-header bg-{{ $roleData['color'] }} text-white text-center fw-bold">
                                     {{ $roleData['title'] }}
                                 </div>
@@ -141,8 +147,8 @@
                                     @endphp
 
                                     @forelse($filteredUsers as $u)
-                                        <div class="card mb-2 p-2 border bg-white shadow-sm">
-                                            <div class="small fw-bold text-dark">{{ $u->name }}</div>
+                                        <div class="card mb-2 p-2 border shadow-sm bg-card-adaptive">
+                                            <div class="small fw-bold text-dark-adaptive">{{ $u->name }}</div>
                                             <div class="text-muted" style="font-size: 0.75rem;">{{ $u->email }}</div>
                                             
                                             <form action="{{ route('admin.users.updateRole', $u->id) }}" method="POST" class="mt-2">
@@ -156,7 +162,7 @@
                                                         <option value="student">Estudiante</option>
                                                         <option value="user">Usuario</option>
                                                     </select>
-                                                    <button class="btn btn-outline-dark btn-sm" type="submit" style="font-size: 0.75rem;">Mover</button>
+                                                    <button class="btn btn-outline-secondary btn-sm text-dark-adaptive" type="submit" style="font-size: 0.75rem;">Mover</button>
                                                 </div>
                                             </form>
                                         </div>

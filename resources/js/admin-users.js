@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("Gestión de usuarios cargada correctamente.");
     const userModal = document.getElementById('userModal');
 
     if (userModal) {
