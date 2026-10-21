@@ -24,6 +24,7 @@ export default defineConfig({
                 'resources/js/instructors.js',
                 'resources/css/admin-users.css',
                 'resources/js/admin-users.js',
+                'resources/css/email-admin.css',
 
                 'resources/css/settings/settings.css',
                 'resources/js/settings/settings.js',
