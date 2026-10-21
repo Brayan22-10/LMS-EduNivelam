@@ -74,6 +74,14 @@ Route::middleware('auth')->group(function () {
         return view('auth.verify-email');
     })->name('verification.notice');
 
+    Route::get('/check-session-status', function (Request $request) {
+        $user = $request->user();
+        if ($user && (!is_null($user->email_verified_at) || ($user->is_active ?? false))) {
+            return response()->json(['status' => 'verified']);
+        }
+        return response()->json(['status' => 'pending']);
+    })->name('verification.status-check');
+
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
         return view('auth.verified-success');
