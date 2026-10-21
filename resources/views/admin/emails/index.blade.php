@@ -16,7 +16,7 @@
 
         <main class="dashboard-main-content">
             <div class="dashboard-topbar mb-4">
-                <h2>Bandeja de Entrada (IMAP)</h2>
+                <h2 class="text-dark-adaptive fw-bold">Bandeja de Entrada (IMAP)</h2>
             </div>
 
             @if(session('success'))
@@ -32,9 +32,9 @@
                 </div>
             @endif
 
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-card-adaptive">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0 text-dark-adaptive">
                         <thead class="table-dark">
                             <tr>
                                 <th>Estado</th>
@@ -46,7 +46,7 @@
                         </thead>
                         <tbody>
                             @forelse($emails as $email)
-                                <tr class="{{ !$email->is_read ? 'fw-bold bg-light' : '' }}">
+                                <tr class="{{ !$email->is_read ? 'fw-bold' : '' }}">
                                     <td>
                                         @if(!$email->is_read)
                                             <span class="badge bg-primary">No leído</span>
@@ -99,9 +99,6 @@
                                                             <div class="mb-3">
                                                                 <label for="reply_message{{ $email->id }}" class="form-label small fw-bold text-light">Mensaje de Respuesta:</label>
                                                                 <textarea class="form-control @error('reply_message') is-invalid @enderror" id="reply_message{{ $email->id }}" name="reply_message" rows="5" placeholder="Escribe tu respuesta aquí..." required></textarea>
-                                                                @error('reply_message')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                @enderror
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer border-top border-secondary px-4 py-3">
@@ -112,12 +109,11 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-4 text-muted">No hay correos recibidos en la base de datos. Ejecuta <code class="text-dark">php artisan mail:receive</code> para consultar el buzón.</td>
+                                    <td colspan="5" class="text-center py-4 text-muted">No hay correos recibidos en la base de datos.</td>
                                 </tr>
                             @endforelse
                         </tbody>
