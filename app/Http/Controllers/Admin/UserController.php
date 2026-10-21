@@ -11,11 +11,13 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->get();
+        $users = collect();
+        if (\Schema::hasTable('users')) {
+            $users = User::latest()->get();
+        }
 
         return view('admin.users.index', compact('users'));
     }
-
 
     public function destroy($id)
     {
@@ -52,21 +54,21 @@ class UserController extends Controller
 
     public function updateRole(Request $request, $id)
     {
-    $user = User::findOrFail($id);
+        $user = User::findOrFail($id);
 
-    if (Auth::id() === $user->id && $request->role !== 'admin') {
+        if (Auth::id() === $user->id && $request->role !== 'admin') {
+            return redirect()->route('admin.users')
+                ->with('error', 'Por seguridad, no puedes quitarte el rol de administrador a ti mismo.');
+        }
+
+        $request->validate([
+            'role' => 'required|string|in:admin,docente,student,user' 
+        ]);
+
+        $user->role = $request->role;
+        $user->save();
+
         return redirect()->route('admin.users')
-            ->with('error', 'Por seguridad, no puedes quitarte el rol de administrador a ti mismo.');
-    }
-
-    $request->validate([
-        'role' => 'required|string|in:admin,docente,student,user' 
-    ]);
-
-    $user->role = $request->role;
-    $user->save();
-
-    return redirect()->route('admin.users')
-        ->with('success', "El rol de {$user->name} ha sido actualizado con éxito.");
+            ->with('success', "El rol de {$user->name} ha sido actualizado con éxito.");
     }
 }
