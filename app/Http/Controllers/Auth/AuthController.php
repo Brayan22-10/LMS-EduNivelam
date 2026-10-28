@@ -3,21 +3,26 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
-use Illuminate\Auth\Events\Registered; 
+use Throwable;
 
 class AuthController extends Controller
 {
+    private const MAX_ATTEMPTS  = 5;
+    private const BASE_LOCKOUT  = 300;   
+    private const MAX_LOCKOUT   = 3600; 
+
     public function showLogin()
     {
         return view('auth.login');
@@ -25,13 +30,17 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $email = Str::lower($request->input('email'));
+        $email = Str::lower(trim((string) $request->input('email')));
         $throttleKey = $email . '|' . $request->ip();
         $lockoutCacheKey = 'lockout_count_' . $throttleKey;
 
-        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            return back()->withInput();
+        if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_ATTEMPTS)) {
+            return back()->withInput()->withErrors([
+                'email' => 'Demasiados intentos fallidos. Espera a que termine el bloqueo para volver a intentarlo.',
+            ]);
         }
+
+        $request->merge(['email' => $email]);
 
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -40,94 +49,95 @@ class AuthController extends Controller
             'password.regex' => 'La contraseña no puede contener espacios en blanco.',
         ]);
 
+        $remember = $request->boolean('remember');
         $user = User::where('email', $email)->first();
 
-        if ($user && $user->role === 'teacher' && !$user->is_approved) {
-            return back()->withErrors([
-                'email' => 'Tu cuenta de docente se encuentra pendiente de aprobación por el administrador.',
-            ])->onlyInput('email');
+        if ($user) {
+            $passwordOk = Hash::check($credentials['password'], $user->password);
+        } else {
+            Hash::make(Str::random(16));
+            $passwordOk = false;
         }
 
-        if ($user && ($user->is_active === false || $user->is_active === 0)) {
-            DB::table('security_logs')->insert([
-                'user_id' => $user->id,
-                'email' => $email,
-                'ip_address' => $request->ip(),
-                'status' => 'failed',
-                'event_type' => 'inactive_account_access',
-                'description' => "Intento de acceso bloqueado: Cuenta desactivada para {$email}",
-                'user_agent' => $request->header('User-Agent'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            return back()->withErrors([
-                'email' => 'Tu cuenta ha sido desactivada por un administrador. No puedes iniciar sesión.',
-            ])->onlyInput('email');
-        }
-
-        $remember = $request->has('remember');
-
-        if (!Auth::attempt($credentials, $remember)) {
-            RateLimiter::hit($throttleKey, 300); 
-
-            DB::table('security_logs')->insert([
-                'user_id' => $user ? $user->id : null,
-                'email' => $email,
-                'ip_address' => $request->ip(),
-                'status' => 'failed',
-                'event_type' => 'failed_login',
-                'description' => "Intento de acceso fallido para el correo: {$email} desde la IP: {$request->ip()}",
-                'user_agent' => $request->header('User-Agent'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-                $blockCount = cache()->get($lockoutCacheKey, 0) + 1;
-                cache()->put($lockoutCacheKey, $blockCount, now()->addHours(24)); 
-
-                $customLockoutTime = 300 * pow(2, $blockCount - 1);
-
-                RateLimiter::clear($throttleKey);
-                for ($i = 0; $i < 5; $i++) {
-                    RateLimiter::hit($throttleKey, $customLockoutTime);
-                }
+        if ($passwordOk) {
+            if ($user->role === 'teacher' && ! $user->is_approved) {
+                return back()->withErrors([
+                    'email' => 'Tu cuenta de docente se encuentra pendiente de aprobación por el administrador.',
+                ])->onlyInput('email');
             }
 
-            return back()->withErrors([
-                'email' => 'Las credenciales no son válidas.',
-            ])->onlyInput('email');
+            if ($user->is_active === false) {
+                $this->securityLog(
+                    $request,
+                    $user->id,
+                    $email,
+                    'failed',
+                    'inactive_account_access',
+                    "Intento de acceso bloqueado: Cuenta desactivada para {$email}"
+                );
+
+                return back()->withErrors([
+                    'email' => 'Tu cuenta ha sido desactivada por un administrador. No puedes iniciar sesión.',
+                ])->onlyInput('email');
+            }
+
+            if (Auth::attempt($credentials, $remember)) {
+                RateLimiter::clear($throttleKey);
+                cache()->forget($lockoutCacheKey);
+
+                $request->session()->regenerate();
+
+                $this->securityLog(
+                    $request,
+                    Auth::id(),
+                    Auth::user()->email,
+                    'success',
+                    'successful_login',
+                    'Inicio de sesión exitoso para el usuario ID: ' . Auth::id()
+                );
+
+                if ($remember) {
+                    Cookie::queue('saved_email', $email, 43200);
+                    Cookie::queue('remember_checked', 'true', 43200);
+                } else {
+                    Cookie::queue(Cookie::forget('saved_email'));
+                    Cookie::queue(Cookie::forget('remember_checked'));
+                }
+                Cookie::queue(Cookie::forget('saved_password'));
+
+                return redirect()->intended(route('home'));
+            }
         }
 
-        RateLimiter::clear($throttleKey);
-        cache()->forget($lockoutCacheKey);
+        RateLimiter::hit($throttleKey, self::BASE_LOCKOUT);
 
-        $request->session()->regenerate();
+        $this->securityLog(
+            $request,
+            $user ? $user->id : null,
+            $email,
+            'failed',
+            'failed_login',
+            "Intento de acceso fallido para el correo: {$email} desde la IP: {$request->ip()}"
+        );
 
-        DB::table('security_logs')->insert([
-            'user_id' => Auth::id(),
-            'email' => Auth::user()->email,
-            'ip_address' => $request->ip(),
-            'status' => 'success',
-            'event_type' => 'successful_login',
-            'description' => "Inicio de sesión exitoso para el usuario ID: " . Auth::id(),
-            'user_agent' => $request->header('User-Agent'),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_ATTEMPTS)) {
+            $blockCount = cache()->get($lockoutCacheKey, 0) + 1;
+            cache()->put($lockoutCacheKey, $blockCount, now()->addHours(24));
 
-        if ($remember) {
-            Cookie::queue('saved_email', $request->email, 43200);
-            Cookie::queue('remember_checked', 'true', 43200);
-        } else {
-            Cookie::queue(Cookie::forget('saved_email'));
-            Cookie::queue(Cookie::forget('remember_checked'));
+            $lockoutSeconds = min(
+                self::BASE_LOCKOUT * (2 ** min($blockCount - 1, 6)),
+                self::MAX_LOCKOUT
+            );
+
+            RateLimiter::clear($throttleKey);
+            for ($i = 0; $i < self::MAX_ATTEMPTS; $i++) {
+                RateLimiter::hit($throttleKey, $lockoutSeconds);
+            }
         }
-        
-        Cookie::queue(Cookie::forget('saved_password'));
 
-        return redirect()->intended(route('home'));
+        return back()->withErrors([
+            'email' => 'Las credenciales no son válidas.',
+        ])->onlyInput('email');
     }
 
     public function showRegister()
@@ -137,12 +147,14 @@ class AuthController extends Controller
 
     public function register(Request $request): \Illuminate\Http\RedirectResponse
     {
+        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+
         $request->validate([
             'name' => ['required', 'string', 'min:2', 'max:100'],
             'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:users,dni'],
             'phone' => ['nullable', 'string', 'regex:/^[0-9]+$/', 'max:20', 'unique:users,phone'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'regex:/^\S*$/'],
         ], [
             'dni.required' => 'La cédula o documento es obligatorio.',
             'dni.regex' => 'La identificación solo debe contener números.',
@@ -150,18 +162,19 @@ class AuthController extends Controller
             'phone.regex' => 'El teléfono solo debe contener números.',
             'phone.unique' => 'Este número de teléfono ya está en uso por otra cuenta.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
+            'password.regex' => 'La contraseña no puede contener espacios en blanco.',
         ]);
 
         $user = User::create([
             'name' => $request->string('name'),
             'dni' => $request->input('dni'),
-            'phone' => $request->filled('phone') ? $request->input('phone') : null, 
-            'email' => Str::lower($request->string('email')),
+            'phone' => $request->filled('phone') ? $request->input('phone') : null,
+            'email' => $request->input('email'),
             'password' => Hash::make($request->string('password')),
             'role' => 'student',
             'is_approved' => true,
             'is_active' => true,
-            'font_size' => '14px', 
+            'font_size' => '14px',
             'locale' => 'es',
         ]);
 
@@ -181,6 +194,8 @@ class AuthController extends Controller
 
     public function registerTeacher(Request $request)
     {
+        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+
         $eighteenYearsAgo = Carbon::now()->subYears(18)->format('Y-m-d');
 
         $request->validate([
@@ -208,18 +223,18 @@ class AuthController extends Controller
 
         User::create([
             'name' => $request->input('name'),
-            'email' => Str::lower($request->input('email')),
+            'email' => $request->input('email'),
             'dni' => $request->input('dni'),
             'country_code' => $request->input('country_code'),
             'phone' => $request->input('phone'),
             'birthdate' => $request->input('birthdate'),
             'teaching_type' => $request->input('teaching_type'),
-            'password' => Hash::make(Str::random(16)), 
+            'password' => Hash::make(Str::random(16)),
             'role' => 'teacher',
             'is_approved' => 0,
             'is_active' => 0,
-            'font_size' => 'normal', 
-            'locale' => 'es',      
+            'font_size' => '14px',
+            'locale' => 'es',
         ]);
 
         return redirect()->route('teacher.pending');
@@ -229,7 +244,7 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
-        if ($user && !$user->hasVerifiedEmail() && $user->role === 'student') {
+        if ($user && ! $user->hasVerifiedEmail() && $user->role === 'student') {
             $user->delete();
         }
 
@@ -248,64 +263,92 @@ class AuthController extends Controller
 
     public function sendResetCode(Request $request)
     {
-        $request->validate(['email' => 'required|email|exists:users,email']);
+        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+        $request->validate(['email' => ['required', 'email']]);
 
-        $code = rand(100000, 999999); 
-        
-        $user = User::where('email', $request->email)->first();
-        $user->reset_code = $code;
-        $user->reset_code_expires_at = Carbon::now()->addMinutes(15); 
-        $user->save();
+        $user = User::where('email', $request->input('email'))->first();
 
-        Mail::raw("Tu código de recuperación para EduNivelam es: {$code}", function ($message) use ($user) {
-            $message->to($user->email)
-                    ->subject('Código de recuperación de contraseña - EduNivelam');
-        });
+        if ($user) {
+            $code = random_int(100000, 999999);
 
-        session(['reset_email' => $user->email]);
-        return redirect()->route('password.verify.form')->with('success', 'Se ha enviado un código de 6 dígitos a tu correo.');
+            $user->reset_code = $code;
+            $user->reset_code_expires_at = Carbon::now()->addMinutes(15);
+            $user->save();
+
+            try {
+                Mail::raw("Tu código de recuperación para EduNivelam es: {$code}", function ($message) use ($user) {
+                    $message->to($user->email)
+                            ->subject('Código de recuperación de contraseña - EduNivelam');
+                });
+            } catch (Throwable $e) {
+                Log::error('No se pudo enviar el código de recuperación: ' . $e->getMessage());
+            }
+        }
+
+        session(['reset_email' => $request->input('email')]);
+        session()->forget('code_verified');
+
+        return redirect()->route('password.verify.form')
+            ->with('success', 'Si el correo está registrado, recibirás un código de 6 dígitos.');
     }
 
     public function showVerifyForm()
     {
+        if (! session('reset_email')) {
+            return redirect()->route('password.request');
+        }
+
         return view('auth.verify-code');
     }
 
     public function verifyCode(Request $request)
     {
-        $request->validate(['code' => 'required|numeric|digits:6']);
+        $request->validate(['code' => ['required', 'digits:6']]);
 
         $user = User::where('email', session('reset_email'))
-                    ->where('reset_code', $request->code)
-                    ->where('reset_code_expires_at', '>', Carbon::now())
-                    ->first();
+            ->where('reset_code', $request->code)
+            ->where('reset_code_expires_at', '>', Carbon::now())
+            ->first();
 
-        if (!$user) {
+        if (! $user) {
             return back()->withErrors(['code' => 'El código es inválido o ha expirado.']);
         }
 
         session(['code_verified' => true]);
+
         return redirect()->route('password.reset.form');
     }
 
     public function showResetForm()
     {
-        if (!session('code_verified')) {
+        if (! session('reset_email') || ! session('code_verified')) {
             return redirect()->route('password.request');
         }
+
         return view('auth.reset-password');
     }
 
     public function updatePassword(Request $request)
     {
+        if (! session('reset_email') || ! session('code_verified')) {
+            return redirect()->route('password.request');
+        }
+
         $request->validate([
-            'password' => 'required|string|min:6|confirmed'
+            'password' => ['required', 'string', 'min:8', 'regex:/^\S*$/', 'confirmed'],
+        ], [
+            'password.regex' => 'La contraseña no puede contener espacios en blanco.',
         ]);
 
         $user = User::where('email', session('reset_email'))->first();
-        
-        if (!$user) {
-            return redirect()->route('password.request');
+
+        if (! $user
+            || ! $user->reset_code_expires_at
+            || Carbon::parse($user->reset_code_expires_at)->isPast()) {
+            session()->forget(['reset_email', 'code_verified']);
+
+            return redirect()->route('password.request')
+                ->withErrors(['email' => 'El código expiró. Solicita uno nuevo.']);
         }
 
         $user->password = Hash::make($request->password);
@@ -315,6 +358,22 @@ class AuthController extends Controller
 
         session()->forget(['reset_email', 'code_verified']);
 
-        return redirect()->route('login')->with('success', '¡Contraseña actualizada con éxito! Ya puedes iniciar sesión.');
+        return redirect()->route('login')
+            ->with('success', '¡Contraseña actualizada con éxito! Ya puedes iniciar sesión.');
+    }
+
+    private function securityLog(Request $request, ?int $userId, string $email, string $status, string $event, string $description): void
+    {
+        DB::table('security_logs')->insert([
+            'user_id' => $userId,
+            'email' => $email,
+            'ip_address' => $request->ip(),
+            'status' => $status,
+            'event_type' => $event,
+            'description' => $description,
+            'user_agent' => $request->header('User-Agent'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
