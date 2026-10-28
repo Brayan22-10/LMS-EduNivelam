@@ -1,42 +1,56 @@
 @extends('layouts.app')
 
+@section('title', 'Recuperar contraseña - EduNivelam')
+
 @section('styles')
-    @vite(['resources/css/login.css'])
+    @vite(['resources/css/login.css', 'resources/css/auth-pages.css'])
     <style>
         footer, .footer { display: none !important; }
     </style>
 @endsection
 
 @section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-dark text-white">Recuperar Contraseña</div>
-                <div class="card-body">
-                    @if (session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
+<div class="ap-stage">
+    <div class="ap-card">
 
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
+        <div class="text-center">
+            <span class="ap-icon"><i class="bi bi-key"></i></span>
+            <h1 class="ap-title">Recuperar contraseña</h1>
+            <p class="ap-sub">Escribe tu correo y te enviaremos un código de 6 dígitos para restablecerla.</p>
+        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Dirección de correo electrónico</label>
-                            <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required autofocus autocomplete="off">
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+        @if (session('success'))
+            <div class="alert alert-success py-2 small auth-alert" role="alert">
+                <i class="bi bi-check-circle-fill me-1"></i> {{ session('success') }}
+            </div>
+        @endif
 
-                        <button type="submit" class="btn btn-dark w-100 mb-3">Enviar código de 6 dígitos</button>
-                        
-                        <div class="text-center">
-                            <a href="{{ route('login') }}" class="text-decoration-none small">Volver al inicio de sesión</a>
-                        </div>
-                    </form>
+        <form method="POST" action="{{ route('password.email') }}">
+            @csrf
+
+            <div class="mb-4">
+                <label for="email" class="form-label auth-label">Correo electrónico</label>
+                <div class="auth-field">
+                    <i class="bi bi-envelope auth-field-icon"></i>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}"
+                           class="form-control auth-input @error('email') is-invalid @enderror"
+                           placeholder="tucorreo@ejemplo.com" required autofocus autocomplete="off">
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
+
+            <button type="submit" class="auth-submit">
+                <span>Enviar código de 6 dígitos</span>
+                <span class="auth-submit-arrow"><i class="bi bi-send"></i></span>
+            </button>
+        </form>
+
+        <div class="ap-links">
+            <a href="{{ route('login') }}" class="auth-link">
+                <i class="bi bi-arrow-left me-1"></i>Volver al inicio de sesión
+            </a>
         </div>
     </div>
 </div>

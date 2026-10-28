@@ -1,64 +1,61 @@
 @extends('layouts.app')
 
+@section('title', 'Verifica tu correo - EduNivelam')
+
 @section('styles')
-    @vite(['resources/css/login.css'])
+    @vite(['resources/css/login.css', 'resources/css/auth-pages.css'])
     <style>
         footer, .footer { display: none !important; }
     </style>
 @endsection
 
 @section('content')
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-sm border-0 p-5 text-center" style="max-width: 600px; width: 100%;">
-        
-        <div class="mb-4">
-            <h3 class="fw-bold text-dark">Verifica tu dirección de correo electrónico</h3>
-        </div>
+<div class="ap-stage" data-verify-email
+     data-status-url="{{ url('/check-session-status') }}"
+     data-home-url="{{ route('home') }}">
+    <div class="ap-card text-center">
 
-        @if (session('message'))
-            <div class="alert alert-success" role="alert">
-                {{ session('message') }}
+        <span class="ap-icon"><i class="bi bi-envelope-check"></i></span>
+        <h1 class="ap-title">Verifica tu correo</h1>
+        <p class="ap-sub">
+            ¡Gracias por registrarte en EduNivelam! Antes de comenzar, haz clic en el enlace que te enviamos para confirmar tu dirección.
+        </p>
+
+        @auth
+            <div class="ap-email"><i class="bi bi-envelope"></i> {{ Auth::user()->email }}</div>
+        @endauth
+
+        @if (session('message') || session('status') === 'verification-link-sent')
+            <div class="alert alert-success py-2 small auth-alert text-start" role="alert">
+                <i class="bi bi-check-circle-fill me-1"></i>
+                {{ session('message') ?? 'Te enviamos un nuevo enlace de verificación.' }}
             </div>
         @endif
 
-        <p class="text-muted mb-4">
-            ¡Gracias por registrarte en EduNivelam! Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar?
-        </p>
+        <div class="ap-wait d-flex justify-content-center">
+            <span class="ap-dot"></span>
+            <span>Esperando la verificación… esta página se actualizará sola.</span>
+        </div>
 
-        <form method="POST" action="{{ route('verification.send') }}" class="mb-3">
+        <form method="POST" action="{{ route('verification.send') }}" class="mb-3 js-once">
             @csrf
-            <button type="submit" class="btn btn-dark w-100 py-2">Reenviar correo de verificación</button>
+            <button type="submit" class="auth-submit">
+                <span>Reenviar correo de verificación</span>
+                <span class="auth-submit-arrow"><i class="bi bi-send"></i></span>
+            </button>
         </form>
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="btn btn-outline-secondary w-100 py-2">Cerrar sesión</button>
+            <button type="submit" class="ap-btn-ghost">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </button>
         </form>
     </div>
 </div>
 
-{{-- Script optimizado para revisar cada 1 segundo (1000 ms) --}}
-<script>
-    setInterval(function() {
-        fetch('/check-session-status', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Pendiente');
-        })
-        .then(data => {
-            if (data.status === 'verified') {
-                window.location.href = "{{ route('home') }}";
-            }
-        })
-        .catch(error => {
-        });
-    }, 1000); 
-</script>
+@endsection
+
+@section('scripts')
+    @vite(['resources/js/auth-pages.js'])
 @endsection
