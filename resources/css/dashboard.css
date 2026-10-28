@@ -51,9 +51,7 @@ body.admin-fixed-body {
     flex-direction: column;
 }
 
-.panel-nav-container,
-body.admin-fixed-body nav.navbar.floating-navbar,
-body.admin-fixed-body header.navbar {
+.panel-nav-container {
     position: fixed !important;
     top: 15px !important;
     left: 280px !important;
@@ -62,16 +60,17 @@ body.admin-fixed-body header.navbar {
     height: 64px !important;
     min-height: 64px !important;
     margin: 0 !important;
-    border-radius: 50rem !important;
-    padding: 0 2rem !important;
-    background-color: rgba(33, 37, 41, 0.95) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3) !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     z-index: 1030;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: all 0.3s ease-in-out;
+    transition: left 0.3s ease-in-out;
+}
+
+body.sidebar-collapsed .panel-nav-container {
+    left: 72px !important;
 }
 
 .panel-nav-container nav.navbar {
