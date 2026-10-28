@@ -390,3 +390,75 @@ body.bg-dark-mode .theme-switch-btn.active {
     color: #38bdf8;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
 }
+
+.settings-sidebar {
+    padding: 4px 6px;
+}
+
+.settings-sidebar .nav-link {
+    border: 1px solid transparent !important;
+    border-radius: 8px;
+    transform-origin: center center;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link {
+    background-color: transparent !important;
+    color: #ced4da !important;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link:hover,
+body.bg-dark-mode .settings-sidebar .nav-link:focus-visible {
+    background-color: rgba(56, 189, 248, 0.12) !important;
+    border-color: rgba(56, 189, 248, 0.85) !important;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+    color: #fff !important;
+    transform: scale(1.04);
+    outline: none;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link.active,
+body.bg-dark-mode .settings-sidebar .nav-link.show {
+    background-color: #343a40 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link.active:hover,
+body.bg-dark-mode .settings-sidebar .nav-link.active:focus-visible {
+    background-color: rgba(56, 189, 248, 0.18) !important;
+    border-color: rgba(56, 189, 248, 0.85) !important;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+}
+
+body:not(.bg-dark-mode) .settings-sidebar .nav-link:hover,
+body:not(.bg-dark-mode) .settings-sidebar .nav-link:focus-visible {
+    background-color: rgba(13, 110, 253, 0.08) !important;
+    border-color: rgba(13, 110, 253, 0.8) !important;
+    box-shadow: 0 0 8px rgba(13, 110, 253, 0.2);
+    color: #0d6efd !important;
+    transform: scale(1.04);
+    outline: none;
+}
+
+body:not(.bg-dark-mode) .settings-sidebar .nav-link.active {
+    background-color: #212529 !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    color: #fff !important;
+}
+
+body:not(.bg-dark-mode) .settings-sidebar .nav-link.active:hover {
+    background-color: rgba(13, 110, 253, 0.15) !important;
+    border-color: rgba(13, 110, 253, 0.8) !important;
+    color: #0d6efd !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .settings-sidebar .nav-link {
+        transition: none;
+    }
+    .settings-sidebar .nav-link:hover,
+    .settings-sidebar .nav-link:focus-visible {
+        transform: none !important;
+    }
+}
