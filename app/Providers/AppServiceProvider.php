@@ -36,10 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-users', fn (User $user) => $user->role === 'admin');
 
         RateLimiter::for('login', function (Request $request) {
-            $email = Str::lower((string) $request->input('email'));
-
-            return Limit::perMinute(5)
-                ->by($email.'|'.$request->ip());
+            return Limit::perMinute(30)->by($request->ip());
         });
     }
 }

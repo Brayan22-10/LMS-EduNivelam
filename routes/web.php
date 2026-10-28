@@ -8,6 +8,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\UserController;
@@ -39,6 +40,13 @@ Route::middleware('guest')->group(function () {
         ->middleware('throttle:login')
         ->name('login.store');
 
+    Route::middleware('throttle:10,1')->group(function () {
+        Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])
+            ->name('auth.google.redirect');
+        Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+            ->name('auth.google.callback');
+    });
+
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 
@@ -50,13 +58,19 @@ Route::middleware('guest')->group(function () {
     })->name('teacher.pending');
 
     Route::get('/forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
-    Route::post('/forgot-password', [AuthController::class, 'sendResetCode'])->name('password.email');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetCode'])
+        ->middleware('throttle:3,1')
+        ->name('password.email');
 
     Route::get('/verify-code', [AuthController::class, 'showVerifyForm'])->name('password.verify.form');
-    Route::post('/verify-code', [AuthController::class, 'verifyCode'])->name('password.verify.submit');
+    Route::post('/verify-code', [AuthController::class, 'verifyCode'])
+        ->middleware('throttle:5,1')
+        ->name('password.verify.submit');
 
     Route::get('/reset-password', [AuthController::class, 'showResetForm'])->name('password.reset.form');
-    Route::post('/reset-password', [AuthController::class, 'updatePassword'])->name('password.update');
+    Route::post('/reset-password', [AuthController::class, 'updatePassword'])
+        ->middleware('throttle:5,1')
+        ->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
