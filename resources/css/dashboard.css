@@ -149,10 +149,11 @@ body.sidebar-collapsed .admin-sidebar {
 
 .sidebar-menu {
     list-style: none;
-    padding: 0;
-    margin-top: 15px;
+    padding: 6px 14px;
+    margin: 15px -12px 0;
     flex-grow: 1;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .sidebar-menu li {
@@ -164,22 +165,37 @@ body.sidebar-collapsed .admin-sidebar {
     color: #ced4da;
     text-decoration: none;
     padding: 8px 12px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transform-origin: center center;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
     font-weight: 500;
     font-size: 0.88rem;
 }
 
 .sidebar-menu li a:hover,
+.sidebar-menu li a:focus-visible {
+    background-color: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.85);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+    color: #fff;
+    transform: scale(1.04);
+    outline: none;
+}
+
 .sidebar-menu li a.active {
     background-color: #343a40;
+    border-color: rgba(255, 255, 255, 0.15);
     color: #fff;
-    transform: translateX(4px);
+}
+
+.sidebar-menu li a.active:hover {
+    background-color: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.85);
 }
 
 .sidebar-footer {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 6px;
 }
 
 .btn-logout-sidebar {
@@ -197,6 +213,49 @@ body.sidebar-collapsed .admin-sidebar {
 
 .btn-logout-sidebar:hover {
     background-color: #bb2d3b;
+}
+
+.sidebar-footer .btn,
+.sidebar-footer .btn-logout-sidebar {
+    border: 1px solid transparent !important;
+    transform-origin: center center;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-footer a.btn:hover,
+.sidebar-footer a.btn:focus-visible {
+    background-color: rgba(56, 189, 248, 0.12) !important;
+    border-color: rgba(56, 189, 248, 0.85) !important;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+    color: #fff !important;
+    transform: scale(1.04);
+    outline: none;
+}
+
+.btn-logout-sidebar:hover,
+.btn-logout-sidebar:focus-visible {
+    background-color: rgba(220, 53, 69, 0.18) !important;
+    border-color: rgba(220, 53, 69, 0.9) !important;
+    box-shadow: 0 0 8px rgba(220, 53, 69, 0.3);
+    color: #fff;
+    transform: scale(1.04);
+    outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-menu li a,
+    .sidebar-footer .btn,
+    .sidebar-footer .btn-logout-sidebar {
+        transition: none;
+    }
+    .sidebar-menu li a:hover,
+    .sidebar-menu li a:focus-visible,
+    .sidebar-footer a.btn:hover,
+    .sidebar-footer a.btn:focus-visible,
+    .btn-logout-sidebar:hover,
+    .btn-logout-sidebar:focus-visible {
+        transform: none;
+    }
 }
 
 .dashboard-main-content {
@@ -330,4 +389,76 @@ body.bg-dark-mode .theme-switch-btn.active {
     background-color: #212b38;
     color: #38bdf8;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.settings-sidebar {
+    padding: 4px 6px;
+}
+
+.settings-sidebar .nav-link {
+    border: 1px solid transparent !important;
+    border-radius: 8px;
+    transform-origin: center center;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link {
+    background-color: transparent !important;
+    color: #ced4da !important;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link:hover,
+body.bg-dark-mode .settings-sidebar .nav-link:focus-visible {
+    background-color: rgba(56, 189, 248, 0.12) !important;
+    border-color: rgba(56, 189, 248, 0.85) !important;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+    color: #fff !important;
+    transform: scale(1.04);
+    outline: none;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link.active,
+body.bg-dark-mode .settings-sidebar .nav-link.show {
+    background-color: #343a40 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+body.bg-dark-mode .settings-sidebar .nav-link.active:hover,
+body.bg-dark-mode .settings-sidebar .nav-link.active:focus-visible {
+    background-color: rgba(56, 189, 248, 0.18) !important;
+    border-color: rgba(56, 189, 248, 0.85) !important;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+}
+
+body:not(.bg-dark-mode) .settings-sidebar .nav-link:hover,
+body:not(.bg-dark-mode) .settings-sidebar .nav-link:focus-visible {
+    background-color: rgba(13, 110, 253, 0.08) !important;
+    border-color: rgba(13, 110, 253, 0.8) !important;
+    box-shadow: 0 0 8px rgba(13, 110, 253, 0.2);
+    color: #0d6efd !important;
+    transform: scale(1.04);
+    outline: none;
+}
+
+body:not(.bg-dark-mode) .settings-sidebar .nav-link.active {
+    background-color: #212529 !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    color: #fff !important;
+}
+
+body:not(.bg-dark-mode) .settings-sidebar .nav-link.active:hover {
+    background-color: rgba(13, 110, 253, 0.15) !important;
+    border-color: rgba(13, 110, 253, 0.8) !important;
+    color: #0d6efd !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .settings-sidebar .nav-link {
+        transition: none;
+    }
+    .settings-sidebar .nav-link:hover,
+    .settings-sidebar .nav-link:focus-visible {
+        transform: none !important;
+    }
 }

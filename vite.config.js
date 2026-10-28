@@ -25,6 +25,8 @@ export default defineConfig({
                 'resources/css/admin-users.css',
                 'resources/js/admin-users.js',
                 'resources/css/email-admin.css',
+                'resources/css/logout-animation.css',
+                'resources/js/logout-animation.js',
 
                 'resources/css/settings/settings.css',
                 'resources/js/settings/settings.js',

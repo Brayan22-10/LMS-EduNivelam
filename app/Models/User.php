@@ -13,6 +13,8 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public const ROLES = ['admin', 'teacher', 'student', 'user'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -32,7 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_active',
         'avatar',
         'bio',
-        'font_size',      
+        'font_size',
         'high_contrast',
         'github_url',
         'linkedin_url',
@@ -59,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_active' => 'boolean',   
+            'is_active' => 'boolean',
             'is_approved' => 'boolean',
         ];
     }
