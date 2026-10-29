@@ -29,6 +29,8 @@ export default defineConfig({
                 'resources/js/logout-animation.js',
                 'resources/css/auth-pages.css',
                 'resources/js/auth-pages.js',
+                'resources/css/teacher-status.css',
+                'resources/js/teacher-status.js',
 
                 'resources/css/settings/settings.css',
                 'resources/js/settings/settings.js',
