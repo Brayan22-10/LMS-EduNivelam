@@ -52,6 +52,7 @@ export default defineConfig({
                 'resources/css/errors/error-419.css',
                 'resources/css/errors/error-429.css',
                 'resources/css/errors/maintenance.css',
+                'resources/css/errors/google-error.css',
             ],
             refresh: true,
         }),
