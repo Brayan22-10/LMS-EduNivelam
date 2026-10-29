@@ -61,8 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const homeUrl = verify.getAttribute('data-home-url');
 
         setInterval(function() {
-            if (document.hidden) return;
-
             fetch(statusUrl, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -78,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.href = homeUrl;
                     }
                 })
-                .catch(function() { /* sigue esperando */ });
+                .catch(function() { /* Sigue esperando en silencio */ });
         }, 3000);
     }
 });
