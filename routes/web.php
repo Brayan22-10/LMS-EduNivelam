@@ -90,7 +90,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/check-session-status', function (Request $request) {
         $user = $request->user();
-        if ($user && (!is_null($user->email_verified_at) || ($user->is_active ?? false))) {
+        if ($user && !is_null($user->email_verified_at)) {
             return response()->json(['status' => 'verified']);
         }
         return response()->json(['status' => 'pending']);
@@ -98,7 +98,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
-        return view('auth.verified-success');
+        return redirect()->route('home')->with('success', '¡Correo verificado con éxito!');
     })->middleware(['signed'])->name('verification.verify');
 
     Route::post('/email/verification-notification', function (Request $request) {

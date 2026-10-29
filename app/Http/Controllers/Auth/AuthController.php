@@ -147,29 +147,43 @@ class AuthController extends Controller
 
     public function register(Request $request): \Illuminate\Http\RedirectResponse
     {
-        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+        $email = Str::lower(trim((string) $request->input('email')));
+        $dni = $request->input('dni');
+
+        $request->merge(['email' => $email]);
 
         $request->validate([
             'name' => ['required', 'string', 'min:2', 'max:100'],
-            'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:users,dni'],
-            'phone' => ['nullable', 'string', 'regex:/^[0-9]+$/', 'max:20', 'unique:users,phone'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30'],
+            'phone' => ['nullable', 'string', 'regex:/^[0-9]+$/', 'max:20'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'regex:/^\S*$/'],
         ], [
             'dni.required' => 'La cédula o documento es obligatorio.',
             'dni.regex' => 'La identificación solo debe contener números.',
-            'dni.unique' => 'Este número de documento ya se encuentra registrado.',
             'phone.regex' => 'El teléfono solo debe contener números.',
-            'phone.unique' => 'Este número de teléfono ya está en uso por otra cuenta.',
-            'email.unique' => 'Este correo electrónico ya está registrado.',
             'password.regex' => 'La contraseña no puede contener espacios en blanco.',
         ]);
+        
+        $existingVerified = User::where(function($query) use ($email, $dni) {
+            $query->where('email', $email)->orWhere('dni', $dni);
+        })->whereNotNull('email_verified_at')->first();
+
+        if ($existingVerified) {
+            return back()->withInput()->withErrors([
+                'email' => 'Este correo electrónico o número de documento ya se encuentra registrado y verificado.',
+            ]);
+        }
+
+        User::where(function($query) use ($email, $dni) {
+            $query->where('email', $email)->orWhere('dni', $dni);
+        })->whereNull('email_verified_at')->delete();
 
         $user = User::create([
             'name' => $request->string('name'),
-            'dni' => $request->input('dni'),
+            'dni' => $dni,
             'phone' => $request->filled('phone') ? $request->input('phone') : null,
-            'email' => $request->input('email'),
+            'email' => $email,
             'password' => Hash::make($request->string('password')),
             'role' => 'student',
             'is_approved' => true,
