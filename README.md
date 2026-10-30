@@ -62,21 +62,26 @@ Ejecuta los siguientes comandos en tu terminal (**Git Bash** o consola compatibl
    cd cms
 
 2. **Instalar dependencias de PHP:**
-  composer install  
+    ```bash
+    composer install  
 
-3. **Instalar y compilar dependencias de Frontend:**
-  npm install
-  npm run build 
+4. **Instalar y compilar dependencias de Frontend:**
+    ```bash
+      npm install
+      npm run build 
 
-4. **Configurar las variables de entorno:**
-  cp .env.example .env
-  php artisan key:generate
+6. **Configurar las variables de entorno:**
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
 
-5. **Ejecutar migraciones de base de datos:**
-  php artisan migrate
+8. **Ejecutar migraciones de base de datos:**
+    ```bash
+    php artisan migrate
 
-6. **Iniciar el servidor local de desarrollo:**
-  php artisan serve
+10. **Iniciar el servidor local de desarrollo:**
+    ```bash
+    php artisan serve
 
 ---
 
