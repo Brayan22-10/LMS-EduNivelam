@@ -9,6 +9,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Auth\TeacherStatusController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\UserController;
@@ -56,6 +57,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/teacher/pending-approval', function () {
         return view('auth.teacher-pending');
     })->name('teacher.pending');
+
+    Route::get('/teacher/status', [TeacherStatusController::class, 'show'])
+        ->name('teacher.status');
+    Route::post('/teacher/status', [TeacherStatusController::class, 'check'])
+        ->middleware('throttle:10,1')
+        ->name('teacher.status.check');
 
     Route::get('/forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetCode'])

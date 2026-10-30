@@ -26,7 +26,9 @@ class GoogleAuthController extends Controller
         } catch (Throwable $e) {
             Log::warning('Google OAuth falló: ' . $e->getMessage());
 
-            return $this->fail('No pudimos completar el inicio de sesión con Google. Inténtalo de nuevo.');
+            return response()->view('errors.google-unregistered', [
+                'message' => 'No pudimos completar el inicio de sesión con Google. Inténtalo de nuevo.'
+            ], 400);
         }
 
         $email     = Str::lower((string) $google->getEmail());
@@ -34,7 +36,9 @@ class GoogleAuthController extends Controller
         $verified  = (bool) ($google->user['email_verified'] ?? false);
 
         if ($email === '' || ! $verified) {
-            return $this->fail('Tu cuenta de Google no tiene un correo verificado.');
+            return response()->view('errors.google-unregistered', [
+                'message' => 'Tu cuenta de Google no tiene un correo verificado.'
+            ], 400);
         }
 
         $user = User::where('google_id', $googleId)->first()
@@ -42,11 +46,15 @@ class GoogleAuthController extends Controller
 
         if ($user) {
             if ($user->google_id && (string) $user->google_id !== $googleId) {
-                return $this->fail('Este correo ya está vinculado a otra cuenta de Google.');
+                return response()->view('errors.google-unregistered', [
+                    'message' => 'Este correo ya está vinculado a otra cuenta de Google.'
+                ], 400);
             }
 
             if ($user->role === 'teacher' && ! $user->is_approved) {
-                return $this->fail('Tu cuenta de docente se encuentra pendiente de aprobación por el administrador.');
+                return response()->view('errors.google-unregistered', [
+                    'message' => 'Tu cuenta de docente se encuentra pendiente de aprobación por el administrador.'
+                ], 403);
             }
 
             if ($user->is_active === false) {
@@ -59,7 +67,9 @@ class GoogleAuthController extends Controller
                     "Intento de acceso bloqueado: Cuenta desactivada para {$email}"
                 );
 
-                return $this->fail('Tu cuenta ha sido desactivada por un administrador. No puedes iniciar sesión.');
+                return response()->view('errors.google-unregistered', [
+                    'message' => 'Tu cuenta ha sido desactivada por un administrador.'
+                ], 403);
             }
 
             if (! $user->google_id) {
@@ -72,19 +82,9 @@ class GoogleAuthController extends Controller
                 $user->save();
             }
         } else {
-            $user = new User([
-                'name'        => $google->getName() ?: Str::before($email, '@'),
-                'email'       => $email,
-                'google_id'   => $googleId,
-                'password'    => Str::random(40),
-                'role'        => 'student',
-                'is_approved' => true,
-                'is_active'   => true,
-                'font_size'   => '14px',
-                'locale'      => 'es',
-            ]);
-            $user->email_verified_at = now();
-            $user->save();
+            return response()->view('errors.google-unregistered', [
+                'message' => 'El correo electrónico no está registrado en EduNivelam.'
+            ], 404);
         }
 
         Auth::login($user);

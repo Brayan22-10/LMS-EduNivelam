@@ -1,0 +1,323 @@
+body.page-full-bleed {
+    background-color: #f8f9fa !important;
+    background-image: radial-gradient(circle at 15% 10%, rgba(124, 58, 237, 0.10), transparent 40%), radial-gradient(circle at 85% 90%, rgba(79, 107, 237, 0.10), transparent 40%) !important;
+    background-attachment: fixed !important;
+    overflow-x: hidden;
+}
+
+.public-full {
+    margin: 0;
+    padding: 0;
+}
+
+.ts-page {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8.5rem 1rem 4rem;
+}
+
+.ts-card {
+    width: 100%;
+    max-width: 520px;
+    padding: 2.5rem 2.25rem;
+    text-align: center;
+    background: #ffffff;
+    color: #1f2937;
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(76, 29, 149, 0.14);
+    animation: ts-rise 0.45s ease both;
+}
+
+.ts-card-wide {
+    max-width: 560px;
+}
+
+@keyframes ts-rise {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ts-icon {
+    width: 72px;
+    height: 72px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.1rem;
+    font-size: 2rem;
+    color: #ffffff;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #7c3aed, #4f6bed);
+    box-shadow: 0 12px 26px rgba(124, 58, 237, 0.35);
+}
+
+.ts-icon-ok {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 12px 26px rgba(16, 185, 129, 0.35);
+}
+
+.ts-icon-wait {
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    box-shadow: 0 12px 26px rgba(245, 158, 11, 0.35);
+}
+
+.ts-title {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.ts-lead {
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+}
+
+
+/* --- Pasos --- */
+
+.ts-steps {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    text-align: left;
+}
+
+.ts-steps li {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding-bottom: 1.25rem;
+}
+
+.ts-steps li:last-child {
+    padding-bottom: 0;
+}
+
+.ts-steps li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 17px;
+    top: 36px;
+    bottom: 2px;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.ts-dot {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: #9ca3af;
+    font-size: 1rem;
+}
+
+.ts-steps strong {
+    display: block;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.ts-steps small {
+    color: #6b7280;
+    font-size: 0.82rem;
+}
+
+.ts-steps li.is-done .ts-dot {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.ts-steps li.is-done:not(:last-child)::before {
+    background: #a7f3d0;
+}
+
+.ts-steps li.is-current .ts-dot {
+    background: #7c3aed;
+    color: #ffffff;
+    box-shadow: 0 0 0 5px rgba(124, 58, 237, 0.18);
+    animation: ts-pulse 1.8s ease-in-out infinite;
+}
+
+.ts-steps li.is-current strong {
+    color: #5b21b6;
+}
+
+@keyframes ts-pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.18);
+    }
+    50% {
+        box-shadow: 0 0 0 9px rgba(124, 58, 237, 0.06);
+    }
+}
+
+.ts-queue {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.ts-queue>div {
+    padding: 1rem 0.5rem;
+    border-radius: 16px;
+    background: #f5f3ff;
+    border: 1px solid #ede9fe;
+}
+
+.ts-queue-num {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #5b21b6;
+}
+
+.ts-queue small {
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.ts-meta {
+    margin: 0 0 1.5rem;
+    font-size: 0.88rem;
+    color: #6b7280;
+}
+
+.ts-form {
+    text-align: left;
+}
+
+.ts-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.ts-input {
+    height: 48px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    color: #111827;
+}
+
+.ts-input:focus {
+    background: #ffffff;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+}
+
+.ts-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.ts-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 0 1.5rem;
+    border: 0;
+    border-radius: 50rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ts-btn-block {
+    width: 100%;
+}
+
+.ts-btn-primary {
+    color: #ffffff;
+    background: linear-gradient(90deg, #7c3aed, #4f6bed);
+    box-shadow: 0 12px 26px rgba(99, 102, 241, 0.32);
+}
+
+.ts-btn-primary:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(99, 102, 241, 0.4);
+}
+
+.ts-btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ts-btn-ghost {
+    color: #4b5563;
+    background: #f3f4f6;
+}
+
+.ts-btn-ghost:hover {
+    color: #111827;
+    background: #e5e7eb;
+}
+
+.ts-note {
+    margin: 1.4rem 0 0;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.ts-note a {
+    color: #6d28d9;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.ts-note a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    .ts-page {
+        padding: 7rem 0.75rem 2.5rem;
+    }
+    .ts-card {
+        padding: 2rem 1.25rem;
+        border-radius: 20px;
+    }
+    .ts-title {
+        font-size: 1.4rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ts-card,
+    .ts-steps li.is-current .ts-dot {
+        animation: none;
+    }
+    .ts-btn {
+        transition: none;
+    }
+    .ts-btn-primary:hover {
+        transform: none;
+    }
+}
