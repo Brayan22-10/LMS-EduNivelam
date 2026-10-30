@@ -1,0 +1,130 @@
+#logoutScene {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(15, 17, 21, 0.94);
+    backdrop-filter: blur(6px);
+    color: #f8f9fa;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    cursor: pointer;
+}
+
+#logoutScene.is-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#logoutScene .ls-svg {
+    width: min(520px, 90vw);
+    height: auto;
+}
+
+#logoutScene .ls-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+#logoutScene .ls-skip {
+    opacity: 0.45;
+    font-size: 0.75rem;
+}
+
+#logoutScene .ls-t2 {
+    display: none;
+}
+
+#logoutScene[data-stage="bye"] .ls-t1 {
+    display: none;
+}
+
+#logoutScene[data-stage="bye"] .ls-t2 {
+    display: inline;
+}
+
+#logoutScene .ls-fig {
+    transform: translate(60px, 200px);
+}
+
+#logoutScene[data-stage="walk"] .ls-fig {
+    transform: translate(250px, 200px);
+    transition: transform 1.1s linear;
+}
+
+#logoutScene[data-stage="open"] .ls-fig {
+    transform: translate(250px, 200px);
+}
+
+#logoutScene[data-stage="exit"] .ls-fig {
+    transform: translate(314px, 200px) scale(0.5);
+    opacity: 0;
+    transition: transform 0.9s ease-in, opacity 0.9s ease-in;
+}
+
+#logoutScene[data-stage="bye"] .ls-fig {
+    transform: translate(314px, 200px) scale(0.5);
+    opacity: 0;
+}
+
+#logoutScene .ls-limb {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+}
+
+@keyframes ls-swing {
+    from {
+        transform: rotate(-28deg);
+    }
+    to {
+        transform: rotate(28deg);
+    }
+}
+
+#logoutScene[data-stage="walk"] .ls-limb,
+#logoutScene[data-stage="exit"] .ls-limb {
+    animation: ls-swing 0.32s ease-in-out infinite alternate;
+}
+
+#logoutScene .ls-limb.rev {
+    animation-direction: alternate-reverse;
+}
+
+#logoutScene[data-stage="open"] .ls-arm-r {
+    transform: rotate(-80deg);
+    transition: transform 0.25s ease;
+}
+
+#logoutScene .ls-door {
+    transform-box: fill-box;
+    transform-origin: 100% 50%;
+    transition: transform 0.5s ease;
+}
+
+#logoutScene[data-stage="open"] .ls-door,
+#logoutScene[data-stage="exit"] .ls-door {
+    transform: scaleX(0.18);
+}
+
+#logoutScene[data-stage="bye"] .ls-door {
+    transform: scaleX(1);
+    transition-duration: 0.4s;
+}
+
+#logoutScene .ls-light {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+#logoutScene[data-stage="open"] .ls-light,
+#logoutScene[data-stage="exit"] .ls-light {
+    opacity: 1;
+}

@@ -13,9 +13,12 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $userCount = \Schema::hasTable('users') ? User::count() : 0;
+        $postCount = \Schema::hasTable('posts') ? Post::count() : 0;
+
         $stats = [
-            'users' => User::count(),
-            'posts' => Post::count(),
+            'users' => $userCount,
+            'posts' => $postCount,
         ];
 
         return view('dashboard', compact('stats'));
@@ -24,13 +27,16 @@ class DashboardController extends Controller
     public function security()
     {
         $stats = [
-            'users' => User::count(),
+            'users' => \Schema::hasTable('users') ? User::count() : 0,
         ];
 
-        $recentFailedLogins = DB::table('security_logs')
-            ->where('created_at', '>=', Carbon::now()->subHours(24))
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $recentFailedLogins = collect();
+        if (\Schema::hasTable('security_logs')) {
+            $recentFailedLogins = DB::table('security_logs')
+                ->where('created_at', '>=', Carbon::now()->subHours(24))
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
 
         $failedCount = $recentFailedLogins->count();
 

@@ -47,4 +47,7 @@
             <button type="submit" class="btn-logout-sidebar">Cerrar Sesión</button>
         </form>
     </div>
+
+    @include('layouts.partials.logout-animation')
+    
 </aside>

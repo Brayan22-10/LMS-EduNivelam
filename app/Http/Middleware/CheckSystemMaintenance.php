@@ -17,6 +17,13 @@ class CheckSystemMaintenance
             if (auth()->check() && auth()->user()->role === 'admin') {
                 return $next($request);
             }
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'error' => 'El sistema se encuentra en mantenimiento temporalmente.'
+                ], 503);
+            }
+
             return response()->view('errors.maintenance', [], 503);
         }
 

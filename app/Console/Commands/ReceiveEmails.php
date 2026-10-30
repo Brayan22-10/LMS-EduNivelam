@@ -10,20 +10,32 @@ use Carbon\Carbon;
 class ReceiveEmails extends Command
 {
     protected $signature = 'mail:receive';
-    protected $description = 'Consulta el buzón IMAP, procesa los mensajes nuevos y los guarda en la base de datos';
+    protected $description = 'Consulta el buzón IMAP, procesa los mensajes nuevos, limpia los de más de una semana y los guarda en la base de datos';
 
     public function handle(): int
     {
-        $this->info('Conectando al servidor IMAP...');
+        $this->info('Iniciando limpieza y sincronización de buzón IMAP...');
 
         try {
+            $deletedCount = ReceivedEmail::where('received_at', '<', Carbon::now()->subDays(7))->delete();
+            if ($deletedCount > 0) {
+                $this->line("Se eliminaron {$deletedCount} correos antiguos de más de 7 días de la base de datos.");
+            }
+
             $client = Client::account('default');
             $client->connect();
             
             $folder = $client->getFolder('INBOX');
-            $messages = $folder->messages()->unseen()->limit(10)->get();
+            $messages = $folder->messages()->unseen()->limit(20)->get();
 
             foreach ($messages as $message) {
+                $receivedAt = Carbon::parse($message->getDate());
+
+                if ($receivedAt->lt(Carbon::now()->subDays(7))) {
+                    $message->setFlag(['Seen']);
+                    continue;
+                }
+
                 $messageId = $message->getMessageId();
                 $from = $message->getFrom()[0];
                 
@@ -31,7 +43,6 @@ class ReceiveEmails extends Command
                 $fromName = $from->personal ?? null;
                 $subject = $message->getSubject();
                 $body = $message->getHTMLBody() ?: $message->getTextBody();
-                $receivedAt = Carbon::parse($message->getDate());
 
                 ReceivedEmail::firstOrCreate(
                     ['message_id' => $messageId],
@@ -49,7 +60,7 @@ class ReceiveEmails extends Command
                 $this->line("Correo procesado y guardado: {$subject}");
             }
 
-            $this->info('¡Revisión de buzón completada con éxito!');
+            $this->info('¡Revisión y sincronización de buzón completada con éxito!');
         } catch (\Exception $e) {
             $this->error('Error al conectar con IMAP: ' . $e->getMessage());
             return self::FAILURE;

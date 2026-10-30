@@ -6,3 +6,30 @@
 .user-modal-icon {
     font-size: 3rem;
 }
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.chart-box {
+    position: relative;
+    height: 260px;
+}
+
+body.bg-dark-mode .btn-group .btn-outline-secondary {
+    color: #cbd5e1;
+    border-color: #26303d;
+}
+
+body.bg-dark-mode .btn-group .btn-outline-secondary.active {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}

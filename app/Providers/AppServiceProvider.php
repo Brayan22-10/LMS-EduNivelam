@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
@@ -30,13 +31,12 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        Paginator::useBootstrapFive();
+
         Gate::define('manage-users', fn (User $user) => $user->role === 'admin');
 
         RateLimiter::for('login', function (Request $request) {
-            $email = Str::lower((string) $request->input('email'));
-
-            return Limit::perMinute(5)
-                ->by($email.'|'.$request->ip());
+            return Limit::perMinute(30)->by($request->ip());
         });
     }
 }
