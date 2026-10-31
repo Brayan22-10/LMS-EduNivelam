@@ -1,0 +1,180 @@
+[32mname[39m     : laravel/framework
+[32mdescrip.[39m : The Laravel Framework.
+[32mkeywords[39m : framework, laravel
+[32mversions[39m : [32m* v12.69.3[39m
+[32mreleased[39m : 2026-09-29, 1 month ago
+[32mtype[39m     : library
+[32mlicense[39m  : MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText
+[32mhomepage[39m : https://laravel.com
+[32msource[39m   : [git] [33mhttps://github.com/laravel/framework.git[39m 58ea544a2a80dc03c168e13a5dc9a1d176a88717
+[32mdist[39m     : [zip] [33mhttps://api.github.com/repos/laravel/framework/zipball/58ea544a2a80dc03c168e13a5dc9a1d176a88717[39m 58ea544a2a80dc03c168e13a5dc9a1d176a88717
+[32mpath[39m     : C:\xampp\htdocs\cms\vendor\laravel\framework
+[32mnames[39m    : laravel/framework, psr/container-implementation, psr/log-implementation, psr/simple-cache-implementation, illuminate/auth, illuminate/broadcasting, illuminate/bus, illuminate/cache, illuminate/collections, illuminate/concurrency, illuminate/conditionable, illuminate/config, illuminate/console, illuminate/container, illuminate/contracts, illuminate/cookie, illuminate/database, illuminate/encryption, illuminate/events, illuminate/filesystem, illuminate/hashing, illuminate/http, illuminate/json-schema, illuminate/log, illuminate/macroable, illuminate/mail, illuminate/notifications, illuminate/pagination, illuminate/pipeline, illuminate/process, illuminate/queue, illuminate/redis, illuminate/reflection, illuminate/routing, illuminate/session, illuminate/support, illuminate/testing, illuminate/translation, illuminate/validation, illuminate/view, spatie/once
+
+[32msupport[39m
+[33missues[39m : https://github.com/laravel/framework/issues
+[33msource[39m : https://github.com/laravel/framework
+
+[32mautoload[39m
+[33mfiles[39m
+[33mpsr-4[39m
+Illuminate\ => src/Illuminate/
+Illuminate\Support\ => src/Illuminate/Macroable/, src/Illuminate/Collections/, src/Illuminate/Conditionable/, src/Illuminate/Reflection/
+
+[32mrequires[39m
+brick/math [33m^0.11|^0.12|^0.13|^0.14[39m
+composer-runtime-api [33m^2.2[39m
+doctrine/inflector [33m^2.0.5[39m
+dragonmantank/cron-expression [33m^3.4[39m
+egulias/email-validator [33m^3.2.1|^4.0[39m
+ext-ctype [33m*[39m
+ext-filter [33m*[39m
+ext-hash [33m*[39m
+ext-mbstring [33m*[39m
+ext-openssl [33m*[39m
+ext-session [33m*[39m
+ext-tokenizer [33m*[39m
+fruitcake/php-cors [33m^1.3[39m
+guzzlehttp/guzzle [33m^7.8.2[39m
+guzzlehttp/uri-template [33m^1.0[39m
+laravel/prompts [33m^0.3.0[39m
+laravel/serializable-closure [33m^1.3|^2.0[39m
+league/commonmark [33m^2.8.1[39m
+league/flysystem [33m^3.25.1[39m
+league/flysystem-local [33m^3.25.1[39m
+league/uri [33m^7.5.1[39m
+monolog/monolog [33m^3.0[39m
+nesbot/carbon [33m^3.8.4[39m
+nunomaduro/termwind [33m^2.0[39m
+php [33m^8.2[39m
+psr/container [33m^1.1.1|^2.0.1[39m
+psr/log [33m^1.0|^2.0|^3.0[39m
+psr/simple-cache [33m^1.0|^2.0|^3.0[39m
+ramsey/uuid [33m^4.7[39m
+symfony/console [33m^7.2.0[39m
+symfony/error-handler [33m^7.2.0[39m
+symfony/finder [33m^7.2.0[39m
+symfony/http-foundation [33m^7.2.0[39m
+symfony/http-kernel [33m^7.2.0[39m
+symfony/mailer [33m^7.2.0[39m
+symfony/mime [33m^7.2.0[39m
+symfony/polyfill-php83 [33m^1.33[39m
+symfony/polyfill-php84 [33m^1.34[39m
+symfony/polyfill-php85 [33m^1.34[39m
+symfony/process [33m^7.2.0[39m
+symfony/routing [33m^7.2.0[39m
+symfony/uid [33m^7.2.0[39m
+symfony/var-dumper [33m^7.2.0[39m
+tijsverkoyen/css-to-inline-styles [33m^2.2.5[39m
+vlucas/phpdotenv [33m^5.6.1[39m
+voku/portable-ascii [33m^2.0.2[39m
+
+[32mrequires (dev)[39m
+ably/ably-php [33m^1.0[39m
+aws/aws-sdk-php [33m^3.322.9[39m
+ext-gmp [33m*[39m
+fakerphp/faker [33m^1.24[39m
+guzzlehttp/promises [33m^2.0.3[39m
+guzzlehttp/psr7 [33m^2.4[39m
+laravel/pint [33m^1.18[39m
+league/flysystem-aws-s3-v3 [33m^3.25.1[39m
+league/flysystem-ftp [33m^3.25.1[39m
+league/flysystem-path-prefixing [33m^3.25.1[39m
+league/flysystem-read-only [33m^3.25.1[39m
+league/flysystem-sftp-v3 [33m^3.25.1[39m
+mockery/mockery [33m^1.6.10[39m
+opis/json-schema [33m^2.4.1[39m
+orchestra/testbench-core [33m^10.9.0[39m
+pda/pheanstalk [33m^5.0.6|^7.0.0[39m
+php-http/discovery [33m^1.15[39m
+phpstan/phpstan [33m^2.1.41[39m
+phpunit/phpunit [33m^10.5.35|^11.5.3|^12.0.1[39m
+predis/predis [33m^2.3|^3.0[39m
+resend/resend-php [33m^0.10.0|^1.0[39m
+symfony/cache [33m^7.2.0[39m
+symfony/http-client [33m^7.2.0[39m
+symfony/psr-http-message-bridge [33m^7.2.0[39m
+symfony/translation [33m^7.2.0[39m
+
+[32msuggests[39m
+ably/ably-php [33mRequired to use the Ably broadcast driver (^1.0).[39m
+aws/aws-sdk-php [33mRequired to use the SQS queue driver, DynamoDb failed job storage, and SES mail driver (^3.322.9).[39m
+brianium/paratest [33mRequired to run tests in parallel (^7.0|^8.0).[39m
+ext-apcu [33mRequired to use the APC cache driver.[39m
+ext-fileinfo [33mRequired to use the Filesystem class.[39m
+ext-ftp [33mRequired to use the Flysystem FTP driver.[39m
+ext-gd [33mRequired to use Illuminate\Http\Testing\FileFactory::image().[39m
+ext-memcached [33mRequired to use the memcache cache driver.[39m
+ext-pcntl [33mRequired to use all features of the queue worker and console signal trapping.[39m
+ext-pdo [33mRequired to use all database features.[39m
+ext-posix [33mRequired to use all features of the queue worker.[39m
+ext-redis [33mRequired to use the Redis cache and queue drivers (^4.0|^5.0|^6.0).[39m
+fakerphp/faker [33mRequired to generate fake data using the fake() helper (^1.23).[39m
+filp/whoops [33mRequired for friendly error pages in development (^2.14.3).[39m
+laravel/tinker [33mRequired to use the tinker console command (^2.0).[39m
+league/flysystem-aws-s3-v3 [33mRequired to use the Flysystem S3 driver (^3.25.1).[39m
+league/flysystem-ftp [33mRequired to use the Flysystem FTP driver (^3.25.1).[39m
+league/flysystem-path-prefixing [33mRequired to use the scoped driver (^3.25.1).[39m
+league/flysystem-read-only [33mRequired to use read-only disks (^3.25.1)[39m
+league/flysystem-sftp-v3 [33mRequired to use the Flysystem SFTP driver (^3.25.1).[39m
+mockery/mockery [33mRequired to use mocking (^1.6).[39m
+pda/pheanstalk [33mRequired to use the beanstalk queue driver (^5.0).[39m
+php-http/discovery [33mRequired to use PSR-7 bridging features (^1.15).[39m
+phpunit/phpunit [33mRequired to use assertions and run tests (^10.5.35|^11.5.3|^12.0.1).[39m
+predis/predis [33mRequired to use the predis connector (^2.3|^3.0).[39m
+psr/http-message [33mRequired to allow Storage::put to accept a StreamInterface (^1.0).[39m
+pusher/pusher-php-server [33mRequired to use the Pusher broadcast driver (^6.0|^7.0).[39m
+resend/resend-php [33mRequired to enable support for the Resend mail transport (^0.10.0|^1.0).[39m
+symfony/cache [33mRequired to PSR-6 cache bridge (^7.2).[39m
+symfony/filesystem [33mRequired to enable support for relative symbolic links (^7.2).[39m
+symfony/http-client [33mRequired to enable support for the Symfony API mail transports (^7.2).[39m
+symfony/mailgun-mailer [33mRequired to enable support for the Mailgun mail transport (^7.2).[39m
+symfony/postmark-mailer [33mRequired to enable support for the Postmark mail transport (^7.2).[39m
+symfony/psr-http-message-bridge [33mRequired to use PSR-7 bridging features (^7.2).[39m
+
+[32mprovides[39m
+psr/container-implementation [33m1.1|2.0[39m
+psr/log-implementation [33m1.0|2.0|3.0[39m
+psr/simple-cache-implementation [33m1.0|2.0|3.0[39m
+
+[32mconflicts[39m
+tightenco/collect [33m<5.5.33[39m
+
+[32mreplaces[39m
+illuminate/auth [33mself.version[39m
+illuminate/broadcasting [33mself.version[39m
+illuminate/bus [33mself.version[39m
+illuminate/cache [33mself.version[39m
+illuminate/collections [33mself.version[39m
+illuminate/concurrency [33mself.version[39m
+illuminate/conditionable [33mself.version[39m
+illuminate/config [33mself.version[39m
+illuminate/console [33mself.version[39m
+illuminate/container [33mself.version[39m
+illuminate/contracts [33mself.version[39m
+illuminate/cookie [33mself.version[39m
+illuminate/database [33mself.version[39m
+illuminate/encryption [33mself.version[39m
+illuminate/events [33mself.version[39m
+illuminate/filesystem [33mself.version[39m
+illuminate/hashing [33mself.version[39m
+illuminate/http [33mself.version[39m
+illuminate/json-schema [33mself.version[39m
+illuminate/log [33mself.version[39m
+illuminate/macroable [33mself.version[39m
+illuminate/mail [33mself.version[39m
+illuminate/notifications [33mself.version[39m
+illuminate/pagination [33mself.version[39m
+illuminate/pipeline [33mself.version[39m
+illuminate/process [33mself.version[39m
+illuminate/queue [33mself.version[39m
+illuminate/redis [33mself.version[39m
+illuminate/reflection [33mself.version[39m
+illuminate/routing [33mself.version[39m
+illuminate/session [33mself.version[39m
+illuminate/support [33mself.version[39m
+illuminate/testing [33mself.version[39m
+illuminate/translation [33mself.version[39m
+illuminate/validation [33mself.version[39m
+illuminate/view [33mself.version[39m
+spatie/once [33m*[39m

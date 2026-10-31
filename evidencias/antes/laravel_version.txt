@@ -1,0 +1,1 @@
+Laravel Framework [32m12.69.3[39m
