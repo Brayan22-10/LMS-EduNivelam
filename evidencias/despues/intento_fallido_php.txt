@@ -1,0 +1,4 @@
+Syntax OK
+php8.dll*
+php8embed.lib
+php8phpdbg.dll*
