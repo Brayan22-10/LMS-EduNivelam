@@ -160,6 +160,13 @@
                 @if(\Illuminate\Support\Facades\Route::has('register'))
                     <p class="auth-register">¿Aún no tienes cuenta? <a href="{{ route('register') }}" class="auth-link">Regístrate</a></p>
                 @endif
+
+                @if(\Illuminate\Support\Facades\Route::has('teacher.status'))
+                    <p class="auth-register auth-register-sub">
+                        ¿Eres docente y ya te postulaste?
+                        <a href="{{ route('teacher.status') }}" class="auth-link">Consulta tu solicitud</a>
+                    </p>
+                @endif
             </div>
         </section>
     </div>

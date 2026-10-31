@@ -1,53 +1,56 @@
 @extends('layouts.app')
 
-@section('title', 'Solicitud en proceso - EduNivelam')
+@section('title', 'Solicitud enviada - EduNivelam')
 
 @section('styles')
-    @vite(['resources/css/login.css', 'resources/css/auth-pages.css'])
-    <style>
-        footer, .footer { display: none !important; }
-    </style>
+    @vite(['resources/css/teacher-status.css'])
 @endsection
 
 @section('content')
-<div class="ap-stage">
-    <div class="ap-card ap-card--wide text-center">
+<div class="ts-page">
+    <div class="ts-card">
+        <span class="ts-icon ts-icon-ok"><i class="bi bi-check2-circle"></i></span>
 
-        <span class="ap-icon ap-icon--warm"><i class="bi bi-hourglass-split"></i></span>
-        <h1 class="ap-title">Solicitud en proceso</h1>
-        <p class="ap-sub">
-            ¡Gracias por registrarte! Tu cuenta de docente fue creada con éxito, pero
+        <h1 class="ts-title">¡Solicitud enviada!</h1>
+        <p class="ts-lead">
+            Tu cuenta de docente fue creada con éxito, pero
             <strong>debe esperar la aprobación del administrador</strong>.
         </p>
 
-        <ol class="ap-steps">
+        <ol class="ts-steps">
             <li class="is-done">
-                <span class="ap-step-dot"><i class="bi bi-check-lg"></i></span>
+                <span class="ts-dot"><i class="bi bi-check-lg"></i></span>
                 <div>
-                    <p class="ap-step-title">Solicitud enviada</p>
-                    <p class="ap-step-text">Tu registro como docente quedó guardado.</p>
+                    <strong>Solicitud recibida</strong>
+                    <small>Ya registramos tus datos.</small>
                 </div>
             </li>
             <li class="is-current">
-                <span class="ap-step-dot"><i class="bi bi-person-check"></i></span>
+                <span class="ts-dot"><i class="bi bi-hourglass-split"></i></span>
                 <div>
-                    <p class="ap-step-title">Revisión del administrador</p>
-                    <p class="ap-step-text">Estamos validando tu información.</p>
+                    <strong>En cola de revisión</strong>
+                    <small>El equipo revisa las solicitudes en orden de llegada.</small>
                 </div>
             </li>
             <li>
-                <span class="ap-step-dot"><i class="bi bi-envelope-paper"></i></span>
+                <span class="ts-dot"><i class="bi bi-envelope-check"></i></span>
                 <div>
-                    <p class="ap-step-title">Recibirás tus credenciales</p>
-                    <p class="ap-step-text">Cuando se apruebe tu cuenta, te enviaremos tus credenciales oficiales de acceso por correo electrónico.</p>
+                    <strong>Recibirás tus credenciales</strong>
+                    <small>Si es aprobada, te las enviamos por correo electrónico.</small>
                 </div>
             </li>
         </ol>
 
-        <a href="{{ route('home') }}" class="auth-submit text-decoration-none">
-            <span>Regresar al inicio</span>
-            <span class="auth-submit-arrow"><i class="bi bi-house-door"></i></span>
-        </a>
+        <div class="ts-actions">
+            <a href="{{ route('teacher.status') }}" class="ts-btn ts-btn-primary">
+                <i class="bi bi-search"></i> Consultar el estado de mi solicitud
+            </a>
+            <a href="{{ route('home') }}" class="ts-btn ts-btn-ghost">Volver al inicio</a>
+        </div>
+
+        <p class="ts-note">
+            Guarda tu correo y tu número de documento: los necesitarás para consultar el estado.
+        </p>
     </div>
 </div>
 @endsection
