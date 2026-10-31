@@ -1,0 +1,4 @@
+Configuration File (php.ini) Path: 
+Loaded Configuration File:         C:\xampp\php\php.ini
+Scan for additional .ini files in: (none)
+Additional .ini files parsed:      (none)

@@ -1,0 +1,1 @@
+C:\xampp\mysql\bin\mysql.exe  Ver 15.1 Distrib 10.4.32-MariaDB, for Win64 (AMD64), source revision c4143f909528e3fab0677a28631d10389354c491
