@@ -1,0 +1,6 @@
+Package              Current  Wanted  Latest  Location                          Depended by
+axios                 1.20.0  1.21.0  1.21.0  node_modules/axios                cms
+concurrently           9.2.4   9.2.5  10.0.6  node_modules/concurrently         cms
+cropperjs              2.3.0   2.3.1   2.3.1  node_modules/cropperjs            cms
+laravel-vite-plugin    2.1.0   2.1.0   3.2.0  node_modules/laravel-vite-plugin  cms
+vite                   7.3.6   7.3.7   8.3.5  node_modules/vite                 cms
