@@ -461,3 +461,98 @@ body:not(.bg-dark-mode) .settings-sidebar .nav-link.active:hover {
         transform: none !important;
     }
 }
+
+.pill-brand {
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 0.75rem !important;
+    height: auto !important;
+    width: 240px !important;
+    flex-shrink: 0;
+    justify-content: flex-start;
+}
+
+.pill-brand .logo-light {
+    height: auto !important;
+    max-height: 75px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    display: block;
+}
+
+.pill-brand .logo-dark {
+    height: auto !important;
+    max-height: 95px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    display: none;
+}
+
+.pill-brand .logo-light {
+    display: block !important;
+}
+
+.pill-brand .logo-dark {
+    display: none !important;
+}
+
+body.bg-dark-mode .pill-brand .logo-light,
+body.dark-mode .pill-brand .logo-light,
+[data-bs-theme="dark"] .pill-brand .logo-light {
+    display: none !important;
+}
+
+body.bg-dark-mode .pill-brand .logo-dark,
+body.dark-mode .pill-brand .logo-dark,
+[data-bs-theme="dark"] .pill-brand .logo-dark {
+    display: block !important;
+}
+
+.footer-link {
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #0d6efd !important;
+    opacity: 1 !important;
+}
+
+.footer-section .mb-5,
+.footer-section .row {
+    background-color: transparent !important;
+}
+
+body.bg-dark-mode .footer-section div,
+:root[data-bs-theme="dark"] .footer-section div {
+    background-color: transparent !important;
+}
+
+.footer-brand .logo-light {
+    height: auto !important;
+    max-height: 38px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: block;
+}
+
+.footer-brand .logo-dark {
+    height: auto !important;
+    max-height: 42px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: none;
+}
+
+body.bg-dark-mode .footer-brand .logo-light,
+body.dark-mode .footer-brand .logo-light,
+:root[data-bs-theme="dark"] .footer-brand .logo-light {
+    display: none !important;
+}
+
+body.bg-dark-mode .footer-brand .logo-dark,
+body.dark-mode .footer-brand .logo-dark,
+:root[data-bs-theme="dark"] .footer-brand .logo-dark {
+    display: block !important;
+}

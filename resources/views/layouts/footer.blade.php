@@ -72,9 +72,12 @@
         </div>
 
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-4 border-top border-secondary border-opacity-10 small text-secondary dark:text-light opacity-75">
-            <div class="d-flex align-items-center mb-2 mb-md-0">
-                <span class="fw-bold text-primary dark:text-info fs-5 me-2">EduNivelam</span>
-                <span>© 2026 EduNivelam CMS, Inc. Todos los derechos reservados.</span>
+            <div class="d-flex align-items-center mb-2 mb-md-0 gap-3">
+                <a href="{{ route('home') }}" class="footer-brand d-flex align-items-center text-decoration-none">
+                    <img src="{{ asset('images/logo-light.png') }}" alt="EduNivelam" class="logo-light" loading="lazy">
+                    <img src="{{ asset('images/logo-dark.png') }}" alt="EduNivelam" class="logo-dark" loading="lazy">
+                </a>
+                <span>© 2026 EduNivelam LMS, Inc. Todos los derechos reservados.</span>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <a href="#" class="text-decoration-none text-secondary dark:text-light opacity-75 footer-link">Configuración de cookies</a>
@@ -84,18 +87,3 @@
         </div>
     </div>
 </footer>
-
-<style>
-    .footer-link {
-        transition: color 0.2s ease, opacity 0.2s ease;
-    }
-    .footer-link:hover {
-        color: #0d6efd !important;
-        opacity: 1 !important;
-    }
-    @media (prefers-color-scheme: dark), (:root[data-bs-theme="dark"]) {
-        .footer-link:hover {
-            color: #0dcaf0 !important;
-        }
-    }
-</style>

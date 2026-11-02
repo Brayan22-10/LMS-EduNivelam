@@ -46,8 +46,10 @@
 
 <div class="{{ $isInAnyPanel ? 'panel-nav-container px-0 pt-2 mb-3' : 'container py-3' }}">
     <nav class="pill-nav floating-navbar" aria-label="Navegación principal">
-
-        <a class="pill-brand" href="{{ route('home') }}">EduNivelam</a>
+    <a class="pill-brand d-flex align-items-center text-decoration-none" href="{{ route('home') }}">
+        <img src="{{ asset('images/logo-light.png') }}" alt="EduNivelam" class="logo-light" loading="lazy">
+        <img src="{{ asset('images/logo-dark.png') }}" alt="EduNivelam" class="logo-dark" loading="lazy">
+    </a>
 
         <div class="pill-scroll">
             <ul class="pill-list">
