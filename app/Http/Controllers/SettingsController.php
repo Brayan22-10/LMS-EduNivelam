@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -264,7 +265,7 @@ class SettingsController extends Controller
             return back()->with('success', '¡Gracias por tus comentarios! Tu mensaje ha sido enviado directamente al equipo de soporte.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'No se pudo enviar el correo de comentarios en este momento: '.$e->getMessage());
+            return $this->failBack($e, 'No se pudo enviar el correo de comentarios en este momento.');
         }
     }
 
@@ -415,7 +416,7 @@ class SettingsController extends Controller
             }, $filename, ['Content-Type' => 'application/sql']);
 
         } catch (\Exception $e) {
-            return back()->with('error', 'No se pudo generar el respaldo de la base de datos: '.$e->getMessage());
+            return $this->failBack($e, 'No se pudo generar el respaldo de la base de datos.');
         }
     }
 
@@ -470,7 +471,7 @@ class SettingsController extends Controller
 
             return back()->with('success', '¡Correo de prueba enviado con éxito a '.$targetEmail.'!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Fallo al enviar correo SMTP: '.$e->getMessage());
+            return $this->failBack($e, 'Fallo al enviar el correo SMTP de prueba.');
         }
     }
 
@@ -559,7 +560,7 @@ class SettingsController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al optimizar la base de datos: '.$e->getMessage());
+            return $this->failBack($e, 'Error al optimizar la base de datos.');
         }
     }
 
@@ -602,7 +603,7 @@ class SettingsController extends Controller
             return back()->with('success', $msg.' Espacio liberado aprox: '.$sizeFormatted);
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al purgar la caché: '.$e->getMessage());
+            return $this->failBack($e, 'Error al purgar la caché.');
         }
     }
 
@@ -617,7 +618,7 @@ class SettingsController extends Controller
 
             return back()->with('success', '¡Caché del sistema y archivos temporales limpiados exitosamente!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al limpiar la caché: '.$e->getMessage());
+            return $this->failBack($e, 'Error al limpiar la caché.');
         }
     }
 
@@ -626,10 +627,14 @@ class SettingsController extends Controller
         $this->authorizeAdmin();
 
         $request->validate([
-            'app_name' => ['required', 'string', 'max:50'],
+            'app_name' => ['required', 'string', 'max:50', 'regex:/^[\p{L}\p{N} _.\-]+$/u'],
             'app_debug' => ['required', 'in:true,false'],
             'mail_mailer' => ['required', 'string', 'in:smtp,log,mailgun,ses'],
         ]);
+
+        if (app()->environment('production') && $request->input('app_debug') === 'true') {
+            return back()->with('error', 'No se permite activar el modo debug en producción.');
+        }
 
         try {
             $envPath = base_path('.env');
@@ -660,7 +665,7 @@ class SettingsController extends Controller
 
             return back()->with('error', 'No se localizó el archivo .env en el servidor.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al modificar el archivo .env: '.$e->getMessage());
+            return $this->failBack($e, 'Error al modificar la configuración.');
         }
     }
 
@@ -709,6 +714,13 @@ class SettingsController extends Controller
                 'updated_at' => now(),
             ]);
         }
+    }
+
+    private function failBack(\Throwable $e, string $message)
+    {
+        Log::error($message.' '.$e->getMessage());
+
+        return back()->with('error', $message);
     }
 
     public function toggleTheme(Request $request)

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ReceivedEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+use Throwable;
 
 class ReceivedEmailController extends Controller
 {
@@ -19,7 +21,7 @@ class ReceivedEmailController extends Controller
 
     public function show($id)
     {
-        $email = ReceivedEmail::findOrFail($id);
+        $email = ReceivedEmail::where('id', $id)->firstOrFail();
 
         if (! $email->is_read) {
             $email->update(['is_read' => true]);
@@ -45,12 +47,14 @@ class ReceivedEmailController extends Controller
     public function destroy($id)
     {
         try {
-            $email = ReceivedEmail::findOrFail($id);
+            $email = ReceivedEmail::where('id', $id)->firstOrFail();
             $email->delete();
 
             return redirect()->route('admin.emails.index')->with('success', '¡El correo ha sido eliminado de la bandeja exitosamente!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'No se pudo eliminar el correo: '.$e->getMessage());
+        } catch (Throwable $e) {
+            Log::error('Error al eliminar correo: '.$e->getMessage());
+
+            return back()->with('error', 'No se pudo eliminar el correo.');
         }
     }
 
@@ -73,7 +77,7 @@ class ReceivedEmailController extends Controller
             'reply_message.max' => 'El mensaje no puede superar los 2000 caracteres.',
         ]);
 
-        $email = ReceivedEmail::findOrFail($id);
+        $email = ReceivedEmail::where('id', $id)->firstOrFail();
 
         $existsUser = User::where('email', $email->from_email)->exists();
 
@@ -91,8 +95,10 @@ class ReceivedEmailController extends Controller
             });
 
             return back()->with('success', '¡Respuesta enviada exitosamente a '.$recipientEmail.'!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Fallo al enviar la respuesta por correo: '.$e->getMessage());
+        } catch (Throwable $e) {
+            Log::error('Fallo al enviar respuesta: '.$e->getMessage());
+
+            return back()->with('error', 'Fallo al enviar la respuesta por correo.');
         }
     }
 }
