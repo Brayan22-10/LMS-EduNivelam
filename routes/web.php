@@ -137,120 +137,50 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'can:manage-users'])->group(function () {
     Route::get('/admin/check-imap', [ContactController::class, 'validateImapConnection'])
         ->name('admin.check.imap');
 
     Route::get('/admin/correos', [ReceivedEmailController::class, 'index'])->name('admin.emails.index');
-    Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->name('admin.emails.show');
-    Route::delete('/admin/correos/{id}', [ReceivedEmailController::class, 'destroy'])->name('admin.emails.destroy');
-    Route::post('/admin/correos/{id}/reply', [ReceivedEmailController::class, 'reply'])->name('admin.emails.reply');
+    Route::get('/admin/correos/{id}', [ReceivedEmailController::class, 'show'])->whereNumber('id')->name('admin.emails.show');
+    Route::delete('/admin/correos/{id}', [ReceivedEmailController::class, 'destroy'])->whereNumber('id')->name('admin.emails.destroy');
+    Route::post('/admin/correos/{id}/reply', [ReceivedEmailController::class, 'reply'])->whereNumber('id')->name('admin.emails.reply');
 
     Route::get('/admin/teachers/pending', [AdminTeacherController::class, 'index'])->name('admin.teachers.pending');
-    Route::post('/admin/teachers/{id}/approve', [AdminTeacherController::class, 'approve'])->name('admin.teachers.approve');
-    Route::delete('/admin/teachers/{id}/deny', [AdminTeacherController::class, 'deny'])->name('admin.teachers.deny');
+    Route::post('/admin/teachers/{id}/approve', [AdminTeacherController::class, 'approve'])->whereNumber('id')->name('admin.teachers.approve');
+    Route::delete('/admin/teachers/{id}/deny', [AdminTeacherController::class, 'deny'])->whereNumber('id')->name('admin.teachers.deny');
 
-    Route::get('/admin/news', [NewsController::class, 'index'])
-        ->name('admin.news.index')
-        ->middleware(['can:manage-users']);
+    Route::get('/admin/news', [NewsController::class, 'index'])->name('admin.news.index');
+    Route::get('/admin/news/create', [NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/admin/news', [NewsController::class, 'store'])->name('admin.news.store');
+    Route::get('/admin/news/{news}', [NewsController::class, 'show'])->name('admin.news.show');
+    Route::get('/admin/news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('/admin/news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('/admin/news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
 
-    Route::get('/admin/news/create', [NewsController::class, 'create'])
-        ->name('admin.news.create')
-        ->middleware(['can:manage-users']);
+    Route::resource('/admin/banners', BannerController::class)->names('admin.banners');
 
-    Route::post('/admin/news', [NewsController::class, 'store'])
-        ->name('admin.news.store')
-        ->middleware(['can:manage-users']);
-
-    Route::get('/admin/news/{news}', [NewsController::class, 'show'])
-        ->name('admin.news.show')
-        ->middleware(['can:manage-users']);
-
-    Route::get('/admin/news/{news}/edit', [NewsController::class, 'edit'])
-        ->name('admin.news.edit')
-        ->middleware(['can:manage-users']);
-
-    Route::put('/admin/news/{news}', [NewsController::class, 'update'])
-        ->name('admin.news.update')
-        ->middleware(['can:manage-users']);
-
-    Route::delete('/admin/news/{news}', [NewsController::class, 'destroy'])
-        ->name('admin.news.destroy')
-        ->middleware(['can:manage-users']);
-
-    Route::resource('/admin/banners', BannerController::class)
-        ->names('admin.banners')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/maintenance', [SettingsController::class, 'toggleMaintenance'])
-        ->name('admin.system.maintenance')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/test-email', [SettingsController::class, 'testEmailConnection'])
-        ->name('admin.system.testemail')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/backup', [SettingsController::class, 'generateBackup'])
-        ->name('admin.system.backup')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/clear-cache', [SettingsController::class, 'clearSystemCache'] ?? [DashboardController::class, 'clearSystemCache'])
-        ->name('admin.system.clearcache')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/logs/view', [SettingsController::class, 'viewLogs'])
-        ->name('admin.system.logs.view')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/logs/clear', [SettingsController::class, 'clearLogs'])
-        ->name('admin.system.logs.clear')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/smtp/test', [SettingsController::class, 'testSmtp'])
-        ->name('admin.system.smtp.test')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/db/optimize', [SettingsController::class, 'optimizeDatabase'])
-        ->name('admin.system.db.optimize')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/cache/inspect', [SettingsController::class, 'inspectCache'])
-        ->name('admin.system.cache.inspect')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/cache/granular', [SettingsController::class, 'clearGranularCache'])
-        ->name('admin.system.cache.granular')
-        ->middleware(['can:manage-users']);
-
-    Route::post('/admin/system/env/update', [SettingsController::class, 'updateEnv'])
-        ->name('admin.system.env.update')
-        ->middleware(['can:manage-users']);
+    Route::post('/admin/system/maintenance', [SettingsController::class, 'toggleMaintenance'])->name('admin.system.maintenance');
+    Route::post('/admin/system/test-email', [SettingsController::class, 'testEmailConnection'])->name('admin.system.testemail');
+    Route::post('/admin/system/backup', [SettingsController::class, 'generateBackup'])->name('admin.system.backup');
+    Route::post('/admin/system/clear-cache', [SettingsController::class, 'clearSystemCache'])->name('admin.system.clearcache');
+    Route::post('/admin/system/logs/view', [SettingsController::class, 'viewLogs'])->name('admin.system.logs.view');
+    Route::post('/admin/system/logs/clear', [SettingsController::class, 'clearLogs'])->name('admin.system.logs.clear');
+    Route::post('/admin/system/smtp/test', [SettingsController::class, 'testSmtp'])->name('admin.system.smtp.test');
+    Route::post('/admin/system/db/optimize', [SettingsController::class, 'optimizeDatabase'])->name('admin.system.db.optimize');
+    Route::post('/admin/system/cache/inspect', [SettingsController::class, 'inspectCache'])->name('admin.system.cache.inspect');
+    Route::post('/admin/system/cache/granular', [SettingsController::class, 'clearGranularCache'])->name('admin.system.cache.granular');
+    Route::post('/admin/system/env/update', [SettingsController::class, 'updateEnv'])->name('admin.system.env.update');
 
     Route::get('/admin/system/config', function () {
         return redirect()->route('settings.index');
-    })->name('admin.system.config')->middleware(['can:manage-users']);
+    })->name('admin.system.config');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard')
-        ->middleware(['can:manage-users']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/admin/security', [DashboardController::class, 'security'])->name('admin.security');
 
-    Route::get('/admin/security', [DashboardController::class, 'security'])
-        ->name('admin.security')
-        ->middleware(['can:manage-users']);
-
-    Route::get('/admin/users', [UserController::class, 'index'])
-        ->name('admin.users')
-        ->middleware(['can:manage-users']);
-
-    Route::put('/admin/users/{id}/role', [UserController::class, 'updateRole'])
-        ->name('admin.users.updateRole')
-        ->middleware(['can:manage-users']);
-
-    Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])
-        ->name('admin.users.destroy')
-        ->middleware(['can:manage-users']);
-
-    Route::delete('/admin/users/permanent/{id}', [UserController::class, 'forceDelete'])
-        ->name('admin.users.forceDelete')
-        ->middleware(['can:manage-users']);
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+    Route::put('/admin/users/{id}/role', [UserController::class, 'updateRole'])->name('admin.users.updateRole');
+    Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::delete('/admin/users/permanent/{id}', [UserController::class, 'forceDelete'])->name('admin.users.forceDelete');
 });
