@@ -2,14 +2,15 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Webklex\IMAP\Facades\Client;
 use App\Models\ReceivedEmail;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Webklex\IMAP\Facades\Client;
 
 class ReceiveEmails extends Command
 {
     protected $signature = 'mail:receive';
+
     protected $description = 'Consulta el buzón IMAP, procesa los mensajes nuevos, limpia los de más de una semana y los guarda en la base de datos';
 
     public function handle(): int
@@ -24,7 +25,7 @@ class ReceiveEmails extends Command
 
             $client = Client::account('default');
             $client->connect();
-            
+
             $folder = $client->getFolder('INBOX');
             $messages = $folder->messages()->unseen()->limit(20)->get();
 
@@ -33,12 +34,13 @@ class ReceiveEmails extends Command
 
                 if ($receivedAt->lt(Carbon::now()->subDays(7))) {
                     $message->setFlag(['Seen']);
+
                     continue;
                 }
 
                 $messageId = $message->getMessageId();
                 $from = $message->getFrom()[0];
-                
+
                 $fromEmail = $from->mail ?? 'desconocido@domain.com';
                 $fromName = $from->personal ?? null;
                 $subject = $message->getSubject();
@@ -62,7 +64,8 @@ class ReceiveEmails extends Command
 
             $this->info('¡Revisión y sincronización de buzón completada con éxito!');
         } catch (\Exception $e) {
-            $this->error('Error al conectar con IMAP: ' . $e->getMessage());
+            $this->error('Error al conectar con IMAP: '.$e->getMessage());
+
             return self::FAILURE;
         }
 

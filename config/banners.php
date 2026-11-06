@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'disk'      => env('BANNERS_DISK', 'public'),
+    'disk' => env('BANNERS_DISK', 'public'),
     'directory' => 'banners',
 ];

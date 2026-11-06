@@ -27,15 +27,15 @@ class SecurityHeadersMiddleware
         $cdn = 'https://cdn.jsdelivr.net https://cdnjs.cloudflare.com';
         $turnstile = 'https://challenges.cloudflare.com';
 
-        $csp = "default-src 'self'; " .
-               "script-src 'self' 'unsafe-inline' 'unsafe-eval'{$dev} {$cdn} {$turnstile}; " .
-               "style-src 'self' 'unsafe-inline'{$dev} {$cdn} https://fonts.googleapis.com; " .
-               "img-src 'self' data: blob: https:; " .
-               "font-src 'self' data: {$cdn} https://fonts.gstatic.com; " .
-               "connect-src 'self'{$devWs}; " .
-               "frame-src 'self' {$turnstile}; " .
-               "object-src 'none'; " .
-               "base-uri 'self'; " .
+        $csp = "default-src 'self'; ".
+               "script-src 'self' 'unsafe-inline' 'unsafe-eval'{$dev} {$cdn} {$turnstile}; ".
+               "style-src 'self' 'unsafe-inline'{$dev} {$cdn} https://fonts.googleapis.com; ".
+               "img-src 'self' data: blob: https:; ".
+               "font-src 'self' data: {$cdn} https://fonts.gstatic.com; ".
+               "connect-src 'self'{$devWs}; ".
+               "frame-src 'self' {$turnstile}; ".
+               "object-src 'none'; ".
+               "base-uri 'self'; ".
                "form-action 'self';";
 
         $response->headers->set('Content-Security-Policy', $csp);

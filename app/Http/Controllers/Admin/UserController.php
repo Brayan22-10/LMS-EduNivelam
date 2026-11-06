@@ -13,10 +13,10 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     private const ROLE_LABELS = [
-        'admin'   => 'Administrador',
+        'admin' => 'Administrador',
         'teacher' => 'Docente',
         'student' => 'Estudiante',
-        'user'    => 'Usuario',
+        'user' => 'Usuario',
     ];
 
     public function index(Request $request)
@@ -37,11 +37,11 @@ class UserController extends Controller
             ->groupBy('role')
             ->pluck('total', 'role');
 
-        $countAll   = (int) $roleCounts->sum();
+        $countAll = (int) $roleCounts->sum();
         $boardUsers = User::orderBy('name')->get(['id', 'name', 'email', 'role']);
 
-        $all    = User::get(['id', 'role', 'is_active', 'created_at']);
-        $stats  = $this->buildStats($all);
+        $all = User::get(['id', 'role', 'is_active', 'created_at']);
+        $stats = $this->buildStats($all);
         $charts = $this->buildCharts($all);
         $roleLabels = self::ROLE_LABELS;
 
@@ -59,7 +59,7 @@ class UserController extends Controller
                 ->with('error', 'Por seguridad, no puedes modificar el estado de tu propia cuenta activa.');
         }
 
-        $user->is_active = !($user->is_active ?? true);
+        $user->is_active = ! ($user->is_active ?? true);
         $user->save();
 
         $statusMessage = $user->is_active ? 'activada' : 'desactivada';
@@ -115,10 +115,10 @@ class UserController extends Controller
         $active = $all->filter(fn ($u) => (bool) ($u->is_active ?? true))->count();
 
         return [
-            'total'    => $all->count(),
+            'total' => $all->count(),
             'newMonth' => $newThis,
-            'growth'   => $newPrev > 0 ? (int) round((($newThis - $newPrev) / $newPrev) * 100) : null,
-            'active'   => $active,
+            'growth' => $newPrev > 0 ? (int) round((($newThis - $newPrev) / $newPrev) * 100) : null,
+            'active' => $active,
             'inactive' => $all->count() - $active,
         ];
     }
@@ -126,9 +126,9 @@ class UserController extends Controller
     private function buildCharts(Collection $all): array
     {
         $now = now();
-        $days  = collect(range(29, 0))->map(fn ($i) => $now->copy()->subDays($i)->startOfDay());
+        $days = collect(range(29, 0))->map(fn ($i) => $now->copy()->subDays($i)->startOfDay());
         $byDay = $all->groupBy(fn ($u) => $u->created_at ? $u->created_at->format('Y-m-d') : '');
-        $months  = collect(range(11, 0))->map(fn ($i) => $now->copy()->startOfMonth()->subMonthsNoOverflow($i));
+        $months = collect(range(11, 0))->map(fn ($i) => $now->copy()->startOfMonth()->subMonthsNoOverflow($i));
         $byMonth = $all->groupBy(fn ($u) => $u->created_at ? $u->created_at->format('Y-m') : '');
 
         $roleKeys = ['student', 'teacher', 'admin'];
@@ -136,9 +136,9 @@ class UserController extends Controller
         $roleMonthly = [];
         foreach ($roleKeys as $role) {
             $roleMonthly[] = [
-                'role'  => $role,
+                'role' => $role,
                 'label' => self::ROLE_LABELS[$role],
-                'data'  => $months->map(fn ($m) => $byMonth
+                'data' => $months->map(fn ($m) => $byMonth
                     ->get($m->format('Y-m'), collect())->where('role', $role)->count())->all(),
             ];
         }
@@ -146,7 +146,7 @@ class UserController extends Controller
         $roleDist = [];
         foreach (['admin', 'teacher', 'student', 'user'] as $role) {
             $roleDist[] = [
-                'role'  => $role,
+                'role' => $role,
                 'label' => self::ROLE_LABELS[$role],
                 'total' => $all->where('role', $role)->count(),
             ];
@@ -157,15 +157,15 @@ class UserController extends Controller
         return [
             'daily' => [
                 'labels' => $days->map(fn ($d) => $d->format('d/m'))->all(),
-                'data'   => $days->map(fn ($d) => $byDay->get($d->format('Y-m-d'), collect())->count())->all(),
+                'data' => $days->map(fn ($d) => $byDay->get($d->format('Y-m-d'), collect())->count())->all(),
             ],
             'monthly' => [
                 'labels' => $months->map(fn ($m) => $m->translatedFormat('M Y'))->all(),
-                'data'   => $months->map(fn ($m) => $byMonth->get($m->format('Y-m'), collect())->count())->all(),
+                'data' => $months->map(fn ($m) => $byMonth->get($m->format('Y-m'), collect())->count())->all(),
             ],
             'roleMonthly' => $roleMonthly,
-            'roles'       => $roleDist,
-            'status'      => ['active' => $active, 'inactive' => $all->count() - $active],
+            'roles' => $roleDist,
+            'status' => ['active' => $active, 'inactive' => $all->count() - $active],
         ];
     }
 }

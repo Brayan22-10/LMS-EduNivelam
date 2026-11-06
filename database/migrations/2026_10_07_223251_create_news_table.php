@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->string('status')->default('publicado'); 
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
+            $table->string('status')->default('publicado');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

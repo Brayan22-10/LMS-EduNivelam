@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
+use App\Mail\ContactMessage;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\ContactMessage;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class EduNivelamCompleteTest extends TestCase
@@ -19,7 +19,7 @@ class EduNivelamCompleteTest extends TestCase
     {
         $response = $this->get('/');
         $response->assertStatus(200);
-        $response->assertViewIs('page.home'); 
+        $response->assertViewIs('page.home');
     }
 
     public function test_paginas_estaticas_principales()
@@ -34,30 +34,30 @@ class EduNivelamCompleteTest extends TestCase
         Mail::fake();
 
         $response = $this->post('/register', [
-            'name'                  => 'Estudiante Prueba',
-            'dni'                   => '1234567890', 
-            'email'                 => 'estudiante@edunivelam.test',
-            'password'              => 'Password123!',
+            'name' => 'Estudiante Prueba',
+            'dni' => '1234567890',
+            'email' => 'estudiante@edunivelam.test',
+            'password' => 'Password123!',
             'password_confirmation' => 'Password123!',
         ]);
 
         $response->assertStatus(302);
-        
+
         $this->assertDatabaseHas('users', [
-            'email' => 'estudiante@edunivelam.test'
+            'email' => 'estudiante@edunivelam.test',
         ]);
     }
 
     public function test_usuario_puede_iniciar_sesion()
     {
         $user = User::factory()->create([
-            'email'     => 'login@edunivelam.test',
-            'password'  => bcrypt($password = 'Password123!'),
+            'email' => 'login@edunivelam.test',
+            'password' => bcrypt($password = 'Password123!'),
             'is_active' => true,
         ]);
 
         $response = $this->post('/login', [
-            'email'    => 'login@edunivelam.test',
+            'email' => 'login@edunivelam.test',
             'password' => $password,
         ]);
 
@@ -74,7 +74,7 @@ class EduNivelamCompleteTest extends TestCase
     public function test_usuario_puede_cerrar_sesion()
     {
         $user = User::factory()->create();
-        
+
         $response = $this->actingAs($user)->post('/logout');
 
         $this->assertGuest();
@@ -100,12 +100,12 @@ class EduNivelamCompleteTest extends TestCase
     public function test_base_de_datos_crea_usuarios_correctamente()
     {
         User::factory()->create([
-            'name'  => 'Prueba DB',
-            'email' => 'db@edunivelam.test'
+            'name' => 'Prueba DB',
+            'email' => 'db@edunivelam.test',
         ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => 'db@edunivelam.test'
+            'email' => 'db@edunivelam.test',
         ]);
     }
 
@@ -115,8 +115,8 @@ class EduNivelamCompleteTest extends TestCase
 
         $post = Post::create([
             'user_id' => $admin->id,
-            'title'   => 'Noticia de Prueba Ubaté',
-            'content' => 'Contenido detallado del post de prueba para EduNivelam.'
+            'title' => 'Noticia de Prueba Ubaté',
+            'content' => 'Contenido detallado del post de prueba para EduNivelam.',
         ]);
 
         $this->assertDatabaseHas('posts', ['title' => 'Noticia de Prueba Ubaté']);
@@ -131,7 +131,7 @@ class EduNivelamCompleteTest extends TestCase
     public function test_subida_de_avatar_o_imagenes_del_sistema()
     {
         Storage::fake('public');
-        
+
         $file = UploadedFile::fake()->image('avatar.jpg');
         $path = $file->store('avatars', 'public');
 
@@ -143,7 +143,7 @@ class EduNivelamCompleteTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->getJson('/dashboard');
-        
+
         $this->assertNotNull($response);
     }
 

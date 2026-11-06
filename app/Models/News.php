@@ -17,7 +17,7 @@ class News extends Model
         'image',
         'status',
         'scheduled_at',
-        'user_id'
+        'user_id',
     ];
 
     public function user()

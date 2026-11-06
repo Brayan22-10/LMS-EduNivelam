@@ -11,10 +11,11 @@ use Illuminate\Support\Str;
 class TeacherStatusController extends Controller
 {
     private const MAX_ATTEMPTS = 5;
-    private const DECAY_SECONDS = 900; 
+
+    private const DECAY_SECONDS = 900;
 
     private const TYPES = [
-        'courses'    => 'Creación de cursos',
+        'courses' => 'Creación de cursos',
         'advisories' => 'Asesorías',
     ];
 
@@ -29,15 +30,15 @@ class TeacherStatusController extends Controller
 
         $data = $request->validate([
             'email' => ['required', 'email', 'max:255'],
-            'dni'   => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30'],
+            'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30'],
         ], [
             'email.required' => 'Ingresa el correo con el que te postulaste.',
-            'email.email'    => 'Ingresa un correo válido.',
-            'dni.required'   => 'Ingresa tu número de documento.',
-            'dni.regex'      => 'El documento solo debe contener números.',
+            'email.email' => 'Ingresa un correo válido.',
+            'dni.required' => 'Ingresa tu número de documento.',
+            'dni.regex' => 'El documento solo debe contener números.',
         ]);
 
-        $key = 'teacher-status|' . $data['email'] . '|' . $request->ip();
+        $key = 'teacher-status|'.$data['email'].'|'.$request->ip();
 
         if (RateLimiter::tooManyAttempts($key, self::MAX_ATTEMPTS)) {
             $minutes = (int) ceil(RateLimiter::availableIn($key) / 60);
@@ -64,7 +65,7 @@ class TeacherStatusController extends Controller
 
         $approved = (bool) $teacher->is_approved;
         $position = null;
-        $total    = null;
+        $total = null;
 
         if (! $approved) {
             $pending = User::where('role', 'teacher')->where('is_approved', false);
@@ -73,20 +74,20 @@ class TeacherStatusController extends Controller
 
             $position = (clone $pending)->where(function ($q) use ($teacher) {
                 $q->where('created_at', '<', $teacher->created_at)
-                  ->orWhere(function ($q2) use ($teacher) {
-                      $q2->where('created_at', $teacher->created_at)
-                         ->where('id', '<', $teacher->id);
-                  });
+                    ->orWhere(function ($q2) use ($teacher) {
+                        $q2->where('created_at', $teacher->created_at)
+                            ->where('id', '<', $teacher->id);
+                    });
             })->count() + 1;
         }
 
         $result = [
-            'name'     => Str::of($teacher->name)->before(' ')->toString(),
-            'status'   => $approved ? 'approved' : 'pending',
+            'name' => Str::of($teacher->name)->before(' ')->toString(),
+            'status' => $approved ? 'approved' : 'pending',
             'position' => $position,
-            'total'    => $total,
-            'sent_at'  => optional($teacher->created_at)->format('d/m/Y H:i'),
-            'type'     => self::TYPES[$teacher->teaching_type] ?? 'Docencia',
+            'total' => $total,
+            'sent_at' => optional($teacher->created_at)->format('d/m/Y H:i'),
+            'type' => self::TYPES[$teacher->teaching_type] ?? 'Docencia',
         ];
 
         return redirect()->route('teacher.status')

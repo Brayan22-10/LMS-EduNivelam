@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('font_size', 20)->default('14px')->after('bio'); 
+            $table->string('font_size', 20)->default('14px')->after('bio');
             $table->boolean('high_contrast')->default(false)->after('font_size');
         });
     }

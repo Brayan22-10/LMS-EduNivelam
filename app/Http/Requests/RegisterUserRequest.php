@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Contracts\Validation\Validator;
 
 class RegisterUserRequest extends FormRequest
 {
-    public function authorize(): bool 
-    { 
-        return true; 
+    public function authorize(): bool
+    {
+        return true;
     }
 
     public function rules(): array
@@ -19,9 +19,9 @@ class RegisterUserRequest extends FormRequest
             'name' => ['required', 'string', 'min:2', 'max:100', 'unique:users,name'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => [
-                'required', 
+                'required',
                 'confirmed',
-                'regex:/^\S*$/', 
+                'regex:/^\S*$/',
                 Password::min(8)->letters()->mixedCase()->numbers(),
             ],
         ];
@@ -38,7 +38,7 @@ class RegisterUserRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         session()->flashInput($this->except(['name', 'password', 'password_confirmation']));
-        
+
         parent::failedValidation($validator);
     }
 }

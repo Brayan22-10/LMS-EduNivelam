@@ -20,7 +20,7 @@ return new class extends Migration
         Schema::create('user_activity_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('action'); 
+            $table->string('action');
             $table->string('ip_address', 45);
             $table->timestamps();
         });

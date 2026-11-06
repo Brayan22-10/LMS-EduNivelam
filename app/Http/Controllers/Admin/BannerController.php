@@ -27,7 +27,7 @@ class BannerController extends Controller
 
         $banners = $query->latest()->paginate(10)->withQueryString();
 
-        $countAll    = Banner::count();
+        $countAll = Banner::count();
         $countActive = Banner::where('is_active', true)->count();
         $countHidden = $countAll - $countActive;
 
@@ -56,7 +56,7 @@ class BannerController extends Controller
             $this->messages()
         );
 
-        $page    = $data['page_identifier'];
+        $page = $data['page_identifier'];
         $payload = $this->payloadFor($page, $data);
 
         if ($request->hasFile('image_path') && in_array('image_path', Banner::fieldsFor($page), true)) {
@@ -65,7 +65,7 @@ class BannerController extends Controller
 
         Banner::create($payload + [
             'page_identifier' => $page,
-            'is_active'       => $request->boolean('is_active'),
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         return redirect()->route('admin.banners.index')
@@ -81,8 +81,8 @@ class BannerController extends Controller
     {
         $data = $request->validate($this->fieldRules(), $this->messages());
 
-        $page     = $banner->page_identifier;
-        $payload  = $this->payloadFor($page, $data);
+        $page = $banner->page_identifier;
+        $payload = $this->payloadFor($page, $data);
         $oldImage = $banner->image_path;
 
         if ($request->hasFile('image_path') && in_array('image_path', Banner::fieldsFor($page), true)) {
@@ -129,8 +129,8 @@ class BannerController extends Controller
     private function fieldRules(): array
     {
         return [
-            'title'      => ['required', 'string', 'max:255'],
-            'subtitle'   => ['nullable', 'string', 'max:1000'],
+            'title' => ['required', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:1000'],
             'badge_text' => ['nullable', 'string', 'max:150'],
             'image_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ];
@@ -141,8 +141,8 @@ class BannerController extends Controller
         $allowed = Banner::fieldsFor($page);
 
         return [
-            'title'      => $data['title'],
-            'subtitle'   => in_array('subtitle', $allowed, true) ? ($data['subtitle'] ?? null) : null,
+            'title' => $data['title'],
+            'subtitle' => in_array('subtitle', $allowed, true) ? ($data['subtitle'] ?? null) : null,
             'badge_text' => in_array('badge_text', $allowed, true) ? ($data['badge_text'] ?? null) : null,
         ];
     }
@@ -151,15 +151,15 @@ class BannerController extends Controller
     {
         return [
             'page_identifier.required' => 'Debes seleccionar una página destino.',
-            'page_identifier.in'       => 'La página seleccionada no es válida.',
-            'page_identifier.unique'   => 'Esa página ya tiene un banner. Edítalo desde el listado.',
-            'title.required'           => 'El título principal es obligatorio.',
-            'title.max'                => 'El título no puede superar 255 caracteres.',
-            'subtitle.max'             => 'El subtítulo no puede superar 1000 caracteres.',
-            'badge_text.max'           => 'La etiqueta no puede superar 150 caracteres.',
-            'image_path.image'         => 'El archivo debe ser una imagen.',
-            'image_path.mimes'         => 'La imagen debe ser JPG, PNG o WEBP.',
-            'image_path.max'           => 'La imagen no puede pesar más de 2 MB.',
+            'page_identifier.in' => 'La página seleccionada no es válida.',
+            'page_identifier.unique' => 'Esa página ya tiene un banner. Edítalo desde el listado.',
+            'title.required' => 'El título principal es obligatorio.',
+            'title.max' => 'El título no puede superar 255 caracteres.',
+            'subtitle.max' => 'El subtítulo no puede superar 1000 caracteres.',
+            'badge_text.max' => 'La etiqueta no puede superar 150 caracteres.',
+            'image_path.image' => 'El archivo debe ser una imagen.',
+            'image_path.mimes' => 'La imagen debe ser JPG, PNG o WEBP.',
+            'image_path.max' => 'La imagen no puede pesar más de 2 MB.',
         ];
     }
 }

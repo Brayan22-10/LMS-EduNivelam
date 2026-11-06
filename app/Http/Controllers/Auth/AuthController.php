@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -19,9 +20,11 @@ use Throwable;
 
 class AuthController extends Controller
 {
-    private const MAX_ATTEMPTS  = 5;
-    private const BASE_LOCKOUT  = 300;   
-    private const MAX_LOCKOUT   = 3600; 
+    private const MAX_ATTEMPTS = 5;
+
+    private const BASE_LOCKOUT = 300;
+
+    private const MAX_LOCKOUT = 3600;
 
     public function showLogin()
     {
@@ -31,8 +34,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $email = Str::lower(trim((string) $request->input('email')));
-        $throttleKey = $email . '|' . $request->ip();
-        $lockoutCacheKey = 'lockout_count_' . $throttleKey;
+        $throttleKey = $email.'|'.$request->ip();
+        $lockoutCacheKey = 'lockout_count_'.$throttleKey;
 
         if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_ATTEMPTS)) {
             return back()->withInput()->withErrors([
@@ -93,7 +96,7 @@ class AuthController extends Controller
                     Auth::user()->email,
                     'success',
                     'successful_login',
-                    'Inicio de sesión exitoso para el usuario ID: ' . Auth::id()
+                    'Inicio de sesión exitoso para el usuario ID: '.Auth::id()
                 );
 
                 if ($remember) {
@@ -145,7 +148,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request): \Illuminate\Http\RedirectResponse
+    public function register(Request $request): RedirectResponse
     {
         $email = Str::lower(trim((string) $request->input('email')));
         $dni = $request->input('dni');
@@ -164,8 +167,8 @@ class AuthController extends Controller
             'phone.regex' => 'El teléfono solo debe contener números.',
             'password.regex' => 'La contraseña no puede contener espacios en blanco.',
         ]);
-        
-        $existingVerified = User::where(function($query) use ($email, $dni) {
+
+        $existingVerified = User::where(function ($query) use ($email, $dni) {
             $query->where('email', $email)->orWhere('dni', $dni);
         })->whereNotNull('email_verified_at')->first();
 
@@ -175,7 +178,7 @@ class AuthController extends Controller
             ]);
         }
 
-        User::where(function($query) use ($email, $dni) {
+        User::where(function ($query) use ($email, $dni) {
             $query->where('email', $email)->orWhere('dni', $dni);
         })->whereNull('email_verified_at')->delete();
 
@@ -218,7 +221,7 @@ class AuthController extends Controller
             'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', 'unique:users,dni'],
             'country_code' => ['required', 'string'],
             'phone' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:20', 'unique:users,phone'],
-            'birthdate' => ['required', 'date', 'before_or_equal:' . $eighteenYearsAgo],
+            'birthdate' => ['required', 'date', 'before_or_equal:'.$eighteenYearsAgo],
             'teaching_type' => ['required', 'in:courses,advisories'],
         ], [
             'name.unique' => 'Este nombre de usuario ya está en uso.',
@@ -292,10 +295,10 @@ class AuthController extends Controller
             try {
                 Mail::raw("Tu código de recuperación para EduNivelam es: {$code}", function ($message) use ($user) {
                     $message->to($user->email)
-                            ->subject('Código de recuperación de contraseña - EduNivelam');
+                        ->subject('Código de recuperación de contraseña - EduNivelam');
                 });
             } catch (Throwable $e) {
-                Log::error('No se pudo enviar el código de recuperación: ' . $e->getMessage());
+                Log::error('No se pudo enviar el código de recuperación: '.$e->getMessage());
             }
         }
 

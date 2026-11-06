@@ -13,34 +13,34 @@ class Banner extends Model
 
     public const PAGES = [
         'home' => [
-            'label'  => 'Home',
+            'label' => 'Home',
             'fields' => ['badge_text', 'title', 'subtitle', 'image_path'],
-            'help'   => 'Sección Hero del Home (título de bienvenida y tarjeta interactiva/imagen).',
+            'help' => 'Sección Hero del Home (título de bienvenida y tarjeta interactiva/imagen).',
         ],
         'about' => [
-            'label'  => 'About',
+            'label' => 'About',
             'fields' => ['badge_text', 'title', 'subtitle'],
-            'help'   => 'Sección Acerca de (etiqueta superior, título principal y párrafo de propósito).',
+            'help' => 'Sección Acerca de (etiqueta superior, título principal y párrafo de propósito).',
         ],
         'news' => [
-            'label'  => 'News',
+            'label' => 'News',
             'fields' => ['title', 'subtitle'],
-            'help'   => 'Encabezado del feed de Avisos y Novedades Institucionales.',
+            'help' => 'Encabezado del feed de Avisos y Novedades Institucionales.',
         ],
         'courses' => [
-            'label'  => 'Courses',
+            'label' => 'Courses',
             'fields' => ['badge_text', 'title', 'subtitle'],
-            'help'   => 'Encabezado del Catálogo de Cursos (etiqueta, título y descripción).',
+            'help' => 'Encabezado del Catálogo de Cursos (etiqueta, título y descripción).',
         ],
         'instructors' => [
-            'label'  => 'Instructors',
+            'label' => 'Instructors',
             'fields' => ['badge_text', 'title', 'subtitle'],
-            'help'   => 'Encabezado del Cuerpo Docente (etiqueta, título y descripción).',
+            'help' => 'Encabezado del Cuerpo Docente (etiqueta, título y descripción).',
         ],
         'contact' => [
-            'label'  => 'Contact',
+            'label' => 'Contact',
             'fields' => ['title', 'subtitle'],
-            'help'   => 'Encabezado de Ayuda y Soporte (título de pregunta y subtítulo de asistencia).',
+            'help' => 'Encabezado de Ayuda y Soporte (título de pregunta y subtítulo de asistencia).',
         ],
     ];
 

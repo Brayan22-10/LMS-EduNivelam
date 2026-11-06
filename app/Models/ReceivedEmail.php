@@ -24,6 +24,7 @@ class ReceivedEmail extends Model
         'received_at' => 'datetime',
         'is_read' => 'boolean',
     ];
+
     protected function displayMessage(): Attribute
     {
         return Attribute::get(function () {

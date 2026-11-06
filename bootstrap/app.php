@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\CheckSystemMaintenance;
+use App\Http\Middleware\SecurityHeadersMiddleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,11 +19,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
 
         $middleware->alias([
-            'maintenance' => \App\Http\Middleware\CheckSystemMaintenance::class,
+            'maintenance' => CheckSystemMaintenance::class,
         ]);
 
         $middleware->append([
-            \App\Http\Middleware\SecurityHeadersMiddleware::class,
+            SecurityHeadersMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

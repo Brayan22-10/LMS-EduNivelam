@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('github_url')->nullable();
-        $table->string('linkedin_url')->nullable();
-        $table->string('portfolio_url')->nullable();
-    });
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('github_url')->nullable();
+            $table->string('linkedin_url')->nullable();
+            $table->string('portfolio_url')->nullable();
+        });
     }
 
     /**

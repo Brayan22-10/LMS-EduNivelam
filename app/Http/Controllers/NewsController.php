@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\News;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class NewsController extends Controller
 {
@@ -18,7 +18,7 @@ class NewsController extends Controller
             ->where('scheduled_at', '<=', Carbon::now())
             ->update([
                 'status' => 'publicado',
-                'scheduled_at' => null
+                'scheduled_at' => null,
             ]);
 
         $tab = $request->get('tab', 'all');
@@ -54,20 +54,20 @@ class NewsController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:300',
-            'status' => 'required|in:publicado,borrador,programado', 
+            'status' => 'required|in:publicado,borrador,programado',
             'scheduled_at' => 'nullable',
         ]);
 
         $imagePath = null;
         if ($request->filled('cropped_image')) {
             $base64Image = $request->input('cropped_image');
-            list($type, $base64Image) = explode(';', $base64Image);
-            list(, $base64Image)      = explode(',', $base64Image);
+            [$type, $base64Image] = explode(';', $base64Image);
+            [, $base64Image] = explode(',', $base64Image);
             $imageBytes = base64_decode($base64Image);
 
-            $filename = 'news_' . Str::uuid() . '.jpg';
-            Storage::disk('public')->put('news-images/' . $filename, $imageBytes);
-            $imagePath = 'news-images/' . $filename;
+            $filename = 'news_'.Str::uuid().'.jpg';
+            Storage::disk('public')->put('news-images/'.$filename, $imageBytes);
+            $imagePath = 'news-images/'.$filename;
         }
 
         $scheduledAt = null;
@@ -102,12 +102,12 @@ class NewsController extends Controller
             ->where('scheduled_at', '<=', Carbon::now())
             ->update([
                 'status' => 'publicado',
-                'scheduled_at' => null
+                'scheduled_at' => null,
             ]);
 
         $news = News::where('status', 'publicado')
-                    ->latest()
-                    ->paginate(9);
+            ->latest()
+            ->paginate(9);
 
         return view('news.index', compact('news'));
     }
@@ -120,7 +120,7 @@ class NewsController extends Controller
     public function edit(News $news)
     {
         $rawDate = $news->getRawOriginal('scheduled_at') ?? $news->scheduled_at;
-        
+
         if ($rawDate) {
             $news->scheduled_at = Carbon::parse($rawDate)->format('Y-m-d\TH:i');
         }
@@ -135,7 +135,7 @@ class NewsController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:300',
-            'status' => 'required|in:publicado,borrador,programado', 
+            'status' => 'required|in:publicado,borrador,programado',
             'scheduled_at' => 'nullable',
         ]);
 
@@ -154,13 +154,13 @@ class NewsController extends Controller
             }
 
             $base64Image = $request->input('cropped_image');
-            list($type, $base64Image) = explode(';', $base64Image);
-            list(, $base64Image)      = explode(',', $base64Image);
+            [$type, $base64Image] = explode(';', $base64Image);
+            [, $base64Image] = explode(',', $base64Image);
             $imageBytes = base64_decode($base64Image);
 
-            $filename = 'news_' . Str::uuid() . '.jpg';
-            Storage::disk('public')->put('news-images/' . $filename, $imageBytes);
-            $imagePath = 'news-images/' . $filename;
+            $filename = 'news_'.Str::uuid().'.jpg';
+            Storage::disk('public')->put('news-images/'.$filename, $imageBytes);
+            $imagePath = 'news-images/'.$filename;
         }
 
         $scheduledAt = $news->scheduled_at;
@@ -196,6 +196,7 @@ class NewsController extends Controller
         }
 
         $news->delete();
+
         return redirect()->route('admin.news.index')->with('success', '¡Noticia eliminada correctamente!');
     }
 }

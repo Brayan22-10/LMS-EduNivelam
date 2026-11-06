@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Post;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -40,7 +39,7 @@ class DashboardController extends Controller
 
         $failedCount = $recentFailedLogins->count();
 
-        $securityStatus = 'secure'; 
+        $securityStatus = 'secure';
         if ($failedCount > 0 && $failedCount < 5) {
             $securityStatus = 'warning';
         } elseif ($failedCount >= 5) {
@@ -54,6 +53,7 @@ class DashboardController extends Controller
     {
         try {
             Artisan::call('optimize:clear');
+
             return back()->with('success', '¡Caché del sistema y optimizaciones limpiadas y restablecidas con éxito!');
         } catch (\Exception $e) {
             return back()->with('error', 'Error al ejecutar el mantenimiento del servidor.');

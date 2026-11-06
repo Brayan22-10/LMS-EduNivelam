@@ -9,11 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'role')) {
+            if (! Schema::hasColumn('users', 'role')) {
                 $table->string('role')->default('student')->after('password');
             }
 
-            if (!Schema::hasColumn('users', 'is_approved')) {
+            if (! Schema::hasColumn('users', 'is_approved')) {
                 $table->boolean('is_approved')->default(true)->after('role');
             }
         });
@@ -23,7 +23,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $columnsToDrop = [];
-            
+
             if (Schema::hasColumn('users', 'role')) {
                 $columnsToDrop[] = 'role';
             }
@@ -31,7 +31,7 @@ return new class extends Migration
                 $columnsToDrop[] = 'is_approved';
             }
 
-            if (!empty($columnsToDrop)) {
+            if (! empty($columnsToDrop)) {
                 $table->dropColumn($columnsToDrop);
             }
         });
