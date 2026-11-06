@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 use Throwable;
 
 class AuthController extends Controller
@@ -160,7 +161,7 @@ class AuthController extends Controller
             'dni' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30'],
             'phone' => ['nullable', 'string', 'regex:/^[0-9]+$/', 'max:20'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'regex:/^\S*$/'],
+            'password' => ['required', 'string', Password::defaults(), 'regex:/^\S*$/', 'confirmed'],
         ], [
             'dni.required' => 'La cédula o documento es obligatorio.',
             'dni.regex' => 'La identificación solo debe contener números.',
