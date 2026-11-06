@@ -27,12 +27,13 @@ class SecurityHeadersMiddleware
 
         $cdn = 'https://cdn.jsdelivr.net https://cdnjs.cloudflare.com';
         $turnstile = 'https://challenges.cloudflare.com';
+        $fonts = 'https://fonts.googleapis.com https://fonts.gstatic.com';
 
         $csp = "default-src 'self'; ".
-               "script-src 'self' 'unsafe-inline' 'unsafe-eval'{$dev} {$cdn} {$turnstile}; ".
-               "style-src 'self' 'unsafe-inline'{$dev} {$cdn} https://fonts.googleapis.com; ".
+               "script-src 'self'{$dev} {$cdn} {$turnstile}; ".
+               "style-src 'self' 'unsafe-inline'{$dev} {$cdn} {$fonts}; ".
                "img-src 'self' data: blob: https:; ".
-               "font-src 'self' data: {$cdn} https://fonts.gstatic.com; ".
+               "font-src 'self' data: {$cdn} {$fonts}; ".
                "connect-src 'self'{$devWs}; ".
                "frame-src 'self' {$turnstile}; ".
                "object-src 'none'; ".

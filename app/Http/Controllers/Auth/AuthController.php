@@ -101,8 +101,8 @@ class AuthController extends Controller
                 );
 
                 if ($remember) {
-                    Cookie::queue('saved_email', $email, 43200);
-                    Cookie::queue('remember_checked', 'true', 43200);
+                    Cookie::queue(Cookie::make('saved_email', $email, 43200, null, null, config('session.secure'), true, false, 'lax'));
+                    Cookie::queue(Cookie::make('remember_checked', 'true', 43200, null, null, config('session.secure'), true, false, 'lax'));
                 } else {
                     Cookie::queue(Cookie::forget('saved_email'));
                     Cookie::queue(Cookie::forget('remember_checked'));
@@ -152,9 +152,12 @@ class AuthController extends Controller
     public function register(Request $request): RedirectResponse
     {
         $email = Str::lower(trim((string) $request->input('email')));
-        $dni = $request->input('dni');
+        $dni = trim((string) $request->input('dni'));
 
-        $request->merge(['email' => $email]);
+        $request->merge([
+            'email' => $email,
+            'dni' => $dni,
+        ]);
 
         $request->validate([
             'name' => ['required', 'string', 'min:2', 'max:100'],
@@ -212,7 +215,15 @@ class AuthController extends Controller
 
     public function registerTeacher(Request $request)
     {
-        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+        $email = Str::lower(trim((string) $request->input('email')));
+        $dni = trim((string) $request->input('dni'));
+        $phone = trim((string) $request->input('phone'));
+
+        $request->merge([
+            'email' => $email,
+            'dni' => $dni,
+            'phone' => $phone,
+        ]);
 
         $eighteenYearsAgo = Carbon::now()->subYears(18)->format('Y-m-d');
 
@@ -241,10 +252,10 @@ class AuthController extends Controller
 
         User::create([
             'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'dni' => $request->input('dni'),
+            'email' => $email,
+            'dni' => $dni,
             'country_code' => $request->input('country_code'),
-            'phone' => $request->input('phone'),
+            'phone' => $phone,
             'birthdate' => $request->input('birthdate'),
             'teaching_type' => $request->input('teaching_type'),
             'password' => Hash::make(Str::random(16)),
@@ -290,10 +301,12 @@ class AuthController extends Controller
 
     public function sendResetCode(Request $request)
     {
-        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+        $email = Str::lower(trim((string) $request->input('email')));
+        $request->merge(['email' => $email]);
+        
         $request->validate(['email' => ['required', 'email']]);
 
-        $user = User::where('email', $request->input('email'))->first();
+        $user = User::where('email', $email)->first();
 
         if ($user) {
             $code = (string) random_int(100000, 999999);
@@ -314,7 +327,7 @@ class AuthController extends Controller
             }
         }
 
-        session(['reset_email' => $request->input('email')]);
+        session(['reset_email' => $email]);
         session()->forget('code_verified');
 
         return redirect()->route('password.verify.form')
@@ -323,7 +336,9 @@ class AuthController extends Controller
 
     public function verifyCode(Request $request)
     {
-        $request->validate(['code' => ['required', 'digits:6']]);
+        $validated = $request->validate([
+            'code' => ['required', 'string', 'digits:6']
+        ]);
 
         $email = session('reset_email');
 
@@ -347,7 +362,7 @@ class AuthController extends Controller
             ->where('reset_code_expires_at', '>', Carbon::now())
             ->first();
 
-        $hash = hash_hmac('sha256', (string) $request->input('code'), (string) config('app.key'));
+        $hash = hash_hmac('sha256', (string) $validated['code'], (string) config('app.key'));
 
         if (! $user || ! hash_equals((string) $user->reset_code, $hash)) {
             RateLimiter::hit($key, 900);
