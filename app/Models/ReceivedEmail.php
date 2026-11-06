@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property string|null
+ * @property string|null $clean_message
  */
 class ReceivedEmail extends Model
 {
