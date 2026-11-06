@@ -116,5 +116,4 @@ class GoogleAuthController extends Controller
             'updated_at' => now(),
         ]);
     }
-
 }

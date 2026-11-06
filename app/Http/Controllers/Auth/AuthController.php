@@ -289,35 +289,35 @@ class AuthController extends Controller
 
     public function sendResetCode(Request $request)
     {
-    $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
-    $request->validate(['email' => ['required', 'email']]);
+        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+        $request->validate(['email' => ['required', 'email']]);
 
-    $user = User::where('email', $request->input('email'))->first();
+        $user = User::where('email', $request->input('email'))->first();
 
-    if ($user) {
-        $code = (string) random_int(100000, 999999);
+        if ($user) {
+            $code = (string) random_int(100000, 999999);
 
-        $user->reset_code = hash_hmac('sha256', $code, (string) config('app.key'));
-        $user->reset_code_expires_at = Carbon::now()->addMinutes(15);
-        $user->save();
+            $user->reset_code = hash_hmac('sha256', $code, (string) config('app.key'));
+            $user->reset_code_expires_at = Carbon::now()->addMinutes(15);
+            $user->save();
 
-        RateLimiter::clear('verify-code:'.$user->email);
+            RateLimiter::clear('verify-code:'.$user->email);
 
-        try {
-            Mail::raw("Tu código de recuperación para EduNivelam es: {$code}", function ($message) use ($user) {
-                $message->to($user->email)
-                    ->subject('Código de recuperación de contraseña - EduNivelam');
-            });
-        } catch (Throwable $e) {
-            Log::error('No se pudo enviar el código de recuperación: '.$e->getMessage());
+            try {
+                Mail::raw("Tu código de recuperación para EduNivelam es: {$code}", function ($message) use ($user) {
+                    $message->to($user->email)
+                        ->subject('Código de recuperación de contraseña - EduNivelam');
+                });
+            } catch (Throwable $e) {
+                Log::error('No se pudo enviar el código de recuperación: '.$e->getMessage());
+            }
         }
-    }
 
-    session(['reset_email' => $request->input('email')]);
-    session()->forget('code_verified');
+        session(['reset_email' => $request->input('email')]);
+        session()->forget('code_verified');
 
-    return redirect()->route('password.verify.form')
-        ->with('success', 'Si el correo está registrado, recibirás un código de 6 dígitos.');
+        return redirect()->route('password.verify.form')
+            ->with('success', 'Si el correo está registrado, recibirás un código de 6 dígitos.');
     }
 
     public function verifyCode(Request $request)
