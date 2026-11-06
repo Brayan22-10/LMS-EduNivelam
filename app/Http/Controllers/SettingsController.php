@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -296,10 +296,7 @@ class SettingsController extends Controller
         $startTime = microtime(true);
 
         try {
-            $pdo = DB::connection()->getPdo();
-            if (! $pdo) {
-                throw new \Exception('Conexión PDO inactiva con la base de datos.');
-            }
+            DB::connection()->getPdo();
 
             $dbName = DB::getDatabaseName();
             $driver = DB::getDriverName();
@@ -373,7 +370,7 @@ class SettingsController extends Controller
             $tablesList = \Illuminate\Support\Facades\Schema::getTables();
 
             foreach ($tablesList as $tableInfo) {
-                $tableName = is_array($tableInfo) ? ($tableInfo['name'] ?? reset($tableInfo)) : $tableInfo->name;
+                $tableName = $tableInfo['name'];
 
                 if (in_array(strtolower($tableName), ['historias', 'migrations', 'sqlite_sequence'])) {
                     continue;
@@ -487,7 +484,8 @@ class SettingsController extends Controller
             $path = base_path('bootstrap/cache/routes-v7.php');
             if (file_exists($path)) {
                 $size = filesize($path);
-            }$title = 'Caché de Rutas del Sistema';
+            }
+            $title = 'Caché de Rutas del Sistema';
             $description = 'Contiene las rutas compiladas para acelerar el enrutamiento de peticiones en EduNivelam.';
         } elseif ($type === 'view') {
             $path = storage_path('framework/views');
@@ -498,7 +496,8 @@ class SettingsController extends Controller
             $path = base_path('bootstrap/cache/config.php');
             if (file_exists($path)) {
                 $size = filesize($path);
-            }$title = 'Caché de Configuración';
+            }
+            $title = 'Caché de Configuración';
             $description = 'Variables globales del sistema unificadas en un solo archivo para evitar lecturas constantes del .env.';
         } else {
             $path = storage_path('framework/cache/data');
@@ -534,7 +533,7 @@ class SettingsController extends Controller
 
             if ($driver === 'mysql') {
                 foreach ($tablesList as $tableInfo) {
-                    $tableName = is_array($tableInfo) ? ($tableInfo['name'] ?? reset($tableInfo)) : $tableInfo->name;
+                    $tableName = $tableInfo['name'];
                     try {
                         DB::statement("OPTIMIZE TABLE `{$tableName}`");
                         $optimizedCount++;
