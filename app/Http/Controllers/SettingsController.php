@@ -60,6 +60,7 @@ class SettingsController extends Controller
 
         $request->validate([
             'name' => ['nullable', 'string', 'min:2', 'max:100', 'unique:users,name,'.$user->id],
+            'cropped_avatar' => ['nullable', 'string', 'max:3000000'],
             'email' => ['nullable', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'phone' => [
                 $isTeacher ? 'required' : 'nullable',
@@ -121,23 +122,37 @@ class SettingsController extends Controller
             }
 
             $file = $request->file('avatar');
-            $originalFilename = 'original_'.Str::uuid().'.'.$file->getClientOriginalExtension();
+            $originalFilename = 'original_'.Str::uuid().'.'.$file->extension();
             $originalPath = $file->storeAs('avatars', $originalFilename, 'public');
             $user->original_avatar = $originalPath;
             $user->avatar = $originalPath;
         }
 
         if ($request->filled('cropped_avatar')) {
+            $parts = explode(',', (string) $request->input('cropped_avatar'), 2);
+
+            if (count($parts) !== 2 || ! preg_match('#^data:image/(png|jpe?g|webp);base64$#', $parts[0])) {
+                return back()->withErrors(['cropped_avatar' => 'La imagen recortada no es válida.']);
+            }
+
+            $imageBytes = base64_decode($parts[1], true);
+            $info = $imageBytes === false ? false : @getimagesizefromstring($imageBytes);
+            $extension = match ($info['mime'] ?? null) {
+                'image/png' => 'png',
+                'image/jpeg' => 'jpg',
+                'image/webp' => 'webp',
+                default => null,
+            };
+
+            if ($extension === null) {
+                return back()->withErrors(['cropped_avatar' => 'La imagen recortada no es válida.']);
+            }
+
             if ($user->avatar && Storage::disk('public')->exists($user->avatar) && $user->avatar !== $user->original_avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
 
-            $base64Image = $request->input('cropped_avatar');
-            [$type, $base64Image] = explode(';', $base64Image);
-            [, $base64Image] = explode(',', $base64Image);
-            $imageBytes = base64_decode($base64Image);
-
-            $filename = 'avatar_'.Str::uuid().'.jpg';
+            $filename = 'avatar_'.Str::uuid().'.'.$extension;
             Storage::disk('public')->put('avatars/'.$filename, $imageBytes);
             $user->avatar = 'avatars/'.$filename;
 
