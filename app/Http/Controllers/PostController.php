@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
-class PostController extends Controller
+class PostController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth')->except(['index', 'show']);
+        return [new Middleware('auth', except: ['index', 'show'])];
     }
 
     public function index()
@@ -30,8 +32,8 @@ class PostController extends Controller
     {
         Post::create([
             'user_id' => Auth::id(),
-            'title' => $request->title,
-            'content' => $request->content,
+            'title' => $request->validated('title'),
+            'content' => $request->validated('content'),
         ]);
 
         return redirect()->route('posts.index')->with('success', 'Publicación creada exitosamente.');
