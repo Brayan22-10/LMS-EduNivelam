@@ -1,0 +1,96 @@
+[37;41mFound 7 security vulnerability advisories affecting 4 packages:[39;49m
++-------------------+----------------------------------------------------------------------------------+
+|[32m Package           [39m| symfony/http-foundation                                                          |
+|[32m Severity          [39m|                                                                                  |
+|[32m Advisory ID       [39m| ]8;;https://packagist.org/security-advisories/PKSA-24ph-xkrh-y79j\PKSA-24ph-xkrh-y79j]8;;\                                                              |
+|[32m CVE               [39m| ]8;;https://www.cve.org/CVERecord?id=CVE-2026-118514\CVE-2026-118514]8;;\                                                                  |
+|[32m Title             [39m| CVE-2026-118514: HEAD Requests Bypass the methods Option of                      |
+|[32m                   [39m| security.access_control Rules and Firewalls: Incomplete Fix for CVE-2026-45075   |
+|[32m URL               [39m| ]8;;https://symfony.com/cve-2026-118514\https://symfony.com/cve-2026-118514]8;;\                                              |
+|[32m Affected versions [39m| >=2.0.0,<3.0.0|>=3.0.0,<4.0.0|>=4.0.0,<5.0.0|>=5.0.0,<5.1.0|>=5.1.0,<5.2.0|>=5.2 |
+|[32m                   [39m| .0,<5.3.0|>=5.3.0,<5.4.0|>=5.4.0,<5.4.56|>=6.0.0,<6.1.0|>=6.1.0,<6.2.0|>=6.2.0,< |
+|[32m                   [39m| 6.3.0|>=6.3.0,<6.4.0|>=6.4.0,<6.4.50|>=7.0.0,<7.1.0|>=7.1.0,<7.2.0|>=7.2.0,<7.3. |
+|[32m                   [39m| 0|>=7.3.0,<7.4.0|>=7.4.0,<7.4.23|>=8.0.0,<8.1.0|>=8.1.0,<8.1.11                  |
+|[32m Reported at       [39m| 2026-11-04T10:45:07+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
++-------------------+----------------------------------------------------------------------------------+
+|[32m Package           [39m| symfony/http-foundation                                                          |
+|[32m Severity          [39m|                                                                                  |
+|[32m Advisory ID       [39m| ]8;;https://packagist.org/security-advisories/PKSA-pr6q-2w5s-kzzf\PKSA-pr6q-2w5s-kzzf]8;;\                                                              |
+|[32m CVE               [39m| NO CVE                                                                           |
+|[32m Title             [39m| Path Rules Enforced in Front of PHP Can Be Bypassed by Appending the Path to the |
+|[32m                   [39m| Script Name                                                                      |
+|[32m URL               [39m| ]8;;https://github.com/symfony/symfony/security/advisories/GHSA-3h27-hjv7-fqjx\https://github.com/symfony/symfony/security/advisories/GHSA-3h27-hjv7-fqjx]8;;\       |
+|[32m Affected versions [39m| >=5.4.50,<5.4.56|>=6.4.29,<6.4.50|>=7.3.7,<7.4.0|>=7.4.0,<7.4.23|>=8.0.0,<8.1.0| |
+|[32m                   [39m| >=8.1.0,<8.1.11                                                                  |
+|[32m Reported at       [39m| 2026-11-04T00:00:00+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
++-------------------+----------------------------------------------------------------------------------+
+|[32m Package           [39m| symfony/http-foundation                                                          |
+|[32m Severity          [39m|                                                                                  |
+|[32m Advisory ID       [39m| ]8;;https://packagist.org/security-advisories/PKSA-nxjs-s6hn-vb6m\PKSA-nxjs-s6hn-vb6m]8;;\                                                              |
+|[32m CVE               [39m| NO CVE                                                                           |
+|[32m Title             [39m| The "private_ranges" Trusted Proxies Shortcut Trusts Clients Presenting an       |
+|[32m                   [39m| IPv4-Mapped, 6to4, Teredo or NAT64 Address as Reverse Proxies                    |
+|[32m URL               [39m| ]8;;https://github.com/symfony/symfony/security/advisories/GHSA-xg2q-4rrq-657q\https://github.com/symfony/symfony/security/advisories/GHSA-xg2q-4rrq-657q]8;;\       |
+|[32m Affected versions [39m| >=7.2.0,<7.3.0|>=7.3.0,<7.4.0|>=7.4.0,<7.4.23|>=8.0.0,<8.1.0|>=8.1.0,<8.1.11     |
+|[32m Reported at       [39m| 2026-11-04T00:00:00+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
++-------------------+----------------------------------------------------------------------------------+
+|[32m Package           [39m| symfony/http-foundation                                                          |
+|[32m Severity          [39m|                                                                                  |
+|[32m Advisory ID       [39m| ]8;;https://packagist.org/security-advisories/PKSA-b2gg-vk1g-6d5q\PKSA-b2gg-vk1g-6d5q]8;;\                                                              |
+|[32m CVE               [39m| NO CVE                                                                           |
+|[32m Title             [39m| Generated URLs Can Point to a Host Chosen by the Client                          |
+|[32m URL               [39m| ]8;;https://github.com/symfony/symfony/security/advisories/GHSA-5mx8-mwrp-5693\https://github.com/symfony/symfony/security/advisories/GHSA-5mx8-mwrp-5693]8;;\       |
+|[32m Affected versions [39m| >=2.0.0,<2.1.0|>=2.1.0,<2.2.0|>=2.2.0,<2.3.0|>=2.3.0,<2.4.0|>=2.4.0,<2.5.0|>=2.5 |
+|[32m                   [39m| .0,<2.6.0|>=2.6.0,<2.7.0|>=2.7.0,<2.8.0|>=2.8.0,<3.0.0|>=3.0.0,<3.1.0|>=3.1.0,<3 |
+|[32m                   [39m| .2.0|>=3.2.0,<3.3.0|>=3.3.0,<3.4.0|>=3.4.0,<4.0.0|>=4.0.0,<4.1.0|>=4.1.0,<4.2.0| |
+|[32m                   [39m| >=4.2.0,<4.3.0|>=4.3.0,<4.4.0|>=4.4.0,<5.0.0|>=5.0.0,<5.1.0|>=5.1.0,<5.2.0|>=5.2 |
+|[32m                   [39m| .0,<5.3.0|>=5.3.0,<5.4.0|>=5.4.0,<5.4.56|>=6.0.0,<6.1.0|>=6.1.0,<6.2.0|>=6.2.0,< |
+|[32m                   [39m| 6.3.0|>=6.3.0,<6.4.0|>=6.4.0,<6.4.50|>=7.0.0,<7.1.0|>=7.1.0,<7.2.0|>=7.2.0,<7.3. |
+|[32m                   [39m| 0|>=7.3.0,<7.4.0|>=7.4.0,<7.4.23|>=8.0.0,<8.1.0|>=8.1.0,<8.1.11                  |
+|[32m Reported at       [39m| 2026-11-04T00:00:00+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
++-------------------+----------------------------------------------------------------------------------+
+|[32m Package           [39m| symfony/http-kernel                                                              |
+|[32m Severity          [39m|                                                                                  |
+|[32m Advisory ID       [39m| ]8;;https://packagist.org/security-advisories/PKSA-3gxv-7xhq-mgmz\PKSA-3gxv-7xhq-mgmz]8;;\                                                              |
+|[32m CVE               [39m| NO CVE                                                                           |
+|[32m Title             [39m| Inline Fragments Let Untrusted Forwarded Headers Set the Host, Scheme and Port   |
+|[32m                   [39m| of the URLs Generated for the Main Request                                       |
+|[32m URL               [39m| ]8;;https://github.com/symfony/symfony/security/advisories/GHSA-wg5q-m2ww-f3c9\https://github.com/symfony/symfony/security/advisories/GHSA-wg5q-m2ww-f3c9]8;;\       |
+|[32m Affected versions [39m| >=2.8.44,<3.0.0|>=3.4.14,<4.0.0|>=4.0.14,<5.0.0|>=5.0.0,<5.1.0|>=5.1.0,<5.2.0|>= |
+|[32m                   [39m| 5.2.0,<5.3.0|>=5.3.0,<5.4.0|>=5.4.0,<5.4.56|>=6.0.0,<6.1.0|>=6.1.0,<6.2.0|>=6.2. |
+|[32m                   [39m| 0,<6.3.0|>=6.3.0,<6.4.0|>=6.4.0,<6.4.50|>=7.0.0,<7.1.0|>=7.1.0,<7.2.0|>=7.2.0,<7 |
+|[32m                   [39m| .3.0|>=7.3.0,<7.4.0|>=7.4.0,<7.4.23|>=8.0.0,<8.1.0|>=8.1.0,<8.1.11               |
+|[32m Reported at       [39m| 2026-11-04T00:00:00+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
++-------------------+----------------------------------------------------------------------------------+
+|[32m Package           [39m| symfony/routing                                                                  |
+|[32m Severity          [39m|                                                                                  |
+|[32m Advisory ID       [39m| ]8;;https://packagist.org/security-advisories/PKSA-y8c5-1b7f-r1gj\PKSA-y8c5-1b7f-r1gj]8;;\                                                              |
+|[32m CVE               [39m| ]8;;https://www.cve.org/CVERecord?id=CVE-2026-118516\CVE-2026-118516]8;;\                                                                  |
+|[32m Title             [39m| CVE-2026-118516: Host Placeholders Can Match the Start of the Path in Compiled   |
+|[32m                   [39m| URL Matchers, Bypassing Path-Based Access Control                                |
+|[32m URL               [39m| ]8;;https://symfony.com/cve-2026-118516\https://symfony.com/cve-2026-118516]8;;\                                              |
+|[32m Affected versions [39m| >=4.1.0,<4.2.0|>=4.2.0,<4.3.0|>=4.3.0,<4.4.0|>=4.4.0,<5.0.0|>=5.0.0,<5.1.0|>=5.1 |
+|[32m                   [39m| .0,<5.2.0|>=5.2.0,<5.3.0|>=5.3.0,<5.4.0|>=5.4.0,<5.4.56|>=6.0.0,<6.1.0|>=6.1.0,< |
+|[32m                   [39m| 6.2.0|>=6.2.0,<6.3.0|>=6.3.0,<6.4.0|>=6.4.0,<6.4.50|>=7.0.0,<7.1.0|>=7.1.0,<7.2. |
+|[32m                   [39m| 0|>=7.2.0,<7.3.0|>=7.3.0,<7.4.0|>=7.4.0,<7.4.23|>=8.0.0,<8.1.0|>=8.1.0,<8.1.11   |
+|[32m Reported at       [39m| 2026-11-04T10:45:07+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
++-------------------+----------------------------------------------------------------------------------+
+|[32m Package           [39m| symfony/yaml                                                                     |
+|[32m Severity          [39m|                                                                                  |
+|[32m Advisory ID       [39m| ]8;;https://packagist.org/security-advisories/PKSA-nktx-f1n1-b4yd\PKSA-nktx-f1n1-b4yd]8;;\                                                              |
+|[32m CVE               [39m| NO CVE                                                                           |
+|[32m Title             [39m| Exponential and Quadratic Parse Times in the YAML Parser Let a Single Document   |
+|[32m                   [39m| Hold a Process                                                                   |
+|[32m URL               [39m| ]8;;https://github.com/symfony/symfony/security/advisories/GHSA-hwfg-qwvh-2wfx\https://github.com/symfony/symfony/security/advisories/GHSA-hwfg-qwvh-2wfx]8;;\       |
+|[32m Affected versions [39m| >=2.0.0,<3.0.0|>=3.0.0,<4.0.0|>=4.0.0,<5.0.0|>=5.0.0,<5.1.0|>=5.1.0,<5.2.0|>=5.2 |
+|[32m                   [39m| .0,<5.3.0|>=5.3.0,<5.4.0|>=5.4.0,<5.4.56|>=6.0.0,<6.1.0|>=6.1.0,<6.2.0|>=6.2.0,< |
+|[32m                   [39m| 6.3.0|>=6.3.0,<6.4.0|>=6.4.0,<6.4.50|>=7.0.0,<7.1.0|>=7.1.0,<7.2.0|>=7.2.0,<7.3. |
+|[32m                   [39m| 0|>=7.3.0,<7.4.0|>=7.4.0,<7.4.23|>=8.0.0,<8.1.0|>=8.1.0,<8.1.11                  |
+|[32m Reported at       [39m| 2026-11-04T00:00:00+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
