@@ -117,8 +117,4 @@ class GoogleAuthController extends Controller
         ]);
     }
 
-    private function fail(string $message)
-    {
-        return redirect()->route('login')->with('error', $message);
-    }
 }
