@@ -278,37 +278,6 @@ class AuthController extends Controller
         return view('auth.forgot-password');
     }
 
-    public function sendResetCode(Request $request)
-    {
-        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
-        $request->validate(['email' => ['required', 'email']]);
-
-        $user = User::where('email', $request->input('email'))->first();
-
-        if ($user) {
-            $code = random_int(100000, 999999);
-
-            $user->reset_code = $code;
-            $user->reset_code_expires_at = Carbon::now()->addMinutes(15);
-            $user->save();
-
-            try {
-                Mail::raw("Tu código de recuperación para EduNivelam es: {$code}", function ($message) use ($user) {
-                    $message->to($user->email)
-                        ->subject('Código de recuperación de contraseña - EduNivelam');
-                });
-            } catch (Throwable $e) {
-                Log::error('No se pudo enviar el código de recuperación: '.$e->getMessage());
-            }
-        }
-
-        session(['reset_email' => $request->input('email')]);
-        session()->forget('code_verified');
-
-        return redirect()->route('password.verify.form')
-            ->with('success', 'Si el correo está registrado, recibirás un código de 6 dígitos.');
-    }
-
     public function showVerifyForm()
     {
         if (! session('reset_email')) {
@@ -318,19 +287,74 @@ class AuthController extends Controller
         return view('auth.verify-code');
     }
 
+    public function sendResetCode(Request $request)
+    {
+    $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+    $request->validate(['email' => ['required', 'email']]);
+
+    $user = User::where('email', $request->input('email'))->first();
+
+    if ($user) {
+        $code = (string) random_int(100000, 999999);
+
+        $user->reset_code = hash_hmac('sha256', $code, (string) config('app.key'));
+        $user->reset_code_expires_at = Carbon::now()->addMinutes(15);
+        $user->save();
+
+        RateLimiter::clear('verify-code:'.$user->email);
+
+        try {
+            Mail::raw("Tu código de recuperación para EduNivelam es: {$code}", function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Código de recuperación de contraseña - EduNivelam');
+            });
+        } catch (Throwable $e) {
+            Log::error('No se pudo enviar el código de recuperación: '.$e->getMessage());
+        }
+    }
+
+    session(['reset_email' => $request->input('email')]);
+    session()->forget('code_verified');
+
+    return redirect()->route('password.verify.form')
+        ->with('success', 'Si el correo está registrado, recibirás un código de 6 dígitos.');
+    }
+
     public function verifyCode(Request $request)
     {
         $request->validate(['code' => ['required', 'digits:6']]);
 
-        $user = User::where('email', session('reset_email'))
-            ->where('reset_code', $request->code)
+        $email = session('reset_email');
+
+        if (! $email) {
+            return redirect()->route('password.request');
+        }
+
+        $key = 'verify-code:'.$email;
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            User::where('email', $email)->update([
+                'reset_code' => null,
+                'reset_code_expires_at' => null,
+            ]);
+
+            return back()->withErrors(['code' => 'Demasiados intentos. Solicita un código nuevo.']);
+        }
+
+        $user = User::where('email', $email)
+            ->whereNotNull('reset_code')
             ->where('reset_code_expires_at', '>', Carbon::now())
             ->first();
 
-        if (! $user) {
+        $hash = hash_hmac('sha256', (string) $request->input('code'), (string) config('app.key'));
+
+        if (! $user || ! hash_equals((string) $user->reset_code, $hash)) {
+            RateLimiter::hit($key, 900);
+
             return back()->withErrors(['code' => 'El código es inválido o ha expirado.']);
         }
 
+        RateLimiter::clear($key);
         session(['code_verified' => true]);
 
         return redirect()->route('password.reset.form');
