@@ -8,7 +8,6 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\TeacherStatusController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
@@ -32,7 +31,6 @@ Route::get('/courses', [SiteController::class, 'reports'])->name('courses');
 
 Route::get('/news', [NewsController::class, 'publicIndex'])->name('news.index');
 
-Route::resource('incidentes', IncidentController::class);
 Route::resource('posts', PostController::class);
 
 Route::middleware('guest')->group(function () {
