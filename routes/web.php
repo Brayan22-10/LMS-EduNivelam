@@ -16,6 +16,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schedule;
 
@@ -31,7 +32,11 @@ Route::get('/courses', [SiteController::class, 'reports'])->name('courses');
 
 Route::get('/news', [NewsController::class, 'publicIndex'])->name('news.index');
 
-Route::resource('posts', PostController::class);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('posts', PostController::class)->except(['index', 'show']);
+});
+
+Route::resource('posts', PostController::class)->only(['index', 'show']);
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
