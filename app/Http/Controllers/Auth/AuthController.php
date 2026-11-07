@@ -303,7 +303,7 @@ class AuthController extends Controller
     {
         $email = Str::lower(trim((string) $request->input('email')));
         $request->merge(['email' => $email]);
-        
+
         $request->validate(['email' => ['required', 'email']]);
 
         $user = User::where('email', $email)->first();
@@ -337,7 +337,7 @@ class AuthController extends Controller
     public function verifyCode(Request $request)
     {
         $validated = $request->validate([
-            'code' => ['required', 'string', 'digits:6']
+            'code' => ['required', 'string', 'digits:6'],
         ]);
 
         $email = session('reset_email');
