@@ -1,14 +1,18 @@
 @php
-    $isAdminArea = request()->routeIs('dashboard') || request()->routeIs('admin.*') || request()->routeIs('settings.*');
-    $isLogin = request()->routeIs('login*');
-    $isFullBleed = request()->routeIs('teacher.pending') || request()->routeIs('teacher.status*') || $isLogin;
-    $hideFooter = request()->routeIs('register*');
+    $isAdminArea = request()->routeIs('dashboard*') 
+        || request()->routeIs('admin.*') 
+        || request()->routeIs('settings.*')
+        || request()->routeIs('student.*')
+        || request()->routeIs('teacher.dashboard');
+    $isFullBleed = request()->routeIs('teacher.pending') || request()->routeIs('teacher.status*');
+    $hideFooter = request()->routeIs('login*') || request()->routeIs('register*');
+    $isAuth = request()->routeIs('login*') || request()->routeIs('register*') || request()->routeIs('password.*');
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $isAdminArea ? 'admin-root' : 'public-root' }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'EduNivelam - LMS Educativo de Cursos')</title>
 
@@ -23,9 +27,10 @@
 <body style="font-size: {{ (Auth::check() && Auth::user()->font_size) ? Auth::user()->font_size : '14px' }};" class="{{ (Auth::check() && Auth::user()->high_contrast) ? 'bg-dark-mode text-light' : 'bg-light text-dark' }} {{ $isAdminArea ? 'admin-fixed-body' : 'public-scroll-body' }} {{ $isFullBleed ? 'page-full-bleed' : '' }}">
 
     @if($isAdminArea)
-        <button class="btn btn-dark text-white border shadow" id="sidebarToggleFloat" title="Mostrar Menú" style="position: fixed; top: 22px; left: 15px; z-index: 1020; display: none; width: 40px; height: 40px; border-radius: 50%; align-items: center; justify-content: center; padding: 0;">
+        <button class="btn btn-dark text-white border shadow" id="sidebarToggleFloat" title="Mostrar Menú" aria-label="Abrir menú de navegación">
             <i class="bi bi-list fs-5"></i>
         </button>
+        <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
 
         <div class="dashboard-nav-container">
             @include('layouts.navigation')
@@ -42,6 +47,10 @@
         <main class="public-full">
             @yield('content')
         </main>
+    @elseif($isAuth)
+        <div class="auth-page-wrapper">
+            @yield('content')
+        </div>
     @else
         <main class="py-4">
             <div class="container">

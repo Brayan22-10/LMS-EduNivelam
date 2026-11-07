@@ -82,7 +82,7 @@
                 <div class="col-lg-8 col-xl-9">
                     <div class="tab-content pb-5" id="profileTabContent">
                         <div class="tab-pane fade show active" id="general" role="tabpanel">
-                            <div class="card card-settings p-4 p-lg-5">
+                            <div class="card card-settings p-3 p-sm-4 p-lg-5">
                                 <h4 class="fw-bold mb-1">Información de Perfil</h4>
                                 <p class="text-muted small mb-4">Actualiza tu foto de avatar, nombre de usuario y descripción profesional.</p>
                                 <hr class="text-muted opacity-25 mb-4">

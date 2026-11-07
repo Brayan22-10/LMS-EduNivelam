@@ -82,8 +82,17 @@ body:has(#login-container) .floating-navbar {
     z-index: 1050;
 }
 
-.auth-main-container {
+.container {
+    height: auto !important;
+    min-height: auto !important;
+    padding-bottom: 0;
+}
+
+.auth-main-container,
+.auth-wrap {
+    --auth-top: 0px;
     width: 100%;
+    max-width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -378,16 +387,22 @@ body:has(#login-container) .floating-navbar {
     }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 991.98px) {
     .auth-card {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
     }
     .auth-hero {
-        min-height: 320px;
+        min-height: 240px;
         margin-bottom: -2.5rem;
-        padding: 6rem 1.5rem 3.5rem;
-        clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+        padding: 5.5rem 1.5rem 1.5rem;
+        clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+    }
+    .auth-hero-copy {
+        display: none;
+    }
+    .auth-art {
+        height: 85%;
     }
     .auth-panel {
         align-items: flex-start;
@@ -397,5 +412,6 @@ body:has(#login-container) .floating-navbar {
     }
     .auth-panel-inner {
         max-width: 460px;
+        margin: 0 auto;
     }
 }

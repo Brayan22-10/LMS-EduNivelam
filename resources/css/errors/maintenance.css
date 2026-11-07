@@ -4,7 +4,10 @@ body.maintenance-body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    padding: 1.5rem 1rem;
     margin: 0;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -18,6 +21,12 @@ body.maintenance-body {
     text-align: center;
     max-width: 500px;
     width: 90%;
+}
+
+@media (max-width: 575.98px) {
+    .maintenance-card {
+        padding: 2rem 1.5rem;
+    }
 }
 
 .maintenance-icon {

@@ -29,11 +29,11 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar mb-4 d-flex justify-content-between align-items-center">
+            <div class="dashboard-topbar mb-4 d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                 <div>
-                    <h2 class="fw-bold text-dark-adaptive">Gestión de Usuarios</h2>
+                    <h2 class="fw-bold text-dark-adaptive mb-0">Gestión de Usuarios</h2>
                 </div>
-                <button type="button" class="btn btn-info text-white fw-bold px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#kanbanRolesModal">
+                <button type="button" class="btn btn-info text-white fw-bold px-3 shadow-sm w-100 w-sm-auto" data-bs-toggle="modal" data-bs-target="#kanbanRolesModal">
                     <i class="bi bi-kanban me-1"></i> Gestionar Roles
                 </button>
             </div>
@@ -54,7 +54,7 @@
 
             <div class="row g-3 mb-4">
                 @foreach($cards as $card)
-                    <div class="col-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm bg-card-adaptive h-100">
                             <div class="card-body d-flex align-items-center gap-3">
                                 <div class="stat-icon bg-{{ $card['color'] }}-subtle text-{{ $card['color'] }}">
@@ -123,9 +123,9 @@
                 </div>
             </div>
 
-            <ul class="nav nav-pills gap-2 mb-4">
+            <ul class="nav nav-pills gap-2 mb-4 flex-nowrap overflow-auto pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
                 @foreach($tabs as $key => $t)
-                    <li class="nav-item">
+                    <li class="nav-item flex-shrink-0">
                         <a class="nav-link rounded-pill px-4 fw-semibold {{ $tab === $key ? 'active bg-dark text-white' : 'bg-light text-dark border' }}"
                            href="{{ route('admin.users', ['tab' => $key]) }}">
                             {{ $t['label'] }} <span class="badge bg-secondary ms-1">{{ $t['count'] }}</span>
@@ -238,7 +238,7 @@
                     @endphp
 
                     @foreach($rolesList as $roleKey => $roleData)
-                        <div class="col-md-3">
+                        <div class="col-12 col-sm-6 col-xl-3">
                             <div class="card border-0 shadow-sm h-100 bg-card-adaptive">
                                 <div class="card-header bg-{{ $roleData['color'] }} text-white text-center fw-bold">
                                     {{ $roleData['title'] }}

@@ -23,7 +23,7 @@
 
 <section class="container mb-6 mt-4">
     <div class="row g-4 align-items-stretch">
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white border-top border-primary border-4 hover-translate-y">
                 <div class="card-body p-3">
                     <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-3 mb-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-size: 1.3rem;">
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white border-top border-success border-4 hover-translate-y">
                 <div class="card-body p-3">
                     <div class="icon-box bg-success bg-opacity-10 text-success rounded-3 mb-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-size: 1.3rem;">
@@ -60,28 +60,28 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-md-3 col-6">
+        <div class="col-12 col-sm-6 col-lg-3">
             <div class="text-center p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100 value-box hover-translate-y">
                 <div class="text-primary fs-3 mb-2"><i class="bi bi-award"></i></div>
                 <h5 class="fw-bold text-dark fs-5">Excelencia</h5>
                 <p class="text-muted small mb-0 lh-relaxed">Contenidos rigurosos diseñados por expertos académicos.</p>
             </div>
         </div>
-        <div class="col-md-3 col-6">
+        <div class="col-12 col-sm-6 col-lg-3">
             <div class="text-center p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100 value-box hover-translate-y">
                 <div class="text-success fs-3 mb-2"><i class="bi bi-heart"></i></div>
                 <h5 class="fw-bold text-dark fs-5">Empatía</h5>
                 <p class="text-muted small mb-0 lh-relaxed">Comprendemos los desafíos del cambio de etapa escolar a universitaria.</p>
             </div>
         </div>
-        <div class="col-md-3 col-6">
+        <div class="col-12 col-sm-6 col-lg-3">
             <div class="text-center p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100 value-box hover-translate-y">
                 <div class="text-warning fs-3 mb-2"><i class="bi bi-lightbulb"></i></div>
                 <h5 class="fw-bold text-dark fs-5">Innovación</h5>
                 <p class="text-muted small mb-0 lh-relaxed">Plataforma dinámica, interactiva y centrada en el estudiante.</p>
             </div>
         </div>
-        <div class="col-md-3 col-6">
+        <div class="col-12 col-sm-6 col-lg-3">
             <div class="text-center p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100 value-box hover-translate-y">
                 <div class="text-info fs-3 mb-2"><i class="bi bi-people"></i></div>
                 <h5 class="fw-bold text-dark fs-5">Inclusión</h5>
@@ -92,11 +92,11 @@
 </section>
 
 <section class="container mb-5">
-    <div class="p-5 bg-dark text-white rounded-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25 py-6">
+    <div class="p-4 p-md-5 py-4 py-md-5 bg-dark text-white rounded-4 rounded-md-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25">
         <div class="position-relative" style="z-index: 2; max-width: 650px; margin: 0 auto;">
             <h3 class="fw-bold text-white mb-3 fs-3">¿Quieres formar parte de nuestra red de instructores?</h3>
             <p class="text-light opacity-75 small mb-4 lh-relaxed">Si eres docente y deseas habilitar tu capacidad de publicación de cursos en nuestro LMS, ponte en contacto con nuestro equipo administrativo.</p>
-            <a href="{{ route('contact') }}" class="btn btn-warning btn-md fw-bold text-dark px-5 py-2.5 shadow-sm rounded-pill hover-scale">Contactar con Administración</a>
+            <a href="{{ route('contact') }}" class="btn btn-warning btn-md fw-bold text-dark px-4 px-sm-5 py-2.5 shadow-sm rounded-pill hover-scale text-wrap">Contactar con Administración</a>
         </div>
     </div>
 </section>

@@ -12,7 +12,7 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content py-3 px-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
                 <div>
                     <h2 class="fw-bold mb-1 text-dark-adaptive fs-4">Editar Configuración de Sección</h2>
                     <p class="text-muted small mb-0">Modifica los parámetros de la página seleccionada.</p>

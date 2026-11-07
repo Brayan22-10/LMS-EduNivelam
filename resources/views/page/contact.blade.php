@@ -35,8 +35,8 @@
     @endif
 
     <div class="row g-4 align-items-stretch">
-        <div class="col-lg-5">
-            <div class="card border border-secondary border-opacity-10 shadow-sm rounded-4 p-4 h-100 bg-white d-flex flex-column">
+        <div class="col-12 col-lg-5">
+            <div class="card border border-secondary border-opacity-10 shadow-sm rounded-4 p-3 p-sm-4 h-100 bg-white d-flex flex-column">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h3 class="fw-bold text-dark m-0 fs-4">Preguntas Frecuentes</h3>
                     <button id="resetFaqBtn" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1" style="font-size: 0.75rem; display: none;">Ver principales</button>
@@ -50,8 +50,8 @@
             </div>
         </div>
 
-        <div class="col-lg-7">
-            <div class="card border border-secondary border-opacity-10 shadow-sm rounded-4 p-4 p-md-5 bg-white h-100">
+        <div class="col-12 col-lg-7">
+            <div class="card border border-secondary border-opacity-10 shadow-sm rounded-4 p-3 p-sm-4 p-md-5 bg-white h-100">
                 <h3 class="fw-bold text-dark mb-4 fs-4">Envíanos un mensaje</h3>
                 
                 <form action="{{ route('contact.store') }}" method="POST" class="needs-validation" novalidate>
@@ -66,7 +66,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="email" class="form-label fw-bold small text-secondary">Correo electrónico</label>
                             <input type="email" class="form-control rounded-pill px-3 py-2.5 border-secondary border-opacity-25 @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="correo@ejemplo.com" required>
                             @error('email')
@@ -74,7 +74,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="subject" class="form-label fw-bold small text-secondary">Asunto o Motivo</label>
                             <select class="form-select rounded-pill px-3 py-2.5 border-secondary border-opacity-25 @error('subject') is-invalid @enderror" id="subject" name="subject" required>
                                 <option value="" selected disabled>Selecciona...</option>
@@ -95,7 +95,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-12 my-2">
+                        <div class="col-12 my-2 overflow-hidden">
                             <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
                             <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
                         </div>

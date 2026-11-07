@@ -11,14 +11,14 @@
     <div class="dashboard-wrapper">
         @include('layouts.partials.sidebar')
 
-        <main class="dashboard-main-content py-4 px-4">
-            <div class="dashboard-topbar mb-4 d-flex justify-content-between align-items-center">
+        <main class="dashboard-main-content py-4 px-3 px-sm-4">
+            <div class="dashboard-topbar mb-4 d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                 <div>
                     <h2 class="fw-bold mb-1 text-dark-adaptive">Bienvenido, {{ Auth::user()->name }}</h2>
                     <p class="text-muted small mb-0">Panel de control y supervisión general del sistema.</p>
                 </div>
                 
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2 gap-sm-3 flex-wrap">
                     <div class="theme-switch-container">
                         <button type="button" id="btn-light-mode" class="theme-switch-btn {{ !(Auth::check() && Auth::user()->high_contrast) ? 'active' : '' }}" title="Modo Claro">
                             <i class="bi bi-sun-fill"></i>
@@ -32,22 +32,22 @@
                 </div>
             </div>
 
-            <div class="row g-4 mb-4">
-                <div class="col-md-6">
-                    <div class="stat-card shadow-sm border-0 p-4 rounded-4 h-100 bg-card-adaptive">
+            <div class="row g-3 g-sm-4 mb-4">
+                <div class="col-12 col-md-6">
+                    <div class="stat-card shadow-sm border-0 p-3 p-sm-4 rounded-4 h-100 bg-card-adaptive">
                         <h6 class="text-muted mb-2 text-uppercase small fw-bold">Usuarios Registrados</h6>
                         <h3 class="fw-bold mb-0 display-6 text-dark-adaptive">{{ $stats['users'] }}</h3>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="stat-card shadow-sm border-0 p-4 rounded-4 h-100 bg-card-adaptive">
+                <div class="col-12 col-md-6">
+                    <div class="stat-card shadow-sm border-0 p-3 p-sm-4 rounded-4 h-100 bg-card-adaptive">
                         <h6 class="text-muted mb-2 text-uppercase small fw-bold">Publicaciones Activas</h6>
                         <h3 class="fw-bold mb-0 text-success display-6">{{ $stats['posts'] }}</h3>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-sm border-0 p-4 rounded-4 bg-card-adaptive">
+            <div class="card shadow-sm border-0 p-3 p-sm-4 rounded-4 bg-card-adaptive">
                 <h4 class="mb-3 fw-bold text-dark-adaptive">Panel de Control General</h4>
                 <p class="text-secondary small lh-relaxed">
                     Este panel se encuentra protegido por un middleware de autenticación del servidor a nivel estricto. Desde aquí puedes supervisar las métricas de usuarios, revisar el buzón de soporte y administrar la seguridad general del sistema mediante la barra lateral izquierda.
@@ -72,8 +72,4 @@
 
 @section('scripts')
     @vite(['resources/js/dashboard.js'])
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-        });
-    </script>
 @endsection

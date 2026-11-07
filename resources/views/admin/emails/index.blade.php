@@ -12,8 +12,8 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar mb-4">
-                <h2 class="fw-bold text-dark-adaptive">Bandeja de Entrada (IMAP)</h2>
+            <div class="dashboard-topbar d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4">
+                <h2 class="fw-bold text-dark-adaptive mb-0">Bandeja de Entrada (IMAP)</h2>
             </div>
 
             @if(session('success'))

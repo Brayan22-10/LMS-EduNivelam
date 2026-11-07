@@ -24,7 +24,7 @@
 <section class="container mb-6 py-3">
     <div class="row g-4">
         @foreach($instructors as $instructor)
-            <div class="col-md-4">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="card border border-secondary border-opacity-10 shadow-sm rounded-4 h-100 instructor-card p-4 bg-white hover-translate-y d-flex flex-column justify-content-between">
                     <div class="card-body p-0 text-center">
                         
@@ -55,11 +55,11 @@
 </section>
 
 <section class="container mb-5">
-    <div class="p-5 bg-dark text-white rounded-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25 py-6">
+    <div class="p-4 p-md-5 py-4 py-md-5 bg-dark text-white rounded-4 rounded-md-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25">
         <div class="position-relative" style="z-index: 2; max-width: 650px; margin: 0 auto;">
             <h3 class="fw-bold text-white mb-3 fs-3">¿Eres docente y quieres unirte al equipo?</h3>
             <p class="text-light opacity-75 small mb-4 lh-relaxed">Los instructores de EduNivelam tienen la capacidad de crear, estructurar y publicar módulos de nivelación para toda la comunidad estudiantil una vez habilitados por la administración.</p>
-            <a href="{{ route('contact') }}" class="btn btn-warning btn-md fw-bold text-dark px-5 py-2.5 shadow-sm rounded-pill hover-scale">Postularme como Instructor</a>
+            <a href="{{ route('contact') }}" class="btn btn-warning btn-md fw-bold text-dark px-4 px-sm-5 py-2.5 shadow-sm rounded-pill hover-scale text-wrap">Postularme como Instructor</a>
         </div>
     </div>
 </section>

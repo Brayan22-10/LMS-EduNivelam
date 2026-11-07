@@ -9,7 +9,7 @@
             <hr>
             <p style="white-space: pre-line;">{{ $post->content }}</p>
 
-            <div class="d-flex gap-2 mt-4">
+            <div class="d-flex flex-wrap gap-2 mt-4">
                 <a href="{{ route('posts.index') }}" class="btn btn-secondary">Volver</a>
 
                 @can('update', $post)

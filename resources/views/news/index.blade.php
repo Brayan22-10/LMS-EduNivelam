@@ -13,7 +13,7 @@
     {{-- Grid de 4 columnas para tarjetas más compactas y organizadas --}}
     <div class="row g-3">
         @forelse($news as $item)
-            <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card border-0 shadow-sm rounded-4 h-100 news-card position-relative bg-dark text-white overflow-hidden" 
                      style="transition: transform 0.25s ease, box-shadow 0.25s ease; cursor: pointer;"
                      data-bs-toggle="modal" 

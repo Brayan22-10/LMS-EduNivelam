@@ -22,6 +22,50 @@ body.sidebar-collapsed #sidebarToggleFloat {
     display: flex !important;
 }
 
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 1038;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+@media (max-width: 991.98px) {
+    #sidebarToggleFloat {
+        display: flex !important;
+        width: 44px !important;
+        height: 44px !important;
+        top: 12px !important;
+        left: 12px !important;
+        font-size: 1.15rem !important;
+    }
+
+    body.sidebar-mobile-open #sidebarToggleFloat {
+        display: none !important;
+    }
+
+    body.sidebar-mobile-open .sidebar-backdrop {
+        display: block;
+        opacity: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    #sidebarToggleFloat {
+        width: 40px !important;
+        height: 40px !important;
+        top: 8px !important;
+        left: 8px !important;
+        font-size: 1rem !important;
+    }
+}
+
 html.public-root,
 html.public-root body,
 body.public-scroll-body {
@@ -555,4 +599,112 @@ body.bg-dark-mode .footer-brand .logo-dark,
 body.dark-mode .footer-brand .logo-dark,
 :root[data-bs-theme="dark"] .footer-brand .logo-dark {
     display: block !important;
+}
+
+@media (max-width: 991.98px) {
+    html.admin-root,
+    html.admin-root body,
+    body.admin-fixed-body {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 100dvh !important;
+    }
+
+    body.admin-fixed-body.sidebar-mobile-open {
+        overflow: hidden !important;
+    }
+
+    .dashboard-fullscreen-fix {
+        position: relative !important;
+        height: auto !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+    }
+
+    .dashboard-wrapper {
+        height: auto !important;
+        min-height: calc(100dvh - 55px) !important;
+        overflow: visible !important;
+        display: block !important;
+    }
+
+    .panel-nav-container,
+    body.sidebar-collapsed .panel-nav-container,
+    body.admin-fixed-body .panel-nav-container,
+    body.admin-fixed-body.sidebar-collapsed .panel-nav-container,
+    body.admin-fixed-body.sidebar-collapsed nav.navbar.floating-navbar,
+    body.admin-fixed-body.sidebar-collapsed header.navbar,
+    body.sidebar-collapsed.admin-fixed-body nav.navbar.floating-navbar {
+        position: fixed !important;
+        top: 10px !important;
+        left: 64px !important;
+        right: 12px !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        padding: 0 !important;
+    }
+
+    .admin-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        width: 280px !important;
+        max-width: 85vw !important;
+        z-index: 1050 !important;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+        margin-left: 0 !important;
+    }
+
+    body.sidebar-mobile-open .admin-sidebar {
+        transform: translateX(0) !important;
+    }
+
+    .dashboard-main-content,
+    body.admin-fixed-body .dashboard-main-content {
+        padding: 16px 12px 30px !important;
+        padding-top: 68px !important;
+        height: auto !important;
+        min-height: calc(100dvh - 68px) !important;
+        overflow-y: visible !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .panel-nav-container,
+    body.sidebar-collapsed .panel-nav-container,
+    body.admin-fixed-body .panel-nav-container,
+    body.admin-fixed-body.sidebar-collapsed .panel-nav-container,
+    body.admin-fixed-body.sidebar-collapsed nav.navbar.floating-navbar,
+    body.admin-fixed-body.sidebar-collapsed header.navbar,
+    body.sidebar-collapsed.admin-fixed-body nav.navbar.floating-navbar {
+        top: 7px !important;
+        left: 54px !important;
+        right: 8px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+    }
+
+    .dashboard-main-content,
+    body.admin-fixed-body .dashboard-main-content {
+        padding: 12px 8px 24px !important;
+        padding-top: 58px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .border-end-md {
+        border-right: 1px solid rgba(0, 0, 0, 0.125) !important;
+    }
+    body.bg-dark-mode .border-end-md {
+        border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    .border-bottom-md-0 {
+        border-bottom: 0 !important;
+    }
 }

@@ -12,13 +12,13 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
                 <div>
                     <h2 class="fw-bold mb-1 text-dark-adaptive">Gestión de Banners y Encabezados</h2>
                     <p class="text-muted small mb-0">Administra los banners dinámicos de las páginas principales del sitio.</p>
                 </div>
-                <div class="d-flex gap-2">
-                    <a href="{{ route('admin.banners.create') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">
+                <div class="d-flex gap-2 w-100 w-sm-auto">
+                    <a href="{{ route('admin.banners.create') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold w-100 w-sm-auto text-center">
                         <i class="bi bi-plus-lg me-1"></i> Crear Nuevo Banner
                     </a>
                 </div>
@@ -31,20 +31,20 @@
                 </div>
             @endif
 
-            <ul class="nav nav-pills gap-2 mb-4">
-                <li class="nav-item">
+            <ul class="nav nav-pills gap-2 mb-4 flex-nowrap overflow-auto pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+                <li class="nav-item flex-shrink-0">
                     <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? 'all') == 'all' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}"
                        href="{{ route('admin.banners.index', ['tab' => 'all']) }}">
                         Todas <span class="badge bg-secondary ms-1">{{ $countAll ?? 0 }}</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item flex-shrink-0">
                     <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'active' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}"
                        href="{{ route('admin.banners.index', ['tab' => 'active']) }}">
                         Activas <span class="badge bg-success ms-1">{{ $countActive ?? 0 }}</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item flex-shrink-0">
                     <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'hidden' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}"
                        href="{{ route('admin.banners.index', ['tab' => 'hidden']) }}">
                         Ocultas <span class="badge bg-secondary ms-1">{{ $countHidden ?? 0 }}</span>

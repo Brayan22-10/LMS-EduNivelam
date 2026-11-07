@@ -12,8 +12,8 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar">
-                <h2>Monitoreo de Seguridad</h2>
+            <div class="dashboard-topbar d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4">
+                <h2 class="fw-bold text-dark-adaptive mb-0">Monitoreo de Seguridad</h2>
                 
                 @if($securityStatus === 'secure')
                     <span class="badge bg-success text-white p-2">Sistema Seguro (Operación Normal)</span>
@@ -26,19 +26,19 @@
 
             <div class="row mb-4">
                 <div class="col-md-12">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
-                            <h5 class="mb-0">Widget de Estadísticas de Seguridad y Accesos</h5>
+                    <div class="card shadow-sm border-0 bg-card-adaptive">
+                        <div class="card-header bg-dark text-white d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 py-3">
+                            <h5 class="mb-0">Estadísticas de Seguridad y Accesos</h5>
                             <span class="badge bg-secondary">Últimas 24 horas</span>
                         </div>
                         <div class="card-body">
-                            <div class="row text-center mb-4">
-                                <div class="col-md-6 border-end">
+                            <div class="row text-center mb-4 g-3">
+                                <div class="col-md-6 border-end-md border-bottom border-bottom-md-0 pb-3 pb-md-0">
                                     <h2 class="fw-bold {{ $failedCount > 0 ? 'text-danger' : 'text-success' }}">{{ $failedCount }}</h2>
                                     <p class="text-muted mb-0">Intentos de acceso erróneos detectados</p>
                                 </div>
-                                <div class="col-md-6">
-                                    <h2 class="fw-bold text-dark">{{ $stats['users'] }}</h2>
+                                <div class="col-md-6 pt-2 pt-md-0">
+                                    <h2 class="fw-bold text-dark-adaptive">{{ $stats['users'] }}</h2>
                                     <p class="text-muted mb-0">Cuentas activas en la plataforma</p>
                                 </div>
                             </div>

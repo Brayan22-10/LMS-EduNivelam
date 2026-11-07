@@ -10,8 +10,8 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar">
-                <h2>Configuración y Mantenimiento del Sistema</h2>
+            <div class="dashboard-topbar d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4">
+                <h2 class="fs-4 fw-bold mb-0">Configuración y Mantenimiento del Sistema</h2>
                 <span class="badge bg-secondary p-2">Herramientas de Servidor</span>
             </div>
 
@@ -29,7 +29,7 @@
                 </div>
             @endif
 
-            <div class="card shadow-sm border-0 p-4 mb-4">
+            <div class="card shadow-sm border-0 p-3 p-sm-4 mb-4">
                 <h4 class="mb-3 text-dark">Rendimiento y Limpieza del Servidor</h4>
                 <p class="text-muted small">
                     Si realizas cambios en el código, rutas o configuraciones y no se reflejan de inmediato, puedes vaciar la caché compilada y optimizar el framework con un solo clic.
@@ -37,7 +37,7 @@
                 <hr>
                 <form action="{{ route('admin.system.clearcache') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-dark" onclick="return confirm('¿Estás seguro de limpiar la caché general y optimizar el sistema?');">
+                    <button type="submit" class="btn btn-dark w-100 w-sm-auto" onclick="return confirm('¿Estás seguro de limpiar la caché general y optimizar el sistema?');">
                         Limpiar Caché y Optimizar Sistema
                     </button>
                 </form>

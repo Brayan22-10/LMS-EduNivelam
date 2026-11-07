@@ -15,8 +15,10 @@
             <textarea name="content" rows="5" class="form-control @error('content') is-invalid @enderror" required>{{ old('content') }}</textarea>
             @error('content') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
-        <button type="submit" class="btn btn-dark">Guardar Publicación</button>
-        <a href="{{ route('posts.index') }}" class="btn btn-secondary">Cancelar</a>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+            <button type="submit" class="btn btn-dark">Guardar Publicación</button>
+            <a href="{{ route('posts.index') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
     </form>
 </div>
 @endsection

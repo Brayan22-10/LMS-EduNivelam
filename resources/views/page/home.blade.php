@@ -69,20 +69,20 @@
 </section>
 
 <section class="container mb-6">
-    <div class="row g-4 text-center">
-        <div class="col-md-4">
+    <div class="row g-3 g-md-4 text-center">
+        <div class="col-12 col-md-4">
             <div class="p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100">
                 <h3 class="fw-bold text-primary display-5 mb-1">+500</h3>
                 <p class="text-muted small mb-0 fw-semibold text-uppercase tracking-wider">Estudiantes Nivelados</p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100">
                 <h3 class="fw-bold text-success display-5 mb-1">100%</h3>
                 <p class="text-muted small mb-0 fw-semibold text-uppercase tracking-wider">Enfoque Práctico U</p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100">
                 <h3 class="fw-bold text-warning display-5 mb-1">3 Áreas</h3>
                 <p class="text-muted small mb-0 fw-semibold text-uppercase tracking-wider">Clave para tu Ingreso</p>
@@ -99,7 +99,7 @@
     </div>
     
     <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card h-100 border-0 shadow-sm course-card p-4 rounded-4 bg-white transition-all hover-translate-y border-top border-primary border-4">
                 <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-3 mb-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-size: 1.3rem;">
                     <i class="bi bi-calculator"></i>
@@ -109,7 +109,7 @@
                 <p class="text-secondary small mb-0 lh-relaxed">Refuerza el pensamiento lógico, álgebra y resolución de problemas fundamentales para cálculo universitario.</p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card h-100 border-0 shadow-sm course-card p-4 rounded-4 bg-white transition-all hover-translate-y border-top border-success border-4">
                 <div class="icon-box bg-success bg-opacity-10 text-success rounded-3 mb-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-size: 1.3rem;">
                     <i class="bi bi-book"></i>
@@ -119,7 +119,7 @@
                 <p class="text-secondary small mb-0 lh-relaxed">Mejora la comprensión de textos académicos complejos, argumentación sólida y pensamiento analítico.</p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card h-100 border-0 shadow-sm course-card p-4 rounded-4 bg-white transition-all hover-translate-y border-top border-warning border-4">
                 <div class="icon-box bg-warning bg-opacity-10 text-dark rounded-3 mb-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; font-size: 1.3rem;">
                     <i class="bi bi-people"></i>
@@ -139,7 +139,7 @@
         <p class="text-muted">Experiencias reales de quienes superaron con éxito su transición a la universidad.</p>
     </div>
     <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <div class="p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100 d-flex flex-column justify-content-between">
                 <div>
                     <div class="text-warning mb-3 small">
@@ -156,7 +156,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <div class="p-4 bg-white rounded-4 shadow-sm border border-secondary border-opacity-10 h-100 d-flex flex-column justify-content-between">
                 <div>
                     <div class="text-warning mb-3 small">
@@ -177,11 +177,11 @@
 </section>
 
 <section class="container mb-5">
-    <div class="p-5 bg-dark text-white rounded-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25 py-6">
+    <div class="p-4 p-md-5 bg-dark text-white rounded-4 rounded-md-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25 py-5 py-md-6">
         <div class="position-relative" style="z-index: 2; max-width: 650px; margin: 0 auto;">
             <h2 class="fw-bold mb-3 display-5 text-white">¿Listo para asegurar tu éxito universitario?</h2>
             <p class="lead mb-4 text-light opacity-75 fs-6 lh-relaxed">Únete hoy a EduNivelam, accede a los cursos creados por docentes expertos y comienza tu camino sin vacíos académicos.</p>
-            <a href="{{ route('register') }}" class="btn btn-warning btn-lg fw-bold text-dark px-5 py-3 shadow-sm rounded-pill hover-scale">Crear Cuenta Gratis</a>
+            <a href="{{ route('register') }}" class="btn btn-warning btn-lg fw-bold text-dark px-4 px-md-5 py-3 shadow-sm rounded-pill hover-scale">Crear Cuenta Gratis</a>
         </div>
     </div>
 </section>

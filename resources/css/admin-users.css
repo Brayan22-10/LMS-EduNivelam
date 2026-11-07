@@ -23,6 +23,12 @@
     height: 260px;
 }
 
+@media (max-width: 575.98px) {
+    .chart-box {
+        height: 200px;
+    }
+}
+
 body.bg-dark-mode .btn-group .btn-outline-secondary {
     color: #cbd5e1;
     border-color: #26303d;

@@ -71,15 +71,15 @@
             </div>
         </div>
 
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-4 border-top border-secondary border-opacity-10 small text-secondary dark:text-light opacity-75">
-            <div class="d-flex align-items-center mb-2 mb-md-0 gap-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start pt-4 border-top border-secondary border-opacity-10 small text-secondary dark:text-light opacity-75 gap-2">
+            <div class="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center mb-2 mb-md-0 gap-3">
                 <a href="{{ route('home') }}" class="footer-brand d-flex align-items-center text-decoration-none">
                     <img src="{{ asset('images/logo-light.png') }}" alt="EduNivelam" class="logo-light" loading="lazy">
                     <img src="{{ asset('images/logo-dark.png') }}" alt="EduNivelam" class="logo-dark" loading="lazy">
                 </a>
                 <span>© 2026 EduNivelam LMS, Inc. Todos los derechos reservados.</span>
             </div>
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center justify-content-center gap-3">
                 <a href="#" class="text-decoration-none text-secondary dark:text-light opacity-75 footer-link">Configuración de cookies</a>
                 <span>•</span>
                 <span class="fw-semibold text-dark dark:text-white">Español</span>

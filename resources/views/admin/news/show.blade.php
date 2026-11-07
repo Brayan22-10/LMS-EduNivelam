@@ -12,7 +12,7 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content py-3 px-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
                 <div>
                     <h2 class="fw-bold mb-1 text-dark fs-4">Vista Previa del Aviso</h2>
                     <p class="text-muted small mb-0">Así es exactamente como visualizan la noticia los usuarios en la plataforma.</p>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="row justify-content-center">
-                <div class="col-lg-7 col-md-9">
+                <div class="col-12 col-md-9 col-lg-7">
                     <div class="card border-0 shadow-lg rounded-4 text-white overflow-hidden bg-dark">
                         
                         <div class="border-bottom border-secondary border-opacity-25 px-4 py-3">

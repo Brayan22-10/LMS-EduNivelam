@@ -6,8 +6,8 @@
     <title>Correo Verificado - EduNivelam</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-sm p-5 text-center border-0" style="max-width: 450px; width: 100%;">
+<body class="bg-light d-flex justify-content-center align-items-center min-vh-100 p-3">
+    <div class="card shadow-sm p-4 p-sm-5 text-center border-0 rounded-4" style="max-width: 450px; width: 100%;">
         <div class="mb-4">
             <div class="text-success display-1 mb-3">✓</div>
             <h3 class="fw-bold text-dark">¡Correo Verificado con Éxito!</h3>

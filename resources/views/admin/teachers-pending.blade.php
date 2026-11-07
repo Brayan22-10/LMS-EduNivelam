@@ -12,8 +12,8 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="dashboard-topbar mb-4">
-                <h2>Gestión de Solicitudes de Docentes</h2>
+            <div class="dashboard-topbar d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4">
+                <h2 class="fw-bold text-dark-adaptive mb-0">Gestión de Solicitudes de Docentes</h2>
                 <span class="badge bg-warning text-dark p-2">Pendientes: {{ $pendingTeachers->count() }}</span>
             </div>
 
@@ -31,7 +31,7 @@
                 </div>
             @endif
 
-            <div class="card shadow-sm border-0 p-4">
+            <div class="card shadow-sm border-0 p-3 p-sm-4">
                 <h4 class="mb-3 text-dark">Profesores en espera de aprobación</h4>
                 <p class="text-muted small">
                     Aprueba las solicitudes para generarles automáticamente sus credenciales de acceso o deniégalas para eliminar sus registros por completo.

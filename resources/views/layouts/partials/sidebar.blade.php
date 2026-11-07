@@ -12,9 +12,14 @@
                 <span class="sidebar-role">Nivelación Académica</span>
             @endif
         </div>
-        <button class="btn btn-sm btn-dark text-white border-0 shadow-none" id="sidebarToggle" title="Ocultar / Mostrar Menú" style="background-color: rgba(255,255,255,0.08);">
-            <i class="bi bi-list fs-5"></i>
-        </button>
+        <div class="d-flex align-items-center gap-1">
+            <button class="btn btn-sm btn-dark text-white border-0 shadow-none d-lg-none" id="sidebarCloseBtn" title="Cerrar Menú" style="background-color: rgba(255,255,255,0.12); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0;" aria-label="Cerrar menú">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <button class="btn btn-sm btn-dark text-white border-0 shadow-none d-none d-lg-inline-flex" id="sidebarToggle" title="Ocultar / Mostrar Menú" style="background-color: rgba(255,255,255,0.08);" aria-label="Colapsar menú">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+        </div>
     </div>
     
     <ul class="sidebar-menu">

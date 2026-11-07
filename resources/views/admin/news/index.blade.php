@@ -12,13 +12,13 @@
         @include('layouts.partials.sidebar')
 
         <main class="dashboard-main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
                 <div>
-                    <h2 class="fw-bold mb-1 text-dark">Bandeja de Noticias y Avisos</h2>
+                    <h2 class="fw-bold mb-1 text-dark-adaptive">Bandeja de Noticias y Avisos</h2>
                     <p class="text-muted small mb-0">Administra las comunicaciones informativas dirigidas a la comunidad académica.</p>
                 </div>
-                <div class="d-flex gap-2">
-                    <a href="{{ route('admin.news.create') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">
+                <div class="d-flex gap-2 w-100 w-sm-auto">
+                    <a href="{{ route('admin.news.create') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold w-100 w-sm-auto text-center">
                         <i class="bi bi-plus-lg me-1"></i> Crear Nueva Noticia
                     </a>
                 </div>
@@ -31,26 +31,26 @@
                 </div>
             @endif
 
-            <ul class="nav nav-pills gap-2 mb-4">
-                <li class="nav-item">
+            <ul class="nav nav-pills gap-2 mb-4 flex-nowrap overflow-auto pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+                <li class="nav-item flex-shrink-0">
                     <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? 'all') == 'all' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
                         href="{{ route('admin.news.index', ['tab' => 'all']) }}">
                         Todas <span class="badge bg-secondary ms-1">{{ $countAll ?? 0 }}</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item flex-shrink-0">
                     <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'publicado' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
                         href="{{ route('admin.news.index', ['tab' => 'publicado']) }}">
                         Publicadas <span class="badge bg-success ms-1">{{ $countPublished ?? 0 }}</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item flex-shrink-0">
                     <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'programado' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
                         href="{{ route('admin.news.index', ['tab' => 'programado']) }}">
                         Programadas <span class="badge bg-warning text-dark ms-1">{{ $countScheduled ?? 0 }}</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item flex-shrink-0">
                     <a class="nav-link rounded-pill px-4 fw-semibold {{ ($tab ?? '') == 'borrador' ? 'active bg-dark text-white' : 'bg-light text-dark border' }}" 
                         href="{{ route('admin.news.index', ['tab' => 'borrador']) }}">
                         Borradores <span class="badge bg-secondary ms-1">{{ $countDrafts ?? 0 }}</span>

@@ -323,6 +323,15 @@ body.bg-dark-mode .iti__dial-code {
     }
 }
 
+@media (max-width: 400px) {
+    .register-modal-card {
+        padding: 1.5rem 1rem;
+    }
+    .register-modal-title {
+        font-size: 1.25rem;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .register-modal-card {
         animation: none;

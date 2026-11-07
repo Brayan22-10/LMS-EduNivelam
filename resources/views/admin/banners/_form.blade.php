@@ -82,7 +82,7 @@
         </div>
 
         <div class="row g-3 mb-3">
-            <div class="col-md-6" data-field="badge_text">
+            <div class="col-12 col-md-6" data-field="badge_text">
                 <label for="badge_text" class="form-label small fw-semibold text-dark-adaptive mb-1">Texto de la Etiqueta (Badge)</label>
                 <input type="text" class="form-control border py-1.5 @error('badge_text') is-invalid @enderror"
                        id="badge_text" name="badge_text"
@@ -91,7 +91,7 @@
                 @error('badge_text')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
 
-            <div class="col-md-6" data-field="title">
+            <div class="col-12 col-md-6" data-field="title">
                 <label for="title" class="form-label small fw-semibold text-dark-adaptive mb-1">Título Principal <span class="text-danger">*</span></label>
                 <input type="text" class="form-control border py-1.5 @error('title') is-invalid @enderror"
                        id="title" name="title" required
@@ -110,7 +110,7 @@
         </div>
 
         <div class="row g-3 mb-2 align-items-center">
-            <div class="col-md-7" data-field="image_path">
+            <div class="col-12 col-md-7" data-field="image_path">
                 <label for="image_path" class="form-label small fw-semibold text-dark-adaptive mb-1">
                     Imagen Ilustrativa / Fondo <span class="text-muted">(Opcional, máx. 2 MB)</span>
                 </label>
@@ -129,7 +129,7 @@
                 @endif
             </div>
 
-            <div class="col-md-5 pt-3">
+            <div class="col-12 col-md-5 pt-md-3">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="is_active"
                            name="is_active" value="1" @checked($isActive)>
@@ -140,7 +140,7 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-end gap-2 pt-3 border-top mt-3 {{ $current ? '' : 'd-none' }}" id="formActions">
+        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 pt-3 border-top mt-3 {{ $current ? '' : 'd-none' }}" id="formActions">
             <a href="{{ route('admin.banners.index') }}" class="btn btn-outline-secondary btn-sm px-4 fw-semibold rounded-pill">Cancelar</a>
             <button type="submit" class="btn btn-dark btn-sm px-4 fw-semibold rounded-pill shadow-sm text-white" id="submitBtn">
                 {{ $isEdit ? 'Actualizar Configuración' : 'Guardar Configuración' }}

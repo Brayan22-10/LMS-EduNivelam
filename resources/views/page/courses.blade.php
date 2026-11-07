@@ -24,7 +24,7 @@
 <section class="container mb-6 py-3">
     <div class="row g-4">
         @foreach($courses as $course)
-            <div class="col-md-4">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="card border border-secondary border-opacity-10 shadow-sm rounded-4 h-100 course-item-card p-4 bg-white hover-translate-y d-flex flex-column justify-content-between">
                     <div class="card-body p-0">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -51,11 +51,11 @@
 </section>
 
 <section class="container mb-5">
-    <div class="p-5 bg-dark text-white rounded-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25 py-6">
+    <div class="p-4 p-md-5 py-4 py-md-5 bg-dark text-white rounded-4 rounded-md-5 shadow-lg text-center position-relative overflow-hidden border border-secondary border-opacity-25">
         <div class="position-relative" style="z-index: 2; max-width: 650px; margin: 0 auto;">
             <h3 class="fw-bold text-white mb-3 fs-3">¿Eres estudiante registrado?</h3>
             <p class="text-light opacity-75 small mb-4 lh-relaxed">Una vez que la administración habilite tu cuenta y pases a los módulos interactivos, podrás desarrollar los cursos y evaluaciones desde tu acceso exclusivo.</p>
-            <a href="{{ route('login') }}" class="btn btn-warning btn-md fw-bold text-dark px-5 py-2.5 shadow-sm rounded-pill hover-scale">Iniciar Sesión en el Campus</a>
+            <a href="{{ route('login') }}" class="btn btn-warning btn-md fw-bold text-dark px-4 px-sm-5 py-2.5 shadow-sm rounded-pill hover-scale text-wrap">Iniciar Sesión en el Campus</a>
         </div>
     </div>
 </section>

@@ -39,12 +39,12 @@
                             </div>
                         @endif
 
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 bg-dark p-3 p-lg-4 rounded-4 shadow-sm border border-secondary mb-4">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 bg-dark p-3 p-lg-4 rounded-4 shadow-sm border border-secondary mb-4">
                             <a href="{{ route('admin.emails.index') }}" class="btn btn-outline-light btn-sm fw-bold px-3 d-inline-flex align-items-center w-fit">
                                 <i class="bi bi-arrow-left me-2"></i> Volver a la Bandeja
                             </a>
 
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
                                 <button type="button" class="btn btn-primary btn-sm fw-bold px-3 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#replyModal{{ $email->id }}">
                                     <i class="bi bi-reply-fill me-2"></i> Responder
                                 </button>
@@ -60,25 +60,25 @@
                         </div>
 
                         <div class="card bg-dark text-white border border-secondary shadow-sm rounded-4 overflow-hidden">
-                            <div class="card-header bg-black text-white p-4 border-bottom border-secondary">
-                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-2">
-                                    <h4 class="fw-bold mb-0 text-white fs-5">{{ $email->subject ?? 'Sin asunto' }}</h4>
-                                    <span class="badge bg-secondary text-light px-3 py-2 rounded-pill fs-6 w-fit">
+                            <div class="card-header bg-black text-white p-3 p-sm-4 border-bottom border-secondary">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2 mb-2">
+                                    <h4 class="fw-bold mb-0 text-white fs-5 text-break">{{ $email->subject ?? 'Sin asunto' }}</h4>
+                                    <span class="badge bg-secondary text-light px-3 py-2 rounded-pill fs-6 w-auto">
                                         {{ $email->received_at ? $email->received_at->format('d/m/Y H:i') : 'N/A' }}
                                     </span>
                                 </div>
-                                <div class="small text-light opacity-75">
+                                <div class="small text-light opacity-75 text-break">
                                     <span class="fw-semibold">De:</span>
                                     <span class="font-monospace text-warning">{{ $email->from_name ?: 'Usuario' }} &lt;{{ $email->from_email }}&gt;</span>
                                 </div>
                             </div>
 
-                            <div class="card-body p-4 p-lg-5 bg-dark">
+                            <div class="card-body p-3 p-sm-4 p-lg-5 bg-dark">
                                 <h6 class="fw-bold text-info mb-3">
                                     <i class="bi bi-chat-left-text me-2"></i> Mensaje
                                 </h6>
 
-                                <div class="message-content p-4 bg-black border-start border-4 border-primary rounded-end text-white">
+                                <div class="message-content p-3 p-sm-4 bg-black border-start border-4 border-primary rounded-end text-white">
                                     {{ $email->display_message ?: 'No hay contenido disponible.' }}
                                 </div>
                             </div>

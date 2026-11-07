@@ -164,3 +164,37 @@ body.bg-dark-mode .settings-sidebar .nav-link.active {
     background-color: #f8f9fa !important;
     color: #12161f !important;
 }
+
+@media (max-width: 991.98px) {
+    .card-settings.sticky-top {
+        position: static !important;
+        top: auto !important;
+    }
+
+    .settings-sidebar,
+    .settings-sidebar.nav-pills,
+    #profileTab.settings-sidebar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 0.5rem !important;
+        padding: 4px 2px 8px !important;
+        margin-bottom: 0 !important;
+        scrollbar-width: thin;
+    }
+
+    .settings-sidebar .nav-item,
+    .settings-sidebar .nav-link {
+        flex-shrink: 0 !important;
+    }
+
+    .settings-sidebar .nav-link {
+        white-space: nowrap !important;
+        margin-bottom: 0 !important;
+        padding: 8px 14px !important;
+        font-size: 0.88rem !important;
+    }
+}

@@ -307,16 +307,31 @@ body.bg-dark-mode .ap-card .auth-link {
 }
 
 @media (max-width: 575.98px) {
+    .ap-stage {
+        padding: 1rem 0.5rem 2rem;
+        min-height: auto;
+    }
     .ap-card {
-        padding: 2rem 1.35rem;
+        padding: 1.75rem 1.25rem;
         border-radius: 20px;
     }
     .ap-title {
-        font-size: 1.4rem;
+        font-size: 1.35rem;
     }
     .ap-card .form-control.auth-input.ap-code {
-        font-size: 1.5rem;
-        letter-spacing: 0.4em;
+        font-size: 1.35rem;
+        letter-spacing: 0.3em;
+    }
+}
+
+@media (max-width: 380px) {
+    .ap-card {
+        padding: 1.4rem 0.85rem;
+        border-radius: 16px;
+    }
+    .ap-card .form-control.auth-input.ap-code {
+        font-size: 1.2rem;
+        letter-spacing: 0.2em;
     }
 }
 

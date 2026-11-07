@@ -20,8 +20,10 @@
             @error('content') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
-        <button type="submit" class="btn btn-dark">Actualizar Publicación</button>
-        <a href="{{ route('posts.index') }}" class="btn btn-secondary">Cancelar</a>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+            <button type="submit" class="btn btn-dark">Actualizar Publicación</button>
+            <a href="{{ route('posts.index') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
     </form>
 </div>
 @endsection

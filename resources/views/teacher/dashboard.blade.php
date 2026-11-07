@@ -3,7 +3,7 @@
 @section('title', 'Panel Docente - EduNivelam')
 
 @section('styles')
-    @vite(['resources/css/dashboard.css', 'resources/css/login.css'])
+    @vite(['resources/css/dashboard.css'])
 @endsection
 
 @section('content')
@@ -11,9 +11,12 @@
     <div class="dashboard-wrapper">
         @include('layouts.partials.sidebar')
 
-        <main class="dashboard-main-content">
-            <div class="dashboard-topbar">
-                <h2>Bienvenido, Profesor(a) {{ Auth::user()->name }}</h2>
+        <main class="dashboard-main-content py-4 px-3 px-sm-4">
+            <div class="dashboard-topbar d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1 text-dark-adaptive">Bienvenido, Profesor(a) {{ Auth::user()->name }}</h2>
+                    <p class="text-muted small mb-0">Gestión de tutorías, cursos y nivelación institucional.</p>
+                </div>
                 <span class="badge bg-success px-3 py-2 rounded-pill">Portal Docente Activo</span>
             </div>
 
@@ -26,10 +29,10 @@
 
             <div class="row g-4 mb-4">
                 <div class="col-12">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
-                        <h3 class="fw-bold text-dark mb-3">Gestión de tutorías y nivelación académica</h3>
-                        <p class="text-muted lead">Este es tu panel de control como instructor. Aquí podrás administrar los contenidos de tus materias a cargo, subir guías metodológicas y evaluar el progreso de los estudiantes inscritos.</p>
-                        <hr class="my-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-card-adaptive">
+                        <h3 class="fw-bold text-dark-adaptive mb-3">Gestión de tutorías y nivelación académica</h3>
+                        <p class="text-secondary lead fs-6 lh-relaxed">Este es tu panel de control como instructor. Aquí podrás administrar los contenidos de tus materias a cargo, subir guías metodológicas y evaluar el progreso de los estudiantes inscritos.</p>
+                        <hr class="my-4 opacity-25">
                         <div class="d-flex flex-wrap gap-3">
                             <a href="{{ route('admin.profile') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold py-2"><i class="bi bi-person-badge me-1"></i> Mi Perfil Docente</a>
                             <a href="{{ route('settings.index') }}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold py-2"><i class="bi bi-gear me-1"></i> Configuración de Cuenta</a>
@@ -41,4 +44,8 @@
         </main>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    @vite(['resources/js/dashboard.js'])
 @endsection

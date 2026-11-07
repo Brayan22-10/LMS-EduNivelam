@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Panel de administración cargado correctamente.");
 
+    function isMobileView() {
+        return window.innerWidth < 992;
+    }
+
     function applySidebarState(isCollapsed) {
         const wrapper = document.querySelector('.dashboard-wrapper');
         const body = document.body;
@@ -9,23 +13,52 @@ document.addEventListener("DOMContentLoaded", function() {
         if (body) body.classList.toggle('sidebar-collapsed', isCollapsed);
     }
 
-    if (localStorage.getItem('sidebar_collapsed') === 'true') {
+    if (!isMobileView() && localStorage.getItem('sidebar_collapsed') === 'true') {
         applySidebarState(true);
     }
 
     document.addEventListener('click', function(event) {
-        const toggleBtn = event.target.closest('#sidebarToggle') || event.target.closest('#sidebarToggleFloat');
+        const closeBtn = event.target.closest('#sidebarCloseBtn') || event.target.closest('#sidebarBackdrop');
+        if (closeBtn) {
+            event.preventDefault();
+            document.body.classList.remove('sidebar-mobile-open');
+            return;
+        }
 
+        const toggleBtn = event.target.closest('#sidebarToggle') || event.target.closest('#sidebarToggleFloat');
         if (toggleBtn) {
             event.preventDefault();
-            const wrapper = document.querySelector('.dashboard-wrapper');
-            const body = document.body;
 
-            const currentlyCollapsed = (wrapper && wrapper.classList.contains('sidebar-collapsed')) || body.classList.contains('sidebar-collapsed');
-            const newState = !currentlyCollapsed;
+            if (isMobileView()) {
+                document.body.classList.toggle('sidebar-mobile-open');
+            } else {
+                const wrapper = document.querySelector('.dashboard-wrapper');
+                const body = document.body;
 
-            applySidebarState(newState);
-            localStorage.setItem('sidebar_collapsed', newState);
+                const currentlyCollapsed = (wrapper && wrapper.classList.contains('sidebar-collapsed')) || body.classList.contains('sidebar-collapsed');
+                const newState = !currentlyCollapsed;
+
+                applySidebarState(newState);
+                localStorage.setItem('sidebar_collapsed', newState);
+            }
+            return;
+        }
+
+        // Close mobile drawer when clicking a link inside sidebar menu
+        if (isMobileView() && event.target.closest('.sidebar-menu a')) {
+            document.body.classList.remove('sidebar-mobile-open');
+        }
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && document.body.classList.contains('sidebar-mobile-open')) {
+            document.body.classList.remove('sidebar-mobile-open');
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        if (!isMobileView() && document.body.classList.contains('sidebar-mobile-open')) {
+            document.body.classList.remove('sidebar-mobile-open');
         }
     });
 

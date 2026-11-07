@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Publicaciones</h1>
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
+        <h1 class="h2 mb-0">Publicaciones</h1>
         @auth
-            <a href="{{ route('posts.create') }}" class="btn btn-dark">Crear Nueva Publicación</a>
+            <a href="{{ route('posts.create') }}" class="btn btn-dark w-100 w-sm-auto">Crear Nueva Publicación</a>
         @endauth
     </div>
 

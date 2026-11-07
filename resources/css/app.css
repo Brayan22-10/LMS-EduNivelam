@@ -99,3 +99,33 @@ body.bg-dark-mode .bg-white {
 body.bg-dark-mode hr {
     border-color: #2e3c4f !important;
 }
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+img, svg, video {
+    max-width: 100%;
+    height: auto;
+}
+
+.auth-page-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-height: calc(100vh - 100px);
+    min-height: calc(100dvh - 100px);
+}
+
+@media (max-width: 575.98px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
