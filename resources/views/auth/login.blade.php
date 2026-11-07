@@ -17,7 +17,7 @@
     $isLocked = \Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5);
 
     $initialMinutes = ceil($secondsRemaining / 60);
-    $initialMinutesFormatted = ($initialMinutes < 10 ? "0" : "") . $initialMinutes . ":00";
+    $initialMinutesFormatted = ($initialMinutes < 10 ? '0' : '') . $initialMinutes . ':00';
 
     $googleEnabled = filled(config('services.google.client_id'))
         && \Illuminate\Support\Facades\Route::has('auth.google.redirect');
@@ -37,14 +37,9 @@
     </div>
 </div>
 
-<div class="auth-wrap" id="login-container" data-is-locked="{{ $isLocked ? 'true' : 'false' }}" data-seconds-remaining="{{ $secondsRemaining }}">
+<div class="auth-main-container" id="login-container">
     <div class="auth-card">
-        <aside class="auth-hero" aria-hidden="true">
-            <div class="auth-brand">
-                <span class="auth-brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
-                <span class="auth-brand-name">EduNivelam</span>
-            </div>
-
+        <aside class="auth-hero" style="--hero-img: url('{{ asset('images/login-illustration.jpg') }}');">
             <div class="auth-hero-copy">
                 <h2>Fortalece tus habilidades blandas</h2>
                 <p>Comunicación, liderazgo y trabajo en equipo, a tu ritmo y desde cualquier dispositivo.</p>
@@ -54,26 +49,12 @@
                     <span>Trabajo en equipo</span>
                 </div>
             </div>
-
-            <svg class="auth-art" viewBox="0 0 600 400" preserveAspectRatio="xMidYMax slice" focusable="false">
-                <defs>
-                    <linearGradient id="authSun" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#fda4af"/>
-                        <stop offset="1" stop-color="#fb923c"/>
-                    </linearGradient>
-                </defs>
-                <circle cx="330" cy="200" r="110" fill="url(#authSun)" opacity=".95"/>
-                <path d="M0 400V270L90 200L170 270L240 230L330 320V400Z" fill="#3b2a8f"/>
-                <path d="M120 400V300L230 210L330 300L420 250L520 330L600 280V400Z" fill="#2a1f6e"/>
-                <path d="M0 400V340L140 290L260 350L400 310L600 360V400Z" fill="#1b1450"/>
-                <rect y="372" width="600" height="28" fill="#f472b6" opacity=".22"/>
-            </svg>
         </aside>
 
         <section class="auth-panel">
             <div class="auth-panel-inner">
                 <span class="auth-logo"><i class="bi bi-mortarboard-fill"></i></span>
-                <h1 class="auth-title">Bienvenido de nuevo</h1>
+                <h1 class="auth-title">Inicio de sesión</h1>
                 <p class="auth-subtitle">Inicia sesión para continuar tu aprendizaje.</p>
 
                 @if(session('success'))
